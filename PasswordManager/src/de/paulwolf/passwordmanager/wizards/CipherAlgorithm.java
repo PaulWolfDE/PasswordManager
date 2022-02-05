@@ -28,12 +28,10 @@ public class CipherAlgorithm {
 			paddedBytes++;
 		}
 		ret[ret.length - 1] = paddedBytes;
-		System.out.println(Arrays.toString(ret));
 		return ret;
 	}
 
 	public static byte[] unpad(byte[] in) {
-		System.out.println(Arrays.toString(in));
 		byte[] ret = new byte[in.length - in[in.length - 1] - 1];
 		for (int i = 0; i < ret.length; i++)
 			ret[i] = in[i];

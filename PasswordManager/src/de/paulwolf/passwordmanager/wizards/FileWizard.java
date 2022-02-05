@@ -10,7 +10,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Scanner;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -43,16 +42,13 @@ public class FileWizard {
 		int i = 0;
 		while (scanner.hasNextLine()) {
 			if (i != 0)
-				databaseString = String.valueOf(databaseString) + "\n";
+				databaseString = String.valueOf(databaseString) + StringWizard.separator;
 			i++;
 			databaseString = String.valueOf(databaseString) + scanner.nextLine();
 		}
 		scanner.close();
 
-		if (Main.DEBUG)
-			System.out.println("Database String: " + databaseString);
-
-		String[] splitbase = databaseString.split("\n");
+		String[] splitbase = databaseString.split(StringWizard.separator);
 		if (!isCompatible(splitbase[0])) {
 			JOptionPane.showMessageDialog(null,
 					"Either the file is not an database file or the version is not compatible!", "Invalid file", 0);
@@ -61,18 +57,13 @@ public class FileWizard {
 		byte[] iv = new byte[16];
 		for (int j = 0; j < iv.length; j++)
 			iv[j] = Byte.parseByte(splitbase[4].split(",")[j]);
-
-		if (Main.DEBUG)
-			System.out.println("Initialization Vector: " + Arrays.toString(iv));
-
-		if (Main.DEBUG)
-			System.out.println("Key for decryption: " + Arrays.toString(key));
 		
 		try {
 			Database dtb = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString, key, iv));
 			dtb.setPath(file);
 			dtb.setMasterKey(key);
-			DatabaseUI.initUI(dtb);
+			Main.dbui = new DatabaseUI();
+			Main.dbui.initUI(dtb);
 		} catch (WrongPasswordException | BadPaddingException e) {
 			JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials", 0);
 			return false;

@@ -44,10 +44,10 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 		submit.addActionListener(this);
 		show.addActionListener(this);
 		field.addKeyListener(this);
-		
+
 		field.setFont(new Font("Consolas", Font.PLAIN, 14));
 		field.setPreferredSize(new Dimension(400, 26));
-		
+
 		frame.add(wrapper);
 		frame.pack();
 		frame.setMinimumSize(frame.getSize());
@@ -60,10 +60,10 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() == submit) 
+		if (e.getSource() == submit) {
 			if (MainUI.openDatabaseWithPassword(CreateDatabaseUI.toBytes(field.getPassword())))
 				frame.setVisible(false);
-		else {
+		} else {
 			if (show.isSelected())
 				field.setEchoChar((char) 0);
 			else
@@ -79,8 +79,8 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) 
+
+		if (e.getKeyCode() == KeyEvent.VK_ENTER)
 			submit.doClick();
 	}
 

@@ -273,11 +273,11 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 					db.setMasterKey(toBytes(keyField.getPassword()));
 					db.setHashAlgorithm(hashBox.getSelectedItem().toString());
 					db.setEncryptionAlgorithm(eaBox.getSelectedItem().toString());
-					db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123"));
+					db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123", "Note"));
 
 					frame.setVisible(false);
-
-					DatabaseUI.initUI(db);
+					Main.dbui = new DatabaseUI();
+					Main.dbui.initUI(db);
 
 					try {
 						FileWizard.saveDatabase(db, db.getPath());
@@ -299,8 +299,7 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		;
 	}
 
 	@Override
@@ -312,7 +311,6 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		;
 	}
 }

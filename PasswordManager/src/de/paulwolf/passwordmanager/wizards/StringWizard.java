@@ -35,18 +35,17 @@ public class StringWizard {
 			databaseBody += entries.get(i).getPassword();
 			databaseBody += separator;
 			databaseBody += Main.DATE_FORMAT.format(entries.get(i).getLastModified());
+			databaseBody += separator;
+			databaseBody += entries.get(i).getNotes().equals("") ? "-" : entries.get(i).getNotes();
 			if (i < entries.size() - 1)
 				databaseBody += endEntrySeparator;
 		}
 
 		MessageDigest digest = MessageDigest.getInstance(database.getHashAlgorithm());
 
-		if (Main.DEBUG)
-			System.out.println("Hash algorithm for verification: " + database.getHashAlgorithm());
-
 		databaseString += "PasswordManager<" + Main.VERSION_NUMBER + '>';
 		databaseString += separator;
-		
+
 		if (!databaseBody.matches("\\A\\p{ASCII}*\\z")) {
 			String asciiBody = "";
 			for (int i = 0; i < databaseBody.length(); i++)
@@ -69,7 +68,6 @@ public class StringWizard {
 		}
 		databaseString += headBodySeparator;
 		databaseString += databaseBody;
-
 		return databaseString;
 	}
 
@@ -80,7 +78,7 @@ public class StringWizard {
 		String[] headBodyStrings = databaseString.split(headBodySeparator);
 		String[] headStrings = headBodyStrings[0].split(separator);
 		String[] bodyStrings = headBodyStrings[1].split(endEntrySeparator); // => 1 array index = 1 entry
-		String[][] entryStrings = new String[bodyStrings.length][5];
+		String[][] entryStrings = new String[bodyStrings.length][6];
 
 		for (int i = 0; i < bodyStrings.length; i++)
 			entryStrings[i] = bodyStrings[i].split(separator);
@@ -89,9 +87,15 @@ public class StringWizard {
 		database.setEncryptionAlgorithm(headStrings[2]);
 		database.setMasterKey(headStrings[0].getBytes());
 
-		for (int i = 0; i < entryStrings.length; i++)
-			database.addEntry(new Entry(entryStrings[i][0], entryStrings[i][1], entryStrings[i][2], entryStrings[i][3],
-					Main.DATE_FORMAT.parse(entryStrings[i][4])));
+		if (entryStrings[0].length == 5) {
+			for (int i = 0; i < entryStrings.length; i++)
+				database.addEntry(new Entry(entryStrings[i][0], entryStrings[i][1], entryStrings[i][2],
+						entryStrings[i][3], Main.DATE_FORMAT.parse(entryStrings[i][4]), ""));
+		} else {
+			for (int i = 0; i < entryStrings.length; i++)
+				database.addEntry(new Entry(entryStrings[i][0], entryStrings[i][1], entryStrings[i][2],
+						entryStrings[i][3], Main.DATE_FORMAT.parse(entryStrings[i][4]), entryStrings[i][5]));
+		}
 
 		return database;
 	}

@@ -125,11 +125,12 @@ public class MainUI implements ActionListener, KeyListener {
 
 			String tempURI = uri.getText().toString();
 
-			if (tempURI.length() > 6) 
-				if (!tempURI.substring(tempURI.length() - 6).equalsIgnoreCase(".pmdtb")) 
-					tempURI += ".pmdtb";				
-			 else 
+			if (tempURI.length() > 6) {
+				if (!tempURI.substring(tempURI.length() - 6).equalsIgnoreCase(".pmdtb"))
+					tempURI += ".pmdtb";
+			} else {
 				tempURI += ".pmdtb";
+			}
 
 			Path path = Paths.get(tempURI);
 
@@ -137,7 +138,7 @@ public class MainUI implements ActionListener, KeyListener {
 
 				new OpenDatabaseUI();
 				databaseFile = path.toFile();
-			} else 
+			} else
 				JOptionPane.showMessageDialog(null, "Please enter a valid path or URI!", "Missing arguments",
 						JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -157,7 +158,7 @@ public class MainUI implements ActionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) 
+		if (e.getKeyCode() == KeyEvent.VK_ENTER)
 			openDatabase.doClick();
 	}
 

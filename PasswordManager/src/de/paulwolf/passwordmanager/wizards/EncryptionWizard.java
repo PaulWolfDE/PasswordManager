@@ -5,7 +5,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -16,7 +15,6 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.WrongPasswordException;
 
 public class EncryptionWizard {
@@ -25,14 +23,14 @@ public class EncryptionWizard {
 			InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException,
 			IllegalBlockSizeException, UnsupportedEncodingException {
 
-		String[] headBodyStrings = databaseString.split("\n\n\n");
-		String[] headStrings = headBodyStrings[0].split("\n");
-		String[] bodyStrings = headBodyStrings[1].split("\n\n");
+		String[] headBodyStrings = databaseString.split(StringWizard.headBodySeparator);
+		String[] headStrings = headBodyStrings[0].split(StringWizard.separator);
+		String[] bodyStrings = headBodyStrings[1].split(StringWizard.endEntrySeparator);
 
 		String[][] entryStrings = new String[bodyStrings.length][5];
 
 		for (int i = 0; i < bodyStrings.length; i++)
-			entryStrings[i] = bodyStrings[i].split("\n");
+			entryStrings[i] = bodyStrings[i].split(StringWizard.separator);
 
 		MessageDigest digest = MessageDigest.getInstance(headStrings[3]);
 		byte[] vaultKey = digest.digest(key);
@@ -44,7 +42,7 @@ public class EncryptionWizard {
 								|| headStrings[2].equals("Blowfish/CTR/NoPadding") ? "Blowfish" : "AES"),
 				iv);
 
-		String cipherFileString = String.valueOf(headBodyStrings[0]) + "\n\n\n" + ciphertext;
+		String cipherFileString = String.valueOf(headBodyStrings[0]) + StringWizard.headBodySeparator + ciphertext;
 
 		return cipherFileString;
 	}
@@ -53,17 +51,11 @@ public class EncryptionWizard {
 			InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException,
 			IllegalBlockSizeException, UnsupportedEncodingException, WrongPasswordException {
 
-		String[] headBodyStrings = cipherString.split("\n\n\n");
-		String[] headStrings = headBodyStrings[0].split("\n");
-
-		if (Main.DEBUG)
-			System.out.println("Hash algorithm: " + headStrings[3]);
+		String[] headBodyStrings = cipherString.split(StringWizard.headBodySeparator);
+		String[] headStrings = headBodyStrings[0].split(StringWizard.separator);
 
 		MessageDigest digest = MessageDigest.getInstance(headStrings[3]);
 		byte[] keyHash = digest.digest(key);
-
-		if (Main.DEBUG)
-			System.out.println("Key hash: " + Arrays.toString(keyHash));
 
 		String plaintext = decrypt(headStrings[2], headBodyStrings[1],
 				new SecretKeySpec(keyHash, 0, keyHash.length,
@@ -71,9 +63,6 @@ public class EncryptionWizard {
 								|| headStrings[2].equals("Blowfish/CBC/PKCS5Padding")
 								|| headStrings[2].equals("Blowfish/CTR/NoPadding") ? "Blowfish" : "AES"),
 				iv);
-
-		if (Main.DEBUG)
-			System.out.println("Plain text: " + Arrays.toString(plaintext.getBytes()));
 
 		String verificationHex;
 
@@ -87,17 +76,8 @@ public class EncryptionWizard {
 			verificationHex = bytesToHex(digest.digest(plaintext.getBytes()));
 		}
 
-		if (Main.DEBUG)
-			System.out.println("Hash of the plain text: " + Arrays.toString(digest.digest(plaintext.getBytes())));
-
-		if (Main.DEBUG)
-			System.out.println("Hex value of the plain text: " + verificationHex);
-
-		if (Main.DEBUG)
-			System.out.println("Hex value of the verification: " + headStrings[1]);
-
 		if (verificationHex.equals(headStrings[1]))
-			return String.valueOf(headBodyStrings[0]) + "\n\n\n" + plaintext;
+			return String.valueOf(headBodyStrings[0]) + StringWizard.headBodySeparator + plaintext;
 
 		throw new WrongPasswordException("The entered password is incorrect!");
 	}

@@ -91,7 +91,6 @@ public class DatabaseUI {
 					@Override
 					public void run() {
 						selectedRow = table.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), table));
-						System.out.println(selectedRow);
 						if (selectedRow > -1) {
 							table.setRowSelectionInterval(selectedRow, selectedRow);
 						}
@@ -221,7 +220,7 @@ public class DatabaseUI {
 		}
 	}
 
-	public static void initUI(Database db) {
+	public void initUI(Database db) {
 
 		database = db;
 
