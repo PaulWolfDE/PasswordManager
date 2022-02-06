@@ -276,8 +276,7 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 					db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123", "Note"));
 
 					frame.setVisible(false);
-					Main.dbui = new DatabaseUI();
-					Main.dbui.initUI(db);
+					DatabaseUI.initUI(db);
 
 					try {
 						FileWizard.saveDatabase(db, db.getPath());

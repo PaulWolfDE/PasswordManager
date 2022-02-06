@@ -145,14 +145,17 @@ public class NewEntryUI {
 
 						String notes = textArea.getText().replace("\n", "\\n");
 
-						if (index == -1)
-							Main.dbui.addEntry(new Entry(title.getText().toString(), username.getText().toString(),
+						if (index == -1) {
+							System.out.println("Entry creation");
+							DatabaseUI.addEntry(new Entry(title.getText().toString(), username.getText().toString(),
 									email.getText().toString(), new String(password.getPassword()), notes));
-						else
-							Main.dbui.editEntry(
+						} else {
+							System.out.println("Entry edit");
+							DatabaseUI.editEntry(
 									new Entry(title.getText().toString(), username.getText().toString(),
 											email.getText().toString(), new String(password.getPassword()), notes),
 									index);
+						}
 
 						frame.setVisible(false);
 					} else {

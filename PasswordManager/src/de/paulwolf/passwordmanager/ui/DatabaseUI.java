@@ -34,7 +34,7 @@ import de.paulwolf.passwordmanager.wizards.FileWizard;
 public class DatabaseUI {
 
 	static Database database;
-	
+
 	static JFrame frame;
 	static JPanel wrapper;
 	static JPanel buttonPanel;
@@ -192,7 +192,7 @@ public class DatabaseUI {
 				text = text.replaceAll("\\*", "").replaceAll("\\+", "").replaceAll("\\?", "").replaceAll("\\\\", "");
 				if (text.trim().length() == 0)
 					rowSorter.setRowFilter(null);
-				else 
+				else
 					rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
 			}
 
@@ -200,9 +200,9 @@ public class DatabaseUI {
 			public void removeUpdate(DocumentEvent e) {
 				String text = filter.getText();
 				text = text.replaceAll("\\*", "").replaceAll("\\+", "").replaceAll("\\?", "").replaceAll("\\\\", "");
-				if (text.trim().length() == 0) 
+				if (text.trim().length() == 0)
 					rowSorter.setRowFilter(null);
-				else 
+				else
 					rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
 			}
 
@@ -220,7 +220,7 @@ public class DatabaseUI {
 		}
 	}
 
-	public void initUI(Database db) {
+	public static void initUI(Database db) {
 
 		database = db;
 
@@ -339,7 +339,7 @@ public class DatabaseUI {
 		});
 	}
 
-	public void addEntry(Entry e) {
+	public static void addEntry(Entry e) {
 
 		database.addEntry(e);
 		String[] asteriskContents = new String[5];
@@ -349,17 +349,19 @@ public class DatabaseUI {
 		asteriskContents[3] = new String(new char[t]).replace('\0', Main.ECHO_CHAR);
 
 		dtm.addRow(asteriskContents);
+		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
+		table.setRowSorter(rowSorter);
 	}
 
-	public void editEntry(Entry e, int index) {
+	public static void editEntry(Entry e, int index) {
 
-		ArrayList<Entry> entries = database.getEntries();
-		entries.set(index, e);
-
+		ArrayList<Entry> en = database.getEntries();
+		en.set(table.convertRowIndexToModel(index), e);
 		for (int i = 0; i < 5; i++)
-			dtm.setValueAt(i != 3 ? entries.get(index).getInformationAsArray()[i]
-					: new String(new char[entries.get(index).getInformationAsArray()[i].length()]).replace('\0',
-							Main.ECHO_CHAR),
-					index, i);
+			dtm.setValueAt(i != 3 ? en.get(table.convertRowIndexToModel(index)).getInformationAsArray()[i]
+					: new String(
+							new char[en.get(table.convertRowIndexToModel(index)).getInformationAsArray()[i].length()])
+									.replace('\0', Main.ECHO_CHAR),
+					table.convertRowIndexToModel(index), i);
 	}
 }

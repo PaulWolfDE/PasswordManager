@@ -62,8 +62,7 @@ public class FileWizard {
 			Database dtb = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString, key, iv));
 			dtb.setPath(file);
 			dtb.setMasterKey(key);
-			Main.dbui = new DatabaseUI();
-			Main.dbui.initUI(dtb);
+			DatabaseUI.initUI(dtb);
 		} catch (WrongPasswordException | BadPaddingException e) {
 			JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials", 0);
 			return false;
