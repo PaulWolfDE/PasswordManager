@@ -34,10 +34,10 @@ public class Main {
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd@HH:mm");
 
 	// VERSION NUMBER
-	public static final String VERSION_NUMBER = "1.3.3";
+	public static final String VERSION_NUMBER = "1.3.4";
 
 	// VERIONS COMPATIBLE WITH
-	public static final String[] COMPATIBLE_VERSIONS = { "1.3.3", "1.3.2" };
+	public static final String[] COMPATIBLE_VERSIONS = { "1.3.4", "1.3.3", "1.3.2" };
 
 	public static final boolean DEBUG = true;
 

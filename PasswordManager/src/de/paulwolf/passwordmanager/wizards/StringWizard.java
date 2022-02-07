@@ -12,9 +12,13 @@ import de.paulwolf.passwordmanager.information.Entry;
 
 public class StringWizard {
 
-	public final static String headBodySeparator = "\n\n\n";
-	public final static String separator = "\n";
-	public final static String endEntrySeparator = "\n\n";
+	public final static String separator = "\\\\";
+	public final static String endEntrySeparator = separator + separator;
+	public final static String headBodySeparator = separator + separator + separator;
+
+	public final static String oldSeparator = "\n";
+	public final static String oldEndEntrySeparator = oldSeparator + oldSeparator;
+	public final static String oldHeadBodySeparator = oldSeparator + oldSeparator + oldSeparator;
 
 	public static String makeString(Database database, byte[] iv)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -75,13 +79,23 @@ public class StringWizard {
 
 		Database database = new Database();
 
-		String[] headBodyStrings = databaseString.split(headBodySeparator);
-		String[] headStrings = headBodyStrings[0].split(separator);
-		String[] bodyStrings = headBodyStrings[1].split(endEntrySeparator); // => 1 array index = 1 entry
+		String ver = databaseString.substring(0, Math.min(databaseString.length(), 21));
+		boolean old = false;
+
+		if (ver.equals("PasswordManager<1.3.3") || ver.equals("PasswordManager<1.3.2"))
+			old = true;
+
+		String[] headBodyStrings = databaseString
+				.split(old ? oldHeadBodySeparator : (headBodySeparator + headBodySeparator));
+		String[] headStrings = headBodyStrings[0].split(old ? oldSeparator : (separator + separator));
+		String[] bodyStrings = headBodyStrings[1]
+				.split(old ? oldEndEntrySeparator : (endEntrySeparator + endEntrySeparator));
+		// => 1 array index = 1 entry
+
 		String[][] entryStrings = new String[bodyStrings.length][6];
 
 		for (int i = 0; i < bodyStrings.length; i++)
-			entryStrings[i] = bodyStrings[i].split(separator);
+			entryStrings[i] = bodyStrings[i].split(old ? oldSeparator : (separator + separator));
 
 		database.setHashAlgorithm(headStrings[3]);
 		database.setEncryptionAlgorithm(headStrings[2]);

@@ -42,13 +42,20 @@ public class FileWizard {
 		int i = 0;
 		while (scanner.hasNextLine()) {
 			if (i != 0)
-				databaseString = String.valueOf(databaseString) + StringWizard.separator;
+				databaseString = String.valueOf(databaseString) + "\n";
 			i++;
 			databaseString = String.valueOf(databaseString) + scanner.nextLine();
 		}
 		scanner.close();
 
-		String[] splitbase = databaseString.split(StringWizard.separator);
+		String ver = databaseString.substring(0, Math.min(databaseString.length(), 21));
+		boolean old = false;
+
+		if (ver.equals("PasswordManager<1.3.3") || ver.equals("PasswordManager<1.3.2"))
+			old = true;
+
+		String[] splitbase = databaseString.split(old ? StringWizard.oldSeparator
+				: (StringWizard.separator + StringWizard.separator));
 		if (!isCompatible(splitbase[0])) {
 			JOptionPane.showMessageDialog(null,
 					"Either the file is not an database file or the version is not compatible!", "Invalid file", 0);
@@ -57,7 +64,7 @@ public class FileWizard {
 		byte[] iv = new byte[16];
 		for (int j = 0; j < iv.length; j++)
 			iv[j] = Byte.parseByte(splitbase[4].split(",")[j]);
-		
+
 		try {
 			Database dtb = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString, key, iv));
 			dtb.setPath(file);
@@ -72,7 +79,8 @@ public class FileWizard {
 
 	private static boolean isCompatible(String version) {
 		for (int i = 0; i < Main.COMPATIBLE_VERSIONS.length; i++) {
-			if (version.equals("PasswordManager<" + Main.COMPATIBLE_VERSIONS[i] + ">"))
+			String temp = "PasswordManager<" + Main.COMPATIBLE_VERSIONS[i] + ">";
+			if (version.substring(0, temp.length()).equals(temp))
 				return true;
 		}
 		return false;

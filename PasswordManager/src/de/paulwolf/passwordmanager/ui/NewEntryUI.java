@@ -20,6 +20,7 @@ import javax.swing.JToggleButton;
 
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Entry;
+import de.paulwolf.passwordmanager.wizards.StringWizard;
 
 public class NewEntryUI {
 
@@ -143,7 +144,7 @@ public class NewEntryUI {
 				} else {
 					if (new String(password.getPassword()).equals(new String(confirmPassword.getPassword()))) {
 
-						String notes = textArea.getText().replace("\n", "\\n");
+						String notes = textArea.getText().replace(StringWizard.separator, "\\");
 
 						if (index == -1) {
 							System.out.println("Entry creation");

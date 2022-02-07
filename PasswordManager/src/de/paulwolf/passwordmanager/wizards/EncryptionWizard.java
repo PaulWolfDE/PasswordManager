@@ -23,15 +23,18 @@ public class EncryptionWizard {
 			InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException,
 			IllegalBlockSizeException, UnsupportedEncodingException {
 
-		String[] headBodyStrings = databaseString.split(StringWizard.headBodySeparator);
-		String[] headStrings = headBodyStrings[0].split(StringWizard.separator);
-		String[] bodyStrings = headBodyStrings[1].split(StringWizard.endEntrySeparator);
+		String[] headBodyStrings = databaseString
+				.split(StringWizard.headBodySeparator + StringWizard.headBodySeparator);
+		String[] headStrings = headBodyStrings[0].split(StringWizard.separator + StringWizard.separator);
+		String[] bodyStrings = headBodyStrings[1]
+				.split(StringWizard.endEntrySeparator + StringWizard.endEntrySeparator);
 
 		String[][] entryStrings = new String[bodyStrings.length][5];
 
 		for (int i = 0; i < bodyStrings.length; i++)
-			entryStrings[i] = bodyStrings[i].split(StringWizard.separator);
+			entryStrings[i] = bodyStrings[i].split(StringWizard.separator + StringWizard.separator);
 
+		System.out.println(databaseString);
 		MessageDigest digest = MessageDigest.getInstance(headStrings[3]);
 		byte[] vaultKey = digest.digest(key);
 
@@ -51,8 +54,16 @@ public class EncryptionWizard {
 			InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException,
 			IllegalBlockSizeException, UnsupportedEncodingException, WrongPasswordException {
 
-		String[] headBodyStrings = cipherString.split(StringWizard.headBodySeparator);
-		String[] headStrings = headBodyStrings[0].split(StringWizard.separator);
+		String ver = cipherString.substring(0, Math.min(cipherString.length(), 21));
+		boolean old = false;
+
+		if (ver.equals("PasswordManager<1.3.3") || ver.equals("PasswordManager<1.3.2"))
+			old = true;
+
+		String[] headBodyStrings = cipherString.split(old ? StringWizard.oldHeadBodySeparator
+				: (StringWizard.headBodySeparator + StringWizard.headBodySeparator));
+		String[] headStrings = headBodyStrings[0]
+				.split(old ? StringWizard.oldSeparator : (StringWizard.separator + StringWizard.separator));
 
 		MessageDigest digest = MessageDigest.getInstance(headStrings[3]);
 		byte[] keyHash = digest.digest(key);
@@ -77,7 +88,8 @@ public class EncryptionWizard {
 		}
 
 		if (verificationHex.equals(headStrings[1]))
-			return String.valueOf(headBodyStrings[0]) + StringWizard.headBodySeparator + plaintext;
+			return String.valueOf(headBodyStrings[0])
+					+ (old ? StringWizard.oldHeadBodySeparator : StringWizard.headBodySeparator) + plaintext;
 
 		throw new WrongPasswordException("The entered password is incorrect!");
 	}
@@ -112,7 +124,7 @@ public class EncryptionWizard {
 
 		byte[] ciphertext = null;
 
-		switch(algorithm) {
+		switch (algorithm) {
 		case "Twofish/CTR/NoPadding":
 			CipherAlgorithm ca = new CipherAlgorithm("Twofish");
 			return bytesToHex(ca.ctrEncrypt(input.getBytes(), key.getEncoded(), iv));
@@ -134,7 +146,7 @@ public class EncryptionWizard {
 		default:
 			Cipher cipher = Cipher.getInstance(algorithm);
 			switch (algorithm) {
-			
+
 			case "Blowfish/ECB/PKCS5Padding":
 			case "AES/ECB/PKCS5Padding":
 				cipher.init(1, key);
@@ -163,7 +175,7 @@ public class EncryptionWizard {
 			InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
 		byte[] plainText = null;
 
-		switch(algorithm) {
+		switch (algorithm) {
 		case "Twofish/CTR/NoPadding":
 			CipherAlgorithm ca = new CipherAlgorithm("Twofish");
 			return new String(ca.ctrDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
@@ -185,7 +197,7 @@ public class EncryptionWizard {
 		default:
 			Cipher cipher = Cipher.getInstance(algorithm);
 			switch (algorithm) {
-			
+
 			case "Blowfish/ECB/PKCS5Padding":
 			case "AES/ECB/PKCS5Padding":
 				cipher.init(2, key);
