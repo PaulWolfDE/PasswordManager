@@ -32,11 +32,8 @@ public class EncryptionWizard {
 		for (int i = 0; i < bodyStrings.length; i++)
 			entryStrings[i] = bodyStrings[i].split(StringWizard.separator);
 
-		MessageDigest digest = MessageDigest.getInstance(headStrings[3]);
-		byte[] vaultKey = digest.digest(key);
-
 		String ciphertext = encrypt(headStrings[2], headBodyStrings[1],
-				new SecretKeySpec(vaultKey, 0, vaultKey.length,
+				new SecretKeySpec(key, 0, key.length,
 						headStrings[2].equals("Blowfish/ECB/PKCS5Padding")
 								|| headStrings[2].equals("Blowfish/CBC/PKCS5Padding")
 								|| headStrings[2].equals("Blowfish/CTR/NoPadding") ? "Blowfish" : "AES"),
@@ -55,10 +52,9 @@ public class EncryptionWizard {
 		String[] headStrings = headBodyStrings[0].split(StringWizard.separator);
 
 		MessageDigest digest = MessageDigest.getInstance(headStrings[3]);
-		byte[] keyHash = digest.digest(key);
 
 		String plaintext = decrypt(headStrings[2], headBodyStrings[1],
-				new SecretKeySpec(keyHash, 0, keyHash.length,
+				new SecretKeySpec(key, 0, key.length,
 						headStrings[2].equals("Blowfish/ECB/PKCS5Padding")
 								|| headStrings[2].equals("Blowfish/CBC/PKCS5Padding")
 								|| headStrings[2].equals("Blowfish/CTR/NoPadding") ? "Blowfish" : "AES"),
@@ -112,7 +108,7 @@ public class EncryptionWizard {
 
 		byte[] ciphertext = null;
 
-		switch(algorithm) {
+		switch (algorithm) {
 		case "Twofish/CTR/NoPadding":
 			CipherAlgorithm ca = new CipherAlgorithm("Twofish");
 			return bytesToHex(ca.ctrEncrypt(input.getBytes(), key.getEncoded(), iv));
@@ -134,7 +130,7 @@ public class EncryptionWizard {
 		default:
 			Cipher cipher = Cipher.getInstance(algorithm);
 			switch (algorithm) {
-			
+
 			case "Blowfish/ECB/PKCS5Padding":
 			case "AES/ECB/PKCS5Padding":
 				cipher.init(1, key);
@@ -163,7 +159,7 @@ public class EncryptionWizard {
 			InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
 		byte[] plainText = null;
 
-		switch(algorithm) {
+		switch (algorithm) {
 		case "Twofish/CTR/NoPadding":
 			CipherAlgorithm ca = new CipherAlgorithm("Twofish");
 			return new String(ca.ctrDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
@@ -185,7 +181,7 @@ public class EncryptionWizard {
 		default:
 			Cipher cipher = Cipher.getInstance(algorithm);
 			switch (algorithm) {
-			
+
 			case "Blowfish/ECB/PKCS5Padding":
 			case "AES/ECB/PKCS5Padding":
 				cipher.init(2, key);

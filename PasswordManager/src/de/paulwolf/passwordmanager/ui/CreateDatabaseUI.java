@@ -40,6 +40,7 @@ import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
+import gnu.crypto.prng.LimitReachedException;
 
 public class CreateDatabaseUI implements ActionListener, KeyListener {
 
@@ -84,7 +85,7 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 	public CreateDatabaseUI() {
 
 		frame = new JFrame("Create New Database");
-		
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		wrapper.setLayout(new GridBagLayout());
 		gbc.gridwidth = GridBagConstraints.RELATIVE;
@@ -281,7 +282,8 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 					try {
 						FileWizard.saveDatabase(db, db.getPath());
 					} catch (NoSuchAlgorithmException | IOException | InvalidKeyException | NoSuchPaddingException
-							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e1) {
+							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
+							| IllegalStateException | LimitReachedException e1) {
 						e1.printStackTrace();
 					}
 				} else {

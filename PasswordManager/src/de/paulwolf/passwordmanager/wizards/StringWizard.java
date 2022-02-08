@@ -16,7 +16,7 @@ public class StringWizard {
 	public final static String separator = "\n";
 	public final static String endEntrySeparator = "\n\n";
 
-	public static String makeString(Database database, byte[] iv)
+	public static String makeString(Database database, byte[] iv, byte[] salt)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
 		String databaseString = "";
@@ -63,6 +63,12 @@ public class StringWizard {
 		databaseString += separator;
 		for (int i = 0; i < iv.length; i++) {
 			databaseString += iv[i];
+			if (i != 15)
+				databaseString += ",";
+		}
+		databaseString += separator;
+		for (int i = 0; i < salt.length; i++) {
+			databaseString += salt[i];
 			if (i != 15)
 				databaseString += ",";
 		}

@@ -30,14 +30,20 @@ public class Main {
 			"Serpent/ECB/ISO10126", "Twofish/CTR/NoPadding", "Twofish/CBC/ISO10126", "Twofish/ECB/ISO10126",
 			"Blowfish/CTR/NoPadding", "Blowfish/CBC/PKCS5Padding", "Blowfish/ECB/PKCS5Padding" };
 
+	// PBKDF2 HMAC algorithm
+	public static final String HMAC_ALGORITHM = "HMAC-SHA-256";
+	
+	// PBKDF2 # of iterations
+	public static final int ITERATIONS = 310000;
+	
 	// DATE FORMAT
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd@HH:mm");
 
 	// VERSION NUMBER
-	public static final String VERSION_NUMBER = "1.3.3";
+	public static final String VERSION_NUMBER = "1.3.4";
 
 	// VERIONS COMPATIBLE WITH
-	public static final String[] COMPATIBLE_VERSIONS = { "1.3.3", "1.3.2" };
+	public static final String[] COMPATIBLE_VERSIONS = { "1.3.4", "1.3.3", "1.3.2" };
 
 	public static final boolean DEBUG = true;
 

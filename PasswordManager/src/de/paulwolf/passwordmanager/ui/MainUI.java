@@ -13,6 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
+import gnu.crypto.prng.LimitReachedException;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -53,7 +54,7 @@ public class MainUI implements ActionListener, KeyListener {
 			}
 		} catch (InvalidKeyException | FileNotFoundException | NoSuchAlgorithmException | NoSuchPaddingException
 				| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
-				| UnsupportedEncodingException | ParseException e) {
+				| UnsupportedEncodingException | ParseException | IllegalStateException | LimitReachedException e) {
 			e.printStackTrace();
 		}
 

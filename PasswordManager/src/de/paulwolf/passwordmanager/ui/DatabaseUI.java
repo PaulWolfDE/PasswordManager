@@ -30,6 +30,7 @@ import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
+import gnu.crypto.prng.LimitReachedException;
 
 public class DatabaseUI {
 
@@ -276,7 +277,7 @@ public class DatabaseUI {
 					FileWizard.saveDatabase(database, database.getPath());
 				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
 						| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
-						| IOException e1) {
+						| IOException | IllegalStateException | LimitReachedException e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -320,7 +321,7 @@ public class DatabaseUI {
 						FileWizard.saveDatabase(database, database.getPath().getAbsoluteFile());
 					} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
 							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
-							| IOException e1) {
+							| IOException | IllegalStateException | LimitReachedException e1) {
 						e1.printStackTrace();
 					}
 
