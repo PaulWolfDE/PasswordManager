@@ -105,7 +105,7 @@ public class NewEntryUI {
 			email.setText(e.getEmail());
 			password.setText(e.getPassword());
 			confirmPassword.setText(e.getPassword());
-			textArea.setText(e.getNotes());
+			textArea.setText(e.getNotes().replaceAll("\\\\n", "\n"));
 		}
 
 		password.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -135,32 +135,25 @@ public class NewEntryUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (title.getText().toString().equals("") || username.getText().toString().equals("")
-						|| email.getText().toString().equals("") || new String(password.getPassword()).equals("")
-						|| new String(confirmPassword.getPassword()).equals("")) {
-					JOptionPane.showMessageDialog(null, "Please fill out the form!", "Missing arguments",
-							JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					if (new String(password.getPassword()).equals(new String(confirmPassword.getPassword()))) {
 
-						String notes = textArea.getText().replace("\n", "\\n");
+				if (new String(password.getPassword()).equals(new String(confirmPassword.getPassword()))
+						&& !new String(password.getPassword()).equals("")) {
 
-						if (index == -1) {
-							DatabaseUI.addEntry(new Entry(title.getText().toString(), username.getText().toString(),
-									email.getText().toString(), new String(password.getPassword()), notes));
-						} else {
-							DatabaseUI.editEntry(
-									new Entry(title.getText().toString(), username.getText().toString(),
-											email.getText().toString(), new String(password.getPassword()), notes),
-									index);
-						}
+					String notes = textArea.getText().replaceAll("\n", "\\\\n");
 
-						frame.setVisible(false);
+					if (index == -1) {
+						DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(),
+								new String(password.getPassword()), notes));
 					} else {
-
-						JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error",
-								JOptionPane.ERROR_MESSAGE);
+						DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(),
+								new String(password.getPassword()), notes), index);
 					}
+
+					frame.setVisible(false);
+				} else {
+
+					JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

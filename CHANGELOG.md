@@ -12,3 +12,4 @@
     - 310,000 iterations
     - Randomly salted
     - SHA-256 HMAC algorithm
+- Allowing empty entries

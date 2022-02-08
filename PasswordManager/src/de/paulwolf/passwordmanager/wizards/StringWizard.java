@@ -20,25 +20,25 @@ public class StringWizard {
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
 		String databaseString = "";
-		String databaseBody = "";
+		StringBuilder databaseBody = new StringBuilder();
 
 		ArrayList<Entry> entries = database.getEntries();
 
 		for (int i = 0; i < entries.size(); i++) {
 
-			databaseBody += entries.get(i).getTitle();
-			databaseBody += separator;
-			databaseBody += entries.get(i).getUsername();
-			databaseBody += separator;
-			databaseBody += entries.get(i).getEmail();
-			databaseBody += separator;
-			databaseBody += entries.get(i).getPassword();
-			databaseBody += separator;
-			databaseBody += Main.DATE_FORMAT.format(entries.get(i).getLastModified());
-			databaseBody += separator;
-			databaseBody += entries.get(i).getNotes().equals("") ? "-" : entries.get(i).getNotes();
+			databaseBody.append(entries.get(i).getTitle().equals("") ? "-" : entries.get(i).getTitle());
+			databaseBody.append(separator);
+			databaseBody.append(entries.get(i).getUsername().equals("") ? "-" : entries.get(i).getUsername());
+			databaseBody.append(separator);
+			databaseBody.append(entries.get(i).getEmail().equals("") ? "-" : entries.get(i).getEmail());
+			databaseBody.append(separator);
+			databaseBody.append(entries.get(i).getPassword().equals("") ? "-" : entries.get(i).getPassword());
+			databaseBody.append(separator);
+			databaseBody.append(Main.DATE_FORMAT.format(entries.get(i).getLastModified()));
+			databaseBody.append(separator);
+			databaseBody.append(entries.get(i).getNotes().equals("") ? "-" : entries.get(i).getNotes());
 			if (i < entries.size() - 1)
-				databaseBody += endEntrySeparator;
+				databaseBody.append(endEntrySeparator);
 		}
 
 		MessageDigest digest = MessageDigest.getInstance(database.getHashAlgorithm());
@@ -46,14 +46,14 @@ public class StringWizard {
 		databaseString += "PasswordManager<" + Main.VERSION_NUMBER + '>';
 		databaseString += separator;
 
-		if (!databaseBody.matches("\\A\\p{ASCII}*\\z")) {
+		if (!databaseBody.toString().matches("\\A\\p{ASCII}*\\z")) {
 			String asciiBody = "";
 			for (int i = 0; i < databaseBody.length(); i++)
 				if (String.valueOf(databaseBody.charAt(i)).matches("\\A\\p{ASCII}*\\z"))
 					asciiBody += databaseBody.charAt(i);
 			databaseString += EncryptionWizard.bytesToHex(digest.digest(asciiBody.getBytes()));
 		} else {
-			databaseString += EncryptionWizard.bytesToHex(digest.digest(databaseBody.getBytes()));
+			databaseString += EncryptionWizard.bytesToHex(digest.digest(databaseBody.toString().getBytes()));
 		}
 
 		databaseString += separator;
@@ -95,12 +95,19 @@ public class StringWizard {
 
 		if (entryStrings[0].length == 5) {
 			for (int i = 0; i < entryStrings.length; i++)
-				database.addEntry(new Entry(entryStrings[i][0], entryStrings[i][1], entryStrings[i][2],
-						entryStrings[i][3], Main.DATE_FORMAT.parse(entryStrings[i][4]), ""));
+				database.addEntry(new Entry(entryStrings[i][0].equals("-") ? "" : entryStrings[i][0],
+						entryStrings[i][1].equals("-") ? "" : entryStrings[i][1],
+						entryStrings[i][2].equals("-") ? "" : entryStrings[i][2],
+						entryStrings[i][3].equals("-") ? "" : entryStrings[i][3],
+						Main.DATE_FORMAT.parse(entryStrings[i][4]), ""));
 		} else {
 			for (int i = 0; i < entryStrings.length; i++)
-				database.addEntry(new Entry(entryStrings[i][0], entryStrings[i][1], entryStrings[i][2],
-						entryStrings[i][3], Main.DATE_FORMAT.parse(entryStrings[i][4]), entryStrings[i][5]));
+				database.addEntry(new Entry(entryStrings[i][0].equals("-") ? "" : entryStrings[i][0],
+						entryStrings[i][1].equals("-") ? "" : entryStrings[i][1],
+						entryStrings[i][2].equals("-") ? "" : entryStrings[i][2],
+						entryStrings[i][3].equals("-") ? "" : entryStrings[i][3],
+						Main.DATE_FORMAT.parse(entryStrings[i][4]),
+						entryStrings[i][5].equals("-") ? "" : entryStrings[i][5]));
 		}
 
 		return database;
