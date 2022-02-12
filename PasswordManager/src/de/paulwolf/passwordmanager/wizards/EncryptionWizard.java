@@ -74,7 +74,7 @@ public class EncryptionWizard {
 
 		if (verificationHex.equals(headStrings[1]))
 			return String.valueOf(headBodyStrings[0]) + StringWizard.headBodySeparator + plaintext;
-
+		
 		throw new WrongPasswordException("The entered password is incorrect!");
 	}
 

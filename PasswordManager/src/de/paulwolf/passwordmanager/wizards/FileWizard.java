@@ -102,7 +102,7 @@ public class FileWizard {
 			dtb.setPath(file);
 			dtb.setMasterKey(key);
 			DatabaseUI.initUI(dtb);
-		} catch (WrongPasswordException | BadPaddingException e) {
+		} catch (WrongPasswordException | BadPaddingException | IOException e) {
 			JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials", 0);
 			return false;
 		}

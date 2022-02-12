@@ -18,6 +18,7 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 	JPasswordField field = new JPasswordField(20);
 	JToggleButton show = new JToggleButton("Show");
 	JButton submit = new JButton("Submit Password");
+	JButton changeFile = new JButton("Change file");
 
 	public OpenDatabaseUI() {
 
@@ -38,10 +39,14 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		gbc.gridwidth = 2;
+		gbc.gridwidth = 1;
 		wrapper.add(submit, gbc);
 
+		gbc.gridx = 1;
+		wrapper.add(changeFile, gbc);
+
 		submit.addActionListener(this);
+		changeFile.addActionListener(this);
 		show.addActionListener(this);
 		field.addKeyListener(this);
 
@@ -53,6 +58,7 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 		frame.setMinimumSize(frame.getSize());
 		frame.setIconImage(Main.IMAGE);
 		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
 	}
@@ -63,6 +69,10 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 		if (e.getSource() == submit) {
 			if (MainUI.openDatabaseWithPassword(CreateDatabaseUI.toBytes(field.getPassword())))
 				frame.setVisible(false);
+		} else if (e.getSource() == changeFile) {
+			frame.setVisible(false);
+			MainUI mainui = new MainUI();
+			mainui.initUI();
 		} else {
 			if (show.isSelected())
 				field.setEchoChar((char) 0);

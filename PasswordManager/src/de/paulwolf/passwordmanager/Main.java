@@ -2,8 +2,11 @@ package de.paulwolf.passwordmanager;
 
 import java.awt.Image;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
@@ -32,18 +35,18 @@ public class Main {
 
 	// PBKDF2 HMAC algorithm
 	public static final String HMAC_ALGORITHM = "HMAC-SHA-256";
-	
+
 	// PBKDF2 # of iterations
 	public static final int ITERATIONS = 310000;
-	
+
 	// DATE FORMAT
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd@HH:mm");
 
 	// VERSION NUMBER
-	public static final String VERSION_NUMBER = "1.3.4";
+	public static final String VERSION_NUMBER = "1.3.5";
 
 	// VERIONS COMPATIBLE WITH
-	public static final String[] COMPATIBLE_VERSIONS = { "1.3.4", "1.3.3", "1.3.2" };
+	public static final String[] COMPATIBLE_VERSIONS = { "1.3.5", "1.3.4", "1.3.3", "1.3.2" };
 
 	public static final boolean DEBUG = true;
 
@@ -51,16 +54,42 @@ public class Main {
 
 	public static MainUI ui;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 
+		File file = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
 		loadIconImage();
+
 		ui = new MainUI();
-		
+
 		if (args.length > 0) {
+
 			MainUI.databaseFile = new File(args[0]);
 			new OpenDatabaseUI();
-		} else
-			ui.initUI();
+
+		} else {
+
+			if (Files.exists(file.toPath())) {
+
+				Scanner scanner = new Scanner(file);
+				String data = scanner.nextLine();
+				scanner.close();
+				
+				if (Files.exists(new File(data).toPath())) {
+					
+					MainUI.databaseFile = new File(data);
+					new OpenDatabaseUI();
+					
+				} else {
+					
+					ui.initUI();
+				}
+				
+			} else {
+				
+				ui.initUI();
+			}
+
+		}
 
 	}
 
