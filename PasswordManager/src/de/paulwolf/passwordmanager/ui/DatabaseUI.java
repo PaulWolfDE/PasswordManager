@@ -45,6 +45,7 @@ public class DatabaseUI {
 	static JButton saveDatabase;
 	static JButton saveDatabaseAs;
 	static JButton settings;
+	static JButton openDatabase;
 	static JTable table;
 	static JScrollPane scrollPane;
 	private static String[] columnNames = { "Title", "Username", "Email", "Password", "Last modified" };
@@ -239,11 +240,13 @@ public class DatabaseUI {
 		saveDatabase = new JButton("Save Database");
 		saveDatabaseAs = new JButton("Save Database As");
 		settings = new JButton("Settings");
+		openDatabase = new JButton("Open Database");
 
 		buttonPanel.add(addEntry);
 		buttonPanel.add(saveDatabase);
 		buttonPanel.add(saveDatabaseAs);
 		buttonPanel.add(settings);
+		buttonPanel.add(openDatabase);
 
 		tableWrapper.add(scrollPane, BorderLayout.CENTER);
 		tableWrapper.add(searchPanel, BorderLayout.SOUTH);
@@ -336,6 +339,18 @@ public class DatabaseUI {
 			public void actionPerformed(ActionEvent e) {
 
 				new SettingsUI();
+			}
+		});
+		
+		openDatabase.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				frame.setVisible(false);
+				MainUI mainui = new MainUI();
+				MainUI.uri.setText("");
+				mainui.initUI();
 			}
 		});
 	}
