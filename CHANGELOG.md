@@ -13,3 +13,8 @@
     - Randomly salted
     - SHA-256 HMAC algorithm
 - Allowing empty entries
+
+## Release 1.3.5
+- Added saving of previously opended database as run command
+    - `.pmrc` in `%Appdata%/PasswordManager/`
+    - Changing of the database to open in password input
