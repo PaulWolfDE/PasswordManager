@@ -35,7 +35,7 @@ Passwords are being generated either with
 ### En-/Deciphering Process
 
 #### Enciphering 
-- Generation of a 16 bytes initilization vector with `java.security.SecureRandom`
+- Generation of a 16 bytes initialization vector with `java.security.SecureRandom`
 - Creation of a plain text string from the database
 - Derivation of a 32 bytes key by `PBKDF2` algorithm at 310,000 iterations
 - Building a hash value over the plaintext string
@@ -45,7 +45,7 @@ Passwords are being generated either with
 
 #### Deciphering
 - Reading the cipher file
-- Derivating the user entered key
+- Derivation of the user entered key
 - Decryption of the ciphertext
 - Building a hash value over the resulting plaintext
 	- If the saved hash matches the generated, the password is correct
@@ -54,7 +54,7 @@ Passwords are being generated either with
 
 ### Run Commands/Variables
 The absolute path of the most recent opened database is saved in `%Appdata%/PasswordManager/.pmrc`.
-If and only if the file exists and the database is compatible it is opened during startup of the password manager.
+If and only if the file exists and the database is compatible, it is opened during startup of the password manager.
 The run commands should never be edited by something other than the PasswordManager.
 
 ### Cipher File
