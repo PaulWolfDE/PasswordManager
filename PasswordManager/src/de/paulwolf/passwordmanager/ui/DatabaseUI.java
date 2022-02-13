@@ -224,7 +224,7 @@ public class DatabaseUI {
 	}
 
 	public static void initUI(Database db) throws IOException {
-
+		
 		database = db;
 		
 		File rc = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");

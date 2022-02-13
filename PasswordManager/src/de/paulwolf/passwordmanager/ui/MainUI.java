@@ -137,7 +137,7 @@ public class MainUI implements ActionListener, KeyListener {
 
 			if (Files.exists(path) && !uri.getText().toString().equals("")) {
 
-				new OpenDatabaseUI();
+				new OpenDatabaseUI(path.toFile().getAbsolutePath());
 				databaseFile = path.toFile();
 			} else
 				JOptionPane.showMessageDialog(null, "Please enter a valid path or URI!", "Missing arguments",

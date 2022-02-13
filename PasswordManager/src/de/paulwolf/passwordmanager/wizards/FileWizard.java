@@ -109,7 +109,7 @@ public class FileWizard {
 		return true;
 	}
 
-	private static boolean isCompatible(String version) {
+	public static boolean isCompatible(String version) {
 		for (int i = 0; i < Main.COMPATIBLE_VERSIONS.length; i++) {
 			if (version.equals("PasswordManager<" + Main.COMPATIBLE_VERSIONS[i] + ">"))
 				return true;

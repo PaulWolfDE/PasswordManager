@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.ui.MainUI;
 import de.paulwolf.passwordmanager.ui.OpenDatabaseUI;
+import de.paulwolf.passwordmanager.wizards.FileWizard;
 
 public class Main {
 
@@ -64,7 +65,7 @@ public class Main {
 		if (args.length > 0) {
 
 			MainUI.databaseFile = new File(args[0]);
-			new OpenDatabaseUI();
+			new OpenDatabaseUI(new File(args[0]).getAbsolutePath());
 
 		} else {
 
@@ -73,24 +74,33 @@ public class Main {
 				Scanner scanner = new Scanner(file);
 				String data = scanner.nextLine();
 				scanner.close();
-				
+
 				if (Files.exists(new File(data).toPath())) {
-					
-					MainUI.databaseFile = new File(data);
-					new OpenDatabaseUI();
-					
+
+					Scanner scanner2 = new Scanner(new File(data));
+					String data2 = scanner2.nextLine();
+					scanner2.close();
+
+					if (FileWizard.isCompatible(data2)) {
+
+						MainUI.databaseFile = new File(data);
+						new OpenDatabaseUI(new File(data).getAbsolutePath());
+						
+					} else {
+
+						ui.initUI();
+					}
+
 				} else {
-					
+
 					ui.initUI();
 				}
-				
+
 			} else {
-				
+
 				ui.initUI();
 			}
-
 		}
-
 	}
 
 	private static void loadIconImage() {

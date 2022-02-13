@@ -20,8 +20,10 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 	JButton submit = new JButton("Submit Password");
 	JButton changeFile = new JButton("Change file");
 
-	public OpenDatabaseUI() {
+	public OpenDatabaseUI(String path) {
 
+		frame.setTitle(path);
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		wrapper.setLayout(new GridBagLayout());
 		gbc.gridwidth = GridBagConstraints.RELATIVE;
