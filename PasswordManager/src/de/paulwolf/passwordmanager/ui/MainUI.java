@@ -4,6 +4,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -25,6 +26,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,17 +36,22 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class MainUI implements ActionListener, KeyListener {
 
 	static JFrame frame = new JFrame("Password Manager");
 	static JPanel wrapper = new JPanel();
 	static JFileChooser fileChooser = new JFileChooser();
+	static JComboBox<Object> box;
 	static JButton browse = new JButton("Browse");
 	static JButton newDatabase = new JButton("Create New Database");
 	static JButton openDatabase = new JButton("Open Database At Entered Path");
 	static JTextField uri = new JTextField(25);
 	public static File databaseFile;
+
+	static ArrayList<String> data = new ArrayList<>();
 
 	public static boolean openDatabaseWithPassword(byte[] password) {
 
@@ -63,6 +71,48 @@ public class MainUI implements ActionListener, KeyListener {
 
 	public void initUI() {
 
+		File recentlyOpened = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
+		if (Files.exists(recentlyOpened.toPath())) {
+			Scanner scanner = null;
+			try {
+				scanner = new Scanner(recentlyOpened);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			while (scanner.hasNextLine()) {
+				String s = scanner.nextLine();
+				if (Files.exists(new File(s).toPath())) {
+					File file = new File(s);
+					if (Files.exists(file.toPath())) {
+						Scanner scanner2 = null;
+						try {
+							scanner2 = new Scanner(file);
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
+						String ver = scanner2.nextLine();
+						if (FileWizard.isCompatible(ver))
+							if (!data.contains(file.getAbsolutePath()))
+								data.add(file.getAbsolutePath());
+						scanner2.close();
+					}
+				}
+			}
+			scanner.close();
+		}
+
+		System.out.println(data.toString());
+
+		box = new JComboBox<>(data.toArray());
+		box.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				uri.setText(box.getSelectedItem().toString());
+			}
+		});
+
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Password Manager Database Files", "pmdtb");
 		fileChooser.setFileFilter(filter);
 		browse.addActionListener(this);
@@ -78,22 +128,25 @@ public class MainUI implements ActionListener, KeyListener {
 		gbc.weighty = 1;
 
 		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridy = 1;
 		wrapper.add(uri, gbc);
 
-		gbc.gridy = 0;
+		gbc.gridy = 1;
 		gbc.gridx = 1;
 		wrapper.add(browse, gbc);
 
 		gbc.gridwidth = 2;
 		gbc.gridx = 0;
-		gbc.gridy = 2;
-		wrapper.add(newDatabase, gbc);
+		gbc.gridy = 0;
+		wrapper.add(box, gbc);
 
-		gbc.gridwidth = 2;
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		wrapper.add(openDatabase, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		wrapper.add(newDatabase, gbc);
 
 		uri.addKeyListener(this);
 		uri.setPreferredSize(new Dimension(400, 26));
@@ -139,6 +192,24 @@ public class MainUI implements ActionListener, KeyListener {
 
 				new OpenDatabaseUI(path.toFile().getAbsolutePath());
 				databaseFile = path.toFile();
+
+				File rc = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
+				File rcDir = new File(System.getenv("Appdata") + "/PasswordManager/");
+				rcDir.mkdirs();
+				try {
+					rc.createNewFile();
+					FileWriter writer = new FileWriter(rc);
+					Object[] arr = data.toArray();
+					writer.write(databaseFile.getAbsolutePath() + "\n");
+					for (int i = 0; i < arr.length; i++) {
+						if (!new File(arr[i].toString()).getAbsolutePath().equals(databaseFile.getAbsolutePath()))
+							writer.write(new File(arr[i].toString()).getAbsolutePath() + "\n");
+					}
+
+					writer.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			} else
 				JOptionPane.showMessageDialog(null, "Please enter a valid path or URI!", "Missing arguments",
 						JOptionPane.INFORMATION_MESSAGE);

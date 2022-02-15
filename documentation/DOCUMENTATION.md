@@ -53,9 +53,9 @@ Passwords are being generated either with
 - The plaintext database is displayed in the GUI
 
 ### Run Commands/Variables
-The absolute path of the most recent opened database is saved in `%Appdata%/PasswordManager/.pmrc`.
-If and only if the file exists and the database is compatible, it is opened during startup of the password manager.
-The run commands should never be edited by something other than the PasswordManager.
+Paths of recently opened files are saved in `%Appdata%/PasswordManager/.pmrc`.
+If and only if a file exists and the database is compatible, it is displayed in a combo box during startup.
+The run commands should never be edited by something other than the PasswordManager!
 
 ### Cipher File
 ```

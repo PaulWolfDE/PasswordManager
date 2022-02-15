@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -227,14 +226,6 @@ public class DatabaseUI {
 		
 		database = db;
 		
-		File rc = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
-		File rcDir = new File(System.getenv("Appdata") + "/PasswordManager/");
-		rcDir.mkdirs();
-		rc.createNewFile();
-		FileWriter writer = new FileWriter(rc);
-		writer.write(database.getPath().getAbsolutePath());
-		writer.close();
-
 		searchPanel = new JPanel(new BorderLayout());
 		tableWrapper = new JPanel(new BorderLayout());
 		scrollPane = new JScrollPane(table);

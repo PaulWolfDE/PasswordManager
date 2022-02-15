@@ -4,16 +4,13 @@ import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.ui.MainUI;
 import de.paulwolf.passwordmanager.ui.OpenDatabaseUI;
-import de.paulwolf.passwordmanager.wizards.FileWizard;
 
 public class Main {
 
@@ -44,10 +41,10 @@ public class Main {
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd@HH:mm");
 
 	// VERSION NUMBER
-	public static final String VERSION_NUMBER = "1.3.5";
+	public static final String VERSION_NUMBER = "1.3.6";
 
 	// VERIONS COMPATIBLE WITH
-	public static final String[] COMPATIBLE_VERSIONS = { "1.3.5", "1.3.4", "1.3.3", "1.3.2" };
+	public static final String[] COMPATIBLE_VERSIONS = { "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2" };
 
 	public static final boolean DEBUG = true;
 
@@ -57,17 +54,19 @@ public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException {
 
-		File file = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
+		// File file = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
 		loadIconImage();
 
 		ui = new MainUI();
 
+		ui.initUI();
+		
 		if (args.length > 0) {
 
 			MainUI.databaseFile = new File(args[0]);
 			new OpenDatabaseUI(new File(args[0]).getAbsolutePath());
 
-		} else {
+		} /*else {
 
 			if (Files.exists(file.toPath())) {
 
@@ -100,7 +99,7 @@ public class Main {
 
 				ui.initUI();
 			}
-		}
+		}*/
 	}
 
 	private static void loadIconImage() {
