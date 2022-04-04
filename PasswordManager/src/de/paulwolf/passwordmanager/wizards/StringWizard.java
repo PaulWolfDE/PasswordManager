@@ -17,9 +17,9 @@ public class StringWizard {
 	public final static String endEntrySeparator = "\n\n";
 
 	public static String makeString(Database database, byte[] iv, byte[] salt)
-			throws NoSuchAlgorithmException, UnsupportedEncodingException {
+			throws NoSuchAlgorithmException {
 
-		String databaseString = "";
+		StringBuilder databaseString = new StringBuilder();
 		StringBuilder databaseBody = new StringBuilder();
 
 		ArrayList<Entry> entries = database.getEntries();
@@ -43,38 +43,38 @@ public class StringWizard {
 
 		MessageDigest digest = MessageDigest.getInstance(database.getHashAlgorithm());
 
-		databaseString += "PasswordManager<" + Main.VERSION_NUMBER + '>';
-		databaseString += separator;
+		databaseString.append("PasswordManager<" + Main.VERSION_NUMBER + '>');
+		databaseString.append(separator);
 
 		if (!databaseBody.toString().matches("\\A\\p{ASCII}*\\z")) {
-			String asciiBody = "";
+			StringBuilder asciiBody = new StringBuilder();
 			for (int i = 0; i < databaseBody.length(); i++)
 				if (String.valueOf(databaseBody.charAt(i)).matches("\\A\\p{ASCII}*\\z"))
-					asciiBody += databaseBody.charAt(i);
-			databaseString += EncryptionWizard.bytesToHex(digest.digest(asciiBody.getBytes()));
+					asciiBody.append(databaseBody.charAt(i));
+			databaseString.append(EncryptionWizard.bytesToHex(digest.digest(asciiBody.toString().getBytes())));
 		} else {
-			databaseString += EncryptionWizard.bytesToHex(digest.digest(databaseBody.toString().getBytes()));
+			databaseString.append(EncryptionWizard.bytesToHex(digest.digest(databaseBody.toString().getBytes())));
 		}
 
-		databaseString += separator;
-		databaseString += database.getEncryptionAlgorithm();
-		databaseString += separator;
-		databaseString += database.getHashAlgorithm();
-		databaseString += separator;
+		databaseString.append(separator);
+		databaseString.append(database.getEncryptionAlgorithm());
+		databaseString.append(separator);
+		databaseString.append(database.getHashAlgorithm());
+		databaseString.append(separator);
 		for (int i = 0; i < iv.length; i++) {
-			databaseString += iv[i];
+			databaseString.append(iv[i]);
 			if (i != 15)
-				databaseString += ",";
+				databaseString.append(",");
 		}
-		databaseString += separator;
+		databaseString.append(separator);
 		for (int i = 0; i < salt.length; i++) {
-			databaseString += salt[i];
+			databaseString.append(salt[i]);
 			if (i != 15)
-				databaseString += ",";
+				databaseString.append(",");
 		}
-		databaseString += headBodySeparator;
-		databaseString += databaseBody;
-		return databaseString;
+		databaseString.append(headBodySeparator);
+		databaseString.append(databaseBody);
+		return databaseString.toString();
 	}
 
 	public static Database evaluateString(String databaseString) throws ParseException, UnsupportedEncodingException {
@@ -94,20 +94,20 @@ public class StringWizard {
 		database.setMasterKey(headStrings[0].getBytes());
 
 		if (entryStrings[0].length == 5) {
-			for (int i = 0; i < entryStrings.length; i++)
-				database.addEntry(new Entry(entryStrings[i][0].equals("-") ? "" : entryStrings[i][0],
-						entryStrings[i][1].equals("-") ? "" : entryStrings[i][1],
-						entryStrings[i][2].equals("-") ? "" : entryStrings[i][2],
-						entryStrings[i][3].equals("-") ? "" : entryStrings[i][3],
-						Main.DATE_FORMAT.parse(entryStrings[i][4]), ""));
+			for (String[] entryString : entryStrings)
+				database.addEntry(new Entry(entryString[0].equals("-") ? "" : entryString[0],
+						entryString[1].equals("-") ? "" : entryString[1],
+						entryString[2].equals("-") ? "" : entryString[2],
+						entryString[3].equals("-") ? "" : entryString[3],
+						Main.DATE_FORMAT.parse(entryString[4]), ""));
 		} else {
-			for (int i = 0; i < entryStrings.length; i++)
-				database.addEntry(new Entry(entryStrings[i][0].equals("-") ? "" : entryStrings[i][0],
-						entryStrings[i][1].equals("-") ? "" : entryStrings[i][1],
-						entryStrings[i][2].equals("-") ? "" : entryStrings[i][2],
-						entryStrings[i][3].equals("-") ? "" : entryStrings[i][3],
-						Main.DATE_FORMAT.parse(entryStrings[i][4]),
-						entryStrings[i][5].equals("-") ? "" : entryStrings[i][5]));
+			for (String[] entryString : entryStrings)
+				database.addEntry(new Entry(entryString[0].equals("-") ? "" : entryString[0],
+						entryString[1].equals("-") ? "" : entryString[1],
+						entryString[2].equals("-") ? "" : entryString[2],
+						entryString[3].equals("-") ? "" : entryString[3],
+						Main.DATE_FORMAT.parse(entryString[4]),
+						entryString[5].equals("-") ? "" : entryString[5]));
 		}
 
 		return database;

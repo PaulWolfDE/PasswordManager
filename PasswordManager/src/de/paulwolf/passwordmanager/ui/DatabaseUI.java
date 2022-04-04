@@ -4,10 +4,9 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serial;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -48,23 +47,21 @@ public class DatabaseUI {
 	static JButton openDatabase;
 	static JTable table;
 	static JScrollPane scrollPane;
-	private static String[] columnNames = { "Title", "Username", "Email", "Password", "Last modified" };
+	private static final String[] columnNames = { "Title", "Username", "Email", "Password", "Last modified" };
 	private static int selectedRow;
-	private static Object[] entries;
 	private static DefaultTableModel dtm;
 	private static JTextField filter;
 	private static int t = 0;
 
 	public static void updateTable() {
 
-		entries = database.getEntries().toArray();
+		Object[] entries = database.getEntries().toArray();
 		String[][] asteriskContents = new String[entries.length][5];
 
 		for (int i = 0; i < entries.length; i++) {
 
 			asteriskContents[i] = ((Entry) entries[i]).getInformationAsArray();
 			int t = asteriskContents[i][3].length();
-			asteriskContents[i][3] = "";
 			asteriskContents[i][3] = new String(new char[t]).replace('\0', Main.ECHO_CHAR);
 		}
 
@@ -88,90 +85,62 @@ public class DatabaseUI {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 
-				SwingUtilities.invokeLater(new Runnable() {
-
-					@Override
-					public void run() {
-						selectedRow = table.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), table));
-						if (selectedRow > -1) {
-							table.setRowSelectionInterval(selectedRow, selectedRow);
-						}
+				SwingUtilities.invokeLater(() -> {
+					selectedRow = table.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), table));
+					if (selectedRow > -1) {
+						table.setRowSelectionInterval(selectedRow, selectedRow);
 					}
 				});
 			}
 
 			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				;
 			}
 
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
-				;
 			}
 		});
 
-		menuCopyUsername.addActionListener(new ActionListener() {
+		menuCopyUsername.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				StringSelection stringSelection = new StringSelection(
-						database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getUsername());
-				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-				clipboard.setContents(stringSelection, null);
-			}
+			StringSelection stringSelection = new StringSelection(
+					database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getUsername());
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, null);
 		});
-		menuCopyEmail.addActionListener(new ActionListener() {
+		menuCopyEmail.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				StringSelection stringSelection = new StringSelection(
-						database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getEmail());
-				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-				clipboard.setContents(stringSelection, null);
-			}
+			StringSelection stringSelection = new StringSelection(
+					database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getEmail());
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, null);
 		});
-		menuCopyPassword.addActionListener(new ActionListener() {
+		menuCopyPassword.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				StringSelection stringSelection = new StringSelection(
-						database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getPassword());
-				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-				clipboard.setContents(stringSelection, null);
-			}
+			StringSelection stringSelection = new StringSelection(
+					database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getPassword());
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(stringSelection, null);
 		});
 
-		menuItemEdit.addActionListener(new ActionListener() {
+		menuItemEdit.addActionListener(e -> new NewEntryUI(database.getEntries().get(table.convertRowIndexToModel(selectedRow)), selectedRow));
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		menuItemRemove.addActionListener(e -> {
 
-				new NewEntryUI(database.getEntries().get(table.convertRowIndexToModel(selectedRow)), selectedRow);
-			}
-		});
-
-		menuItemRemove.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				ArrayList<Entry> dtb = database.getEntries();
-				if (dtb.size() != 1) {
-					dtb.remove(table.convertRowIndexToModel(selectedRow));
-					dtm.removeRow(table.convertRowIndexToModel(selectedRow));
-					database.setEntries(dtb);
-				} else
-					JOptionPane.showMessageDialog(null, "The database must have at least 1 entry!",
-							"Database can't be empty!", JOptionPane.INFORMATION_MESSAGE);
-			}
+			ArrayList<Entry> dtb = database.getEntries();
+			if (dtb.size() != 1) {
+				dtb.remove(table.convertRowIndexToModel(selectedRow));
+				dtm.removeRow(table.convertRowIndexToModel(selectedRow));
+				database.setEntries(dtb);
+			} else
+				JOptionPane.showMessageDialog(null, "The database must have at least 1 entry!",
+						"Database can't be empty!", JOptionPane.INFORMATION_MESSAGE);
 		});
 
 		dtm = new DefaultTableModel(asteriskContents, columnNames) {
 
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -262,106 +231,78 @@ public class DatabaseUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
-		addEntry.addActionListener(new ActionListener() {
+		addEntry.addActionListener(e -> new NewEntryUI(null, -1));
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		saveDatabase.addActionListener(e -> {
 
-				new NewEntryUI(null, -1);
+			try {
+				FileWizard.saveDatabase(database, database.getPath());
+			} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
+					| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
+					| IOException | IllegalStateException | LimitReachedException e1) {
+				e1.printStackTrace();
 			}
 		});
 
-		saveDatabase.addActionListener(new ActionListener() {
+		saveDatabaseAs.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setSelectedFile(new File("Database.pmdtb"));
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Password Manager Database Files",
+					"pmdtb");
+			fileChooser.setFileFilter(filter);
 
-				try {
-					FileWizard.saveDatabase(database, database.getPath());
-				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
-						| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
-						| IOException | IllegalStateException | LimitReachedException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
+			int returnVal = fileChooser.showSaveDialog(frame);
 
-		saveDatabaseAs.addActionListener(new ActionListener() {
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+				String pathString = fileChooser.getSelectedFile().toString();
 
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setSelectedFile(new File("Database.pmdtb"));
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Password Manager Database Files",
-						"pmdtb");
-				fileChooser.setFileFilter(filter);
+				if (pathString.length() > 6) {
 
-				int returnVal = fileChooser.showSaveDialog(frame);
+					if (pathString.substring(pathString.length() - 6).equalsIgnoreCase(".pmdtb")) {
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-					String pathString = fileChooser.getSelectedFile().toString();
-
-					if (pathString.length() > 6) {
-
-						if (pathString.substring(pathString.length() - 6).equalsIgnoreCase(".pmdtb")) {
-
-							database.setPath(new File(pathString));
-						} else {
-
-							pathString += ".pmdtb";
-							database.setPath(new File(pathString));
-						}
-
+						database.setPath(new File(pathString));
 					} else {
 
 						pathString += ".pmdtb";
 						database.setPath(new File(pathString));
 					}
 
-					try {
-						FileWizard.saveDatabase(database, database.getPath().getAbsoluteFile());
-					} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
-							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
-							| IOException | IllegalStateException | LimitReachedException e1) {
-						e1.printStackTrace();
-					}
+				} else {
 
+					pathString += ".pmdtb";
+					database.setPath(new File(pathString));
+				}
+
+				try {
+					FileWizard.saveDatabase(database, database.getPath().getAbsoluteFile());
+				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
+						| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
+						| IOException | IllegalStateException | LimitReachedException e1) {
+					e1.printStackTrace();
 				}
 
 			}
+
 		});
 
-		settings.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				new SettingsUI();
-			}
-		});
+		settings.addActionListener(e -> new SettingsUI());
 		
-		openDatabase.addActionListener(new ActionListener() {
+		openDatabase.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				frame.setVisible(false);
-				MainUI mainui = new MainUI();
-				MainUI.uri.setText("");
-				mainui.initUI();
-			}
+			frame.setVisible(false);
+			MainUI mainui = new MainUI();
+			MainUI.uri.setText("");
+			mainui.initUI();
 		});
 	}
 
 	public static void addEntry(Entry e) {
 
 		database.addEntry(e);
-		String[] asteriskContents = new String[5];
-		asteriskContents = database.getEntries().get(database.getEntries().size() - 1).getInformationAsArray();
+		String[] asteriskContents = database.getEntries().get(database.getEntries().size() - 1).getInformationAsArray();
 		int t = asteriskContents[3].length();
-		asteriskContents[3] = "";
 		asteriskContents[3] = new String(new char[t]).replace('\0', Main.ECHO_CHAR);
 
 		dtm.addRow(asteriskContents);

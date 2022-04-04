@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
@@ -19,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -59,8 +60,8 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 	JButton generateKey2 = new JButton("Generate Random Key");
 	JButton createDatabase = new JButton("Create Database");
 
-	JComboBox<String> eaBox = new JComboBox<String>(Main.ENCRYPTION_ALGORITHMS);
-	JComboBox<String> hashBox = new JComboBox<String>(Main.HASH_ALGORITHMS);
+	JComboBox<String> eaBox = new JComboBox<>(Main.ENCRYPTION_ALGORITHMS);
+	JComboBox<String> hashBox = new JComboBox<>(Main.HASH_ALGORITHMS);
 
 	JToggleButton showKey = new JToggleButton("Show");
 	JToggleButton showKeyVerification = new JToggleButton("Show");
@@ -72,11 +73,9 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 
 	JFileChooser fileChooser = new JFileChooser();
 
-	File databaseFile;
-
 	static byte[] toBytes(char[] chars) {
 		CharBuffer charBuffer = CharBuffer.wrap(chars);
-		ByteBuffer byteBuffer = Charset.forName("ascii").encode(charBuffer);
+		ByteBuffer byteBuffer = StandardCharsets.US_ASCII.encode(charBuffer);
 		byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
 		Arrays.fill(byteBuffer.array(), (byte) 0);
 		return bytes;
@@ -192,11 +191,11 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 
 			String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\"";
 			SecureRandom sr = new SecureRandom();
-			String password = "";
+			StringBuilder password = new StringBuilder();
 			for (int i = 0; i < 24; i++)
-				password += alphabet.charAt(sr.nextInt(alphabet.length()));
-			keyField.setText(password);
-			keyVerificationField.setText(password);
+				password.append(alphabet.charAt(sr.nextInt(alphabet.length())));
+			keyField.setText(password.toString());
+			keyVerificationField.setText(password.toString());
 		}
 
 		if (e.getSource() == generateKey) {
@@ -240,12 +239,12 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 
 		if (e.getSource() == createDatabase) {
 
-			Path path = Paths.get(pathField.getText().toString());
+			Path path = Paths.get(pathField.getText());
 
 			if (Arrays.equals(toBytes(keyField.getPassword()), toBytes(keyVerificationField.getPassword()))) {
 
-				if (!pathField.getText().toString().equals("")
-						&& !toBytes(keyField.getPassword()).toString().equals("")) {
+				if (!pathField.getText().equals("")
+						&& !Arrays.toString(toBytes(keyField.getPassword())).equals("")) {
 
 					Database db = new Database();
 
@@ -266,14 +265,16 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 					}
 
 					try {
-						db.getPath().createNewFile();
+						boolean fileCreation = db.getPath().createNewFile();
+						if (!fileCreation)
+							System.out.println("File could not be created.");
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
 
 					db.setMasterKey(toBytes(keyField.getPassword()));
-					db.setHashAlgorithm(hashBox.getSelectedItem().toString());
-					db.setEncryptionAlgorithm(eaBox.getSelectedItem().toString());
+					db.setHashAlgorithm(Objects.requireNonNull(hashBox.getSelectedItem()).toString());
+					db.setEncryptionAlgorithm(Objects.requireNonNull(eaBox.getSelectedItem()).toString());
 					db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123", "Note"));
 
 					frame.setVisible(false);
@@ -304,7 +305,6 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		;
 	}
 
 	@Override
@@ -316,6 +316,5 @@ public class CreateDatabaseUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		;
 	}
 }

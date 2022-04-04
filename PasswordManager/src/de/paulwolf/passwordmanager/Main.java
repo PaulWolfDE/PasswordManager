@@ -5,10 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
-import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.ui.MainUI;
 import de.paulwolf.passwordmanager.ui.OpenDatabaseUI;
 
@@ -45,10 +45,6 @@ public class Main {
 
 	// VERIONS COMPATIBLE WITH
 	public static final String[] COMPATIBLE_VERSIONS = { "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2" };
-
-	public static final boolean DEBUG = true;
-
-	public static Database db = new Database();
 
 	public static MainUI ui;
 
@@ -105,7 +101,7 @@ public class Main {
 	private static void loadIconImage() {
 
 		try {
-			IMAGE = ImageIO.read(Main.class.getResource("/icon.jpg"));
+			IMAGE = ImageIO.read(Objects.requireNonNull(Main.class.getResource("/icon.jpg")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

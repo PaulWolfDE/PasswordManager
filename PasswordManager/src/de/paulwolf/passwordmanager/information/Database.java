@@ -12,7 +12,7 @@ public class Database {
 	private String hashAlgorithm = Main.HASH_ALGORITHM;
 	private String encryptionAlgorithm = Main.ENCRYPTION_ALGORITHM;
 	
-	private ArrayList<Entry> entries = new ArrayList<Entry>();
+	private ArrayList<Entry> entries = new ArrayList<>();
 
 	public void setHashAlgorithm(String hashAlgorithm) {
 		this.hashAlgorithm = hashAlgorithm;

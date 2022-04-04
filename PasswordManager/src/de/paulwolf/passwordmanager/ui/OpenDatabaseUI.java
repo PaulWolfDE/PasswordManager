@@ -86,7 +86,6 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		;
 	}
 
 	@Override
@@ -98,6 +97,5 @@ public class OpenDatabaseUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		;
 	}
 }

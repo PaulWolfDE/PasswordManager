@@ -37,6 +37,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class MainUI implements ActionListener, KeyListener {
@@ -79,7 +80,9 @@ public class MainUI implements ActionListener, KeyListener {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-			while (scanner.hasNextLine()) {
+			while (true) {
+				assert scanner != null;
+				if (!scanner.hasNextLine()) break;
 				String s = scanner.nextLine();
 				if (Files.exists(new File(s).toPath())) {
 					File file = new File(s);
@@ -90,6 +93,7 @@ public class MainUI implements ActionListener, KeyListener {
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 						}
+						assert scanner2 != null;
 						String ver = scanner2.nextLine();
 						if (FileWizard.isCompatible(ver))
 							if (!data.contains(file.getAbsolutePath()))
@@ -104,14 +108,7 @@ public class MainUI implements ActionListener, KeyListener {
 		System.out.println(data.toString());
 
 		box = new JComboBox<>(data.toArray());
-		box.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				uri.setText(box.getSelectedItem().toString());
-			}
-		});
+		box.addActionListener(e -> uri.setText(Objects.requireNonNull(box.getSelectedItem()).toString()));
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Password Manager Database Files", "pmdtb");
 		fileChooser.setFileFilter(filter);
@@ -177,7 +174,7 @@ public class MainUI implements ActionListener, KeyListener {
 
 		if (e.getSource() == openDatabase) {
 
-			String tempURI = uri.getText().toString();
+			String tempURI = uri.getText();
 
 			if (tempURI.length() > 6) {
 				if (!tempURI.substring(tempURI.length() - 6).equalsIgnoreCase(".pmdtb"))
@@ -188,22 +185,26 @@ public class MainUI implements ActionListener, KeyListener {
 
 			Path path = Paths.get(tempURI);
 
-			if (Files.exists(path) && !uri.getText().toString().equals("")) {
+			if (Files.exists(path) && !uri.getText().equals("")) {
 
 				new OpenDatabaseUI(path.toFile().getAbsolutePath());
 				databaseFile = path.toFile();
 
 				File rc = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
 				File rcDir = new File(System.getenv("Appdata") + "/PasswordManager/");
-				rcDir.mkdirs();
+				boolean directoryCreation = rcDir.mkdirs();
+				if (!directoryCreation)
+					System.out.println("Directory creation failed.");
 				try {
-					rc.createNewFile();
+					boolean fileCreation = rc.createNewFile();
+					if (!fileCreation)
+						System.out.println("File could not be created.");
 					FileWriter writer = new FileWriter(rc);
 					Object[] arr = data.toArray();
 					writer.write(databaseFile.getAbsolutePath() + "\n");
-					for (int i = 0; i < arr.length; i++) {
-						if (!new File(arr[i].toString()).getAbsolutePath().equals(databaseFile.getAbsolutePath()))
-							writer.write(new File(arr[i].toString()).getAbsolutePath() + "\n");
+					for (Object o : arr) {
+						if (!new File(o.toString()).getAbsolutePath().equals(databaseFile.getAbsolutePath()))
+							writer.write(new File(o.toString()).getAbsolutePath() + "\n");
 					}
 
 					writer.close();
@@ -223,9 +224,8 @@ public class MainUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		;
 
-	}
+    }
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -236,7 +236,6 @@ public class MainUI implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		;
 
-	}
+    }
 }

@@ -8,12 +8,12 @@ import de.paulwolf.passwordmanager.Main;
 
 public class Entry {
 
-	private String title;
-	private String username;
-	private String email;
+	private final String title;
+	private final String username;
+	private final String email;
+	private final Date lastModified;
+	private final String notes;
 	private String password;
-	private Date lastModified;
-	private String notes;
 
 	// CONSTRUCTOR FOR CREATING AN ENTRY
 	public Entry(String title, String username, String email, String password, String notes) {
@@ -53,24 +53,12 @@ public class Entry {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getEmail() {
 		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getPassword() {
@@ -85,16 +73,8 @@ public class Entry {
 		return lastModified;
 	}
 
-	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
-	}
-
 	public String getNotes() {
 		return notes;
-	}
-
-	public void setNotes(String notes) {
-		this.notes = notes;
 	}
 
 	// DEBUG

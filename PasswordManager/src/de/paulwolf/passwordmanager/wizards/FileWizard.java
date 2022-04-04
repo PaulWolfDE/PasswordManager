@@ -56,21 +56,21 @@ public class FileWizard {
 			throws FileNotFoundException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException,
 			UnsupportedEncodingException, ParseException, IllegalStateException, LimitReachedException {
-		String databaseString = "";
+		StringBuilder databaseString = new StringBuilder();
 		Scanner scanner = new Scanner(file);
 		int i = 0;
 		while (scanner.hasNextLine()) {
 			if (i != 0)
-				databaseString = String.valueOf(databaseString) + StringWizard.separator;
+				databaseString.append(StringWizard.separator);
 			i++;
-			databaseString = String.valueOf(databaseString) + scanner.nextLine();
+			databaseString.append(scanner.nextLine());
 		}
 		scanner.close();
 
-		String[] splitbase = databaseString.split(StringWizard.separator);
+		String[] splitbase = databaseString.toString().split(StringWizard.separator);
 		if (!isCompatible(splitbase[0])) {
 			JOptionPane.showMessageDialog(null,
-					"Either the file is not an database file or the version is not compatible!", "Invalid file", 0);
+					"Either the file is not an database file or the version is not compatible!", "Invalid file", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		byte[] iv = new byte[16];
@@ -98,12 +98,12 @@ public class FileWizard {
 		}
 
 		try {
-			Database dtb = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString, derivatedKey, iv));
+			Database dtb = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString.toString(), derivatedKey, iv));
 			dtb.setPath(file);
 			dtb.setMasterKey(key);
 			DatabaseUI.initUI(dtb);
 		} catch (WrongPasswordException | BadPaddingException | IOException e) {
-			JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials", 0);
+			JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		return true;

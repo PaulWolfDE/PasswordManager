@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import javax.swing.JButton;
@@ -27,12 +27,12 @@ import de.paulwolf.passwordmanager.Main;
 
 public class SettingsUI implements ActionListener {
 
-	JFrame frame = new JFrame("Settings");;
+	JFrame frame = new JFrame("Settings");
 	JPanel wrapper = new JPanel();
 	JLabel eaLabel = new JLabel("Encryption Algorithm");
-	JComboBox<String> eaBox = new JComboBox<String>(Main.ENCRYPTION_ALGORITHMS);
+	JComboBox<String> eaBox = new JComboBox<>(Main.ENCRYPTION_ALGORITHMS);
 	JLabel hashLabel = new JLabel("Hash Algorithm");
-	JComboBox<String> hashBox = new JComboBox<String>(Main.HASH_ALGORITHMS);
+	JComboBox<String> hashBox = new JComboBox<>(Main.HASH_ALGORITHMS);
 	JPasswordField keyField = new JPasswordField(30);
 	JToggleButton showKey = new JToggleButton("Show");
 	JLabel keyLabel = new JLabel("Master Key");
@@ -49,7 +49,7 @@ public class SettingsUI implements ActionListener {
 
 	static byte[] toBytes(char[] chars) {
 		CharBuffer charBuffer = CharBuffer.wrap(chars);
-		ByteBuffer byteBuffer = Charset.forName("ascii").encode(charBuffer);
+		ByteBuffer byteBuffer = StandardCharsets.US_ASCII.encode(charBuffer);
 		byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
 		Arrays.fill(byteBuffer.array(), (byte) 0);
 		return bytes;
@@ -98,7 +98,6 @@ public class SettingsUI implements ActionListener {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				;
 			}
 
 			@Override
@@ -109,7 +108,6 @@ public class SettingsUI implements ActionListener {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				;
 			}
 		});
 	}
@@ -118,7 +116,6 @@ public class SettingsUI implements ActionListener {
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		wrapper.setLayout(new GridBagLayout());
-		gbc.gridwidth = GridBagConstraints.RELATIVE;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(10, 10, 10, 10);
 		gbc.weightx = 1;
@@ -202,7 +199,7 @@ public class SettingsUI implements ActionListener {
 				go();
 			} else
 				JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",
-						0);
+						JOptionPane.ERROR_MESSAGE);
 		} else if (e.getSource() == showKey) {
 			if (showKey.isSelected())
 				keyField.setEchoChar((char) 0);

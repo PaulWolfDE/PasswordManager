@@ -21,16 +21,10 @@ public class EncryptionWizard {
 
 	public static String encrypt(String databaseString, byte[] key, byte[] iv) throws NoSuchAlgorithmException,
 			InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException,
-			IllegalBlockSizeException, UnsupportedEncodingException {
+			IllegalBlockSizeException {
 
 		String[] headBodyStrings = databaseString.split(StringWizard.headBodySeparator);
 		String[] headStrings = headBodyStrings[0].split(StringWizard.separator);
-		String[] bodyStrings = headBodyStrings[1].split(StringWizard.endEntrySeparator);
-
-		String[][] entryStrings = new String[bodyStrings.length][5];
-
-		for (int i = 0; i < bodyStrings.length; i++)
-			entryStrings[i] = bodyStrings[i].split(StringWizard.separator);
 
 		String ciphertext = encrypt(headStrings[2], headBodyStrings[1],
 				new SecretKeySpec(key, 0, key.length,
@@ -39,9 +33,7 @@ public class EncryptionWizard {
 								|| headStrings[2].equals("Blowfish/CTR/NoPadding") ? "Blowfish" : "AES"),
 				iv);
 
-		String cipherFileString = String.valueOf(headBodyStrings[0]) + StringWizard.headBodySeparator + ciphertext;
-
-		return cipherFileString;
+		return headBodyStrings[0] + StringWizard.headBodySeparator + ciphertext;
 	}
 
 	public static String decrypt(String cipherString, byte[] key, byte[] iv) throws NoSuchAlgorithmException,
@@ -63,17 +55,17 @@ public class EncryptionWizard {
 		String verificationHex;
 
 		if (!plaintext.matches("\\A\\p{ASCII}*\\z")) {
-			String asciiBody = "";
+			StringBuilder asciiBody = new StringBuilder();
 			for (int i = 0; i < plaintext.length(); i++)
 				if (String.valueOf(plaintext.charAt(i)).matches("\\A\\p{ASCII}*\\z"))
-					asciiBody += plaintext.charAt(i);
-			verificationHex = bytesToHex(digest.digest(asciiBody.getBytes()));
+					asciiBody.append(plaintext.charAt(i));
+			verificationHex = bytesToHex(digest.digest(asciiBody.toString().getBytes()));
 		} else {
 			verificationHex = bytesToHex(digest.digest(plaintext.getBytes()));
 		}
 
 		if (verificationHex.equals(headStrings[1]))
-			return String.valueOf(headBodyStrings[0]) + StringWizard.headBodySeparator + plaintext;
+			return headBodyStrings[0] + StringWizard.headBodySeparator + plaintext;
 		
 		throw new WrongPasswordException("The entered password is incorrect!");
 	}
@@ -82,9 +74,9 @@ public class EncryptionWizard {
 
 		StringBuilder hexString = new StringBuilder(2 * bytes.length);
 
-		for (int i = 0; i < bytes.length; i++) {
+		for (byte aByte : bytes) {
 
-			String hex = Integer.toHexString(0xFF & bytes[i]);
+			String hex = Integer.toHexString(0xFF & aByte);
 
 			if (hex.length() == 1)
 				hexString.append('0');
@@ -104,103 +96,97 @@ public class EncryptionWizard {
 
 	private static String encrypt(String algorithm, String input, SecretKey key, byte[] iv)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
-			InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+			InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
 
-		byte[] ciphertext = null;
+		byte[] ciphertext;
 
 		switch (algorithm) {
-		case "Twofish/CTR/NoPadding":
-			CipherAlgorithm ca = new CipherAlgorithm("Twofish");
-			return bytesToHex(ca.ctrEncrypt(input.getBytes(), key.getEncoded(), iv));
-		case "Twofish/CBC/ISO10126":
-			CipherAlgorithm ca1 = new CipherAlgorithm("Twofish");
-			return bytesToHex(ca1.cbcEncrypt(input.getBytes(), key.getEncoded(), iv));
-		case "Twofish/ECB/ISO10126":
-			CipherAlgorithm ca2 = new CipherAlgorithm("Twofish");
-			return bytesToHex(ca2.ecbEncrypt(input.getBytes(), key.getEncoded()));
-		case "Serpent/CTR/NoPadding":
-			CipherAlgorithm ca3 = new CipherAlgorithm("Serpent");
-			return bytesToHex(ca3.ctrEncrypt(input.getBytes(), key.getEncoded(), iv));
-		case "Serpent/CBC/ISO10126":
-			CipherAlgorithm ca4 = new CipherAlgorithm("Serpent");
-			return bytesToHex(ca4.cbcEncrypt(input.getBytes(), key.getEncoded(), iv));
-		case "Serpent/ECB/ISO10126":
-			CipherAlgorithm ca5 = new CipherAlgorithm("Serpent");
-			return bytesToHex(ca5.ecbEncrypt(input.getBytes(), key.getEncoded()));
-		default:
-			Cipher cipher = Cipher.getInstance(algorithm);
-			switch (algorithm) {
-
-			case "Blowfish/ECB/PKCS5Padding":
-			case "AES/ECB/PKCS5Padding":
-				cipher.init(1, key);
-				break;
-			case "AES/CBC/PKCS5Padding":
-			case "AES/CTR/NoPadding":
-				cipher.init(1, key, new IvParameterSpec(iv));
-				break;
-			case "AES/GCM/NoPadding":
-				cipher.init(1, key, new GCMParameterSpec(128, iv));
-				break;
-			case "Blowfish/CBC/PKCS5Padding":
-			case "Blowfish/CTR/NoPadding":
-				byte[] bfIV = new byte[8];
-				for (int i = 0; i < bfIV.length; i++)
-					bfIV[i] = iv[i];
-				cipher.init(1, key, new IvParameterSpec(bfIV));
+			case "Twofish/CTR/NoPadding" -> {
+				CipherAlgorithm ca = new CipherAlgorithm("Twofish");
+				return bytesToHex(ca.ctrEncrypt(input.getBytes(), key.getEncoded(), iv));
 			}
-			ciphertext = cipher.doFinal(input.getBytes());
+			case "Twofish/CBC/ISO10126" -> {
+				CipherAlgorithm ca1 = new CipherAlgorithm("Twofish");
+				return bytesToHex(ca1.cbcEncrypt(input.getBytes(), key.getEncoded(), iv));
+			}
+			case "Twofish/ECB/ISO10126" -> {
+				CipherAlgorithm ca2 = new CipherAlgorithm("Twofish");
+				return bytesToHex(ca2.ecbEncrypt(input.getBytes(), key.getEncoded()));
+			}
+			case "Serpent/CTR/NoPadding" -> {
+				CipherAlgorithm ca3 = new CipherAlgorithm("Serpent");
+				return bytesToHex(ca3.ctrEncrypt(input.getBytes(), key.getEncoded(), iv));
+			}
+			case "Serpent/CBC/ISO10126" -> {
+				CipherAlgorithm ca4 = new CipherAlgorithm("Serpent");
+				return bytesToHex(ca4.cbcEncrypt(input.getBytes(), key.getEncoded(), iv));
+			}
+			case "Serpent/ECB/ISO10126" -> {
+				CipherAlgorithm ca5 = new CipherAlgorithm("Serpent");
+				return bytesToHex(ca5.ecbEncrypt(input.getBytes(), key.getEncoded()));
+			}
+			default -> {
+				Cipher cipher = Cipher.getInstance(algorithm);
+				switch (algorithm) {
+					case "Blowfish/ECB/PKCS5Padding", "AES/ECB/PKCS5Padding" -> cipher.init(1, key);
+					case "AES/CBC/PKCS5Padding", "AES/CTR/NoPadding" -> cipher.init(1, key, new IvParameterSpec(iv));
+					case "AES/GCM/NoPadding" -> cipher.init(1, key, new GCMParameterSpec(128, iv));
+					case "Blowfish/CBC/PKCS5Padding", "Blowfish/CTR/NoPadding" -> {
+						byte[] bfIV = new byte[8];
+						System.arraycopy(iv, 0, bfIV, 0, bfIV.length);
+						cipher.init(1, key, new IvParameterSpec(bfIV));
+					}
+				}
+				ciphertext = cipher.doFinal(input.getBytes());
+			}
 		}
 		return bytesToHex(ciphertext);
 	}
 
 	private static String decrypt(String algorithm, String cipherText, SecretKey key, byte[] iv)
 			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
-			InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-		byte[] plainText = null;
+			InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+		byte[] plainText;
 
 		switch (algorithm) {
-		case "Twofish/CTR/NoPadding":
-			CipherAlgorithm ca = new CipherAlgorithm("Twofish");
-			return new String(ca.ctrDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
-		case "Twofish/CBC/ISO10126":
-			CipherAlgorithm ca1 = new CipherAlgorithm("Twofish");
-			return new String(ca1.cbcDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
-		case "Twofish/ECB/ISO10126":
-			CipherAlgorithm ca2 = new CipherAlgorithm("Twofish");
-			return new String(ca2.ecbDecrypt(hexToBytes(cipherText), key.getEncoded()));
-		case "Serpent/CTR/NoPadding":
-			CipherAlgorithm ca3 = new CipherAlgorithm("Serpent");
-			return new String(ca3.ctrDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
-		case "Serpent/CBC/ISO10126":
-			CipherAlgorithm ca4 = new CipherAlgorithm("Serpent");
-			return new String(ca4.cbcDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
-		case "Serpent/ECB/ISO10126":
-			CipherAlgorithm ca5 = new CipherAlgorithm("Serpent");
-			return new String(ca5.ecbDecrypt(hexToBytes(cipherText), key.getEncoded()));
-		default:
-			Cipher cipher = Cipher.getInstance(algorithm);
-			switch (algorithm) {
-
-			case "Blowfish/ECB/PKCS5Padding":
-			case "AES/ECB/PKCS5Padding":
-				cipher.init(2, key);
-				break;
-			case "AES/CBC/PKCS5Padding":
-			case "AES/CTR/NoPadding":
-				cipher.init(2, key, new IvParameterSpec(iv));
-				break;
-			case "AES/GCM/NoPadding":
-				cipher.init(2, key, new GCMParameterSpec(128, iv));
-				break;
-			case "Blowfish/CBC/PKCS5Padding":
-			case "Blowfish/CTR/NoPadding":
-				byte[] bfIV = new byte[8];
-				for (int i = 0; i < bfIV.length; i++)
-					bfIV[i] = iv[i];
-				cipher.init(2, key, new IvParameterSpec(bfIV));
+			case "Twofish/CTR/NoPadding" -> {
+				CipherAlgorithm ca = new CipherAlgorithm("Twofish");
+				return new String(ca.ctrDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
 			}
-			plainText = cipher.doFinal(hexToBytes(cipherText));
+			case "Twofish/CBC/ISO10126" -> {
+				CipherAlgorithm ca1 = new CipherAlgorithm("Twofish");
+				return new String(ca1.cbcDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
+			}
+			case "Twofish/ECB/ISO10126" -> {
+				CipherAlgorithm ca2 = new CipherAlgorithm("Twofish");
+				return new String(ca2.ecbDecrypt(hexToBytes(cipherText), key.getEncoded()));
+			}
+			case "Serpent/CTR/NoPadding" -> {
+				CipherAlgorithm ca3 = new CipherAlgorithm("Serpent");
+				return new String(ca3.ctrDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
+			}
+			case "Serpent/CBC/ISO10126" -> {
+				CipherAlgorithm ca4 = new CipherAlgorithm("Serpent");
+				return new String(ca4.cbcDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
+			}
+			case "Serpent/ECB/ISO10126" -> {
+				CipherAlgorithm ca5 = new CipherAlgorithm("Serpent");
+				return new String(ca5.ecbDecrypt(hexToBytes(cipherText), key.getEncoded()));
+			}
+			default -> {
+				Cipher cipher = Cipher.getInstance(algorithm);
+				switch (algorithm) {
+					case "Blowfish/ECB/PKCS5Padding", "AES/ECB/PKCS5Padding" -> cipher.init(2, key);
+					case "AES/CBC/PKCS5Padding", "AES/CTR/NoPadding" -> cipher.init(2, key, new IvParameterSpec(iv));
+					case "AES/GCM/NoPadding" -> cipher.init(2, key, new GCMParameterSpec(128, iv));
+					case "Blowfish/CBC/PKCS5Padding", "Blowfish/CTR/NoPadding" -> {
+						byte[] bfIV = new byte[8];
+						System.arraycopy(iv, 0, bfIV, 0, bfIV.length);
+						cipher.init(2, key, new IvParameterSpec(bfIV));
+					}
+				}
+				plainText = cipher.doFinal(hexToBytes(cipherText));
+			}
 		}
 
 		return new String(plainText);

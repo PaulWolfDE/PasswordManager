@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.*;
 import java.security.SecureRandom;
 
 import javax.swing.JButton;
@@ -43,7 +42,7 @@ public class NewEntryUI {
 	JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-	private static int NOTES_ROWS = 5;
+	private static final int NOTES_ROWS = 5;
 
 	public NewEntryUI(Entry e, int index) {
 
@@ -131,62 +130,50 @@ public class NewEntryUI {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
-		submit.addActionListener(new ActionListener() {
+		submit.addActionListener(e1 -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			if (new String(password.getPassword()).equals(new String(confirmPassword.getPassword()))
+					&& !new String(password.getPassword()).equals("")) {
 
-				if (new String(password.getPassword()).equals(new String(confirmPassword.getPassword()))
-						&& !new String(password.getPassword()).equals("")) {
+				String notes = textArea.getText().replaceAll("\n", "\\\\n");
 
-					String notes = textArea.getText().replaceAll("\n", "\\\\n");
-
-					if (index == -1) {
-						DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(),
-								new String(password.getPassword()), notes));
-					} else {
-						DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(),
-								new String(password.getPassword()), notes), index);
-					}
-
-					frame.setVisible(false);
+				if (index == -1) {
+					DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(),
+							new String(password.getPassword()), notes));
 				} else {
-
-					JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error",
-							JOptionPane.ERROR_MESSAGE);
+					DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(),
+							new String(password.getPassword()), notes), index);
 				}
+
+				frame.setVisible(false);
+			} else {
+
+				JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
-		generatePassword.addActionListener(new ActionListener() {
+		generatePassword.addActionListener(e12 -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\"";
-				SecureRandom sr = new SecureRandom();
-				String pw = "";
-				for (int i = 0; i < 24; i++)
-					pw += alphabet.charAt(sr.nextInt(alphabet.length()));
-				password.setText(pw);
-				confirmPassword.setText(pw);
-			}
+			String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\"";
+			SecureRandom sr = new SecureRandom();
+			StringBuilder pw = new StringBuilder();
+			for (int i = 0; i < 24; i++)
+				pw.append(alphabet.charAt(sr.nextInt(alphabet.length())));
+			password.setText(pw.toString());
+			confirmPassword.setText(pw.toString());
 		});
 
-		showPassword.addActionListener(new ActionListener() {
+		showPassword.addActionListener(e13 -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			if (!showPassword.isSelected()) {
+				password.setEchoChar(Main.ECHO_CHAR);
+				confirmPassword.setEchoChar(Main.ECHO_CHAR);
+			}
 
-				if (!showPassword.isSelected()) {
-					password.setEchoChar(Main.ECHO_CHAR);
-					confirmPassword.setEchoChar(Main.ECHO_CHAR);
-				}
-
-				else {
-					password.setEchoChar((char) 0);
-					confirmPassword.setEchoChar((char) 0);
-				}
+			else {
+				password.setEchoChar((char) 0);
+				confirmPassword.setEchoChar((char) 0);
 			}
 		});
 	}

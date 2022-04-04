@@ -11,16 +11,15 @@ public class CipherAlgorithm {
 
 	private static final int BLOCK_SIZE = 16;
 	
-	private BaseCipher cipher;
+	private final BaseCipher cipher;
 
 	public CipherAlgorithm(String algorithm) {
 		cipher = (BaseCipher) CipherFactory.getInstance(algorithm);
 	}
 
-	static byte[] pad(byte[] in, int blockSize) {
-		byte[] ret = new byte[in.length + blockSize - in.length % blockSize];
-		for (int i = 0; i < in.length; i++)
-			ret[i] = in[i];
+	static byte[] pad(byte[] in) {
+		byte[] ret = new byte[in.length + BLOCK_SIZE - in.length % BLOCK_SIZE];
+		System.arraycopy(in, 0, ret, 0, in.length);
 		byte paddedBytes = 0;
 		SecureRandom sr = new SecureRandom();
 		for (int i = in.length; i < ret.length - 1; i++) {
@@ -33,14 +32,13 @@ public class CipherAlgorithm {
 
 	public static byte[] unpad(byte[] in) {
 		byte[] ret = new byte[in.length - in[in.length - 1] - 1];
-		for (int i = 0; i < ret.length; i++)
-			ret[i] = in[i];
+		System.arraycopy(in, 0, ret, 0, ret.length);
 		return ret;
 	}
 	
 	public byte[] ecbEncrypt(byte[] plaintext, byte[] key) throws InvalidKeyException {
 		Object sKey = cipher.makeKey(key, BLOCK_SIZE);
-		byte[] pt = pad(plaintext, BLOCK_SIZE);
+		byte[] pt = pad(plaintext);
 		byte[] ciphertext = new byte[pt.length];
 		for (int i = 0; i < pt.length; i += BLOCK_SIZE)
 			cipher.encrypt(pt, i, ciphertext, i, sKey, BLOCK_SIZE);
@@ -57,7 +55,7 @@ public class CipherAlgorithm {
 
 	public byte[] cbcEncrypt(byte[] plaintext, byte[] key, byte[] iv) throws InvalidKeyException {
 		Object sKey = cipher.makeKey(key, BLOCK_SIZE);
-		byte[] pt = pad(plaintext, BLOCK_SIZE);
+		byte[] pt = pad(plaintext);
 		byte[] ciphertext = new byte[pt.length];
 		for (int i = 0; i < BLOCK_SIZE; i++)
 			pt[i] ^= iv[i];
