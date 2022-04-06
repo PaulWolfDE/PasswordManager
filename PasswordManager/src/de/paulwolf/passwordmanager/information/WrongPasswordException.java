@@ -4,10 +4,10 @@ import java.io.Serial;
 
 public class WrongPasswordException extends Exception {
 
-	@Serial
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	public WrongPasswordException(String errorMessage) {
-		super(errorMessage);
-	}
+    public WrongPasswordException(String errorMessage) {
+        super(errorMessage);
+    }
 }
