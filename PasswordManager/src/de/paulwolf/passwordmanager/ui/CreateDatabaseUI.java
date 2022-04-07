@@ -61,7 +61,7 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
 
     public CreateDatabaseUI() {
 
-        this.setTitle("Create New Database");
+        this.setTitle("PasswordManager - Create New Database");
 
         GridBagConstraints gbc = new GridBagConstraints();
         wrapper.setLayout(new GridBagLayout());
@@ -187,8 +187,7 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
         if (e.getSource() == generateKey) {
 
             try {
-                keyField.setText(
-                        Base64.getEncoder().encodeToString(KeyGenerator.getInstance("AES").generateKey().getEncoded()));
+                keyField.setText(Base64.getEncoder().encodeToString(KeyGenerator.getInstance("AES").generateKey().getEncoded()));
             } catch (NoSuchAlgorithmException e1) {
                 e1.printStackTrace();
             }
@@ -197,18 +196,14 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
 
         if (e.getSource() == showKey) {
 
-            if (showKey.isSelected())
-                keyField.setEchoChar((char) 0);
-            else
-                keyField.setEchoChar(Main.ECHO_CHAR);
+            if (showKey.isSelected()) keyField.setEchoChar((char) 0);
+            else keyField.setEchoChar(Main.ECHO_CHAR);
         }
 
         if (e.getSource() == showKeyVerification) {
 
-            if (showKeyVerification.isSelected())
-                keyVerificationField.setEchoChar((char) 0);
-            else
-                keyVerificationField.setEchoChar(Main.ECHO_CHAR);
+            if (showKeyVerification.isSelected()) keyVerificationField.setEchoChar((char) 0);
+            else keyVerificationField.setEchoChar(Main.ECHO_CHAR);
         }
 
         if (e.getSource() == browseButton) {
@@ -229,8 +224,7 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
 
             if (Arrays.equals(toBytes(keyField.getPassword()), toBytes(keyVerificationField.getPassword()))) {
 
-                if (!pathField.getText().equals("")
-                        && !Arrays.toString(toBytes(keyField.getPassword())).equals("")) {
+                if (!pathField.getText().equals("") && !Arrays.toString(toBytes(keyField.getPassword())).equals("")) {
 
                     Database db = new Database();
 
@@ -252,8 +246,7 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
 
                     try {
                         boolean fileCreation = db.getPath().createNewFile();
-                        if (!fileCreation)
-                            System.out.println("File could not be created.");
+                        if (!fileCreation) System.out.println("File could not be created.");
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -268,19 +261,15 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
 
                     try {
                         FileWizard.saveDatabase(db, db.getPath());
-                    } catch (NoSuchAlgorithmException | IOException | InvalidKeyException | NoSuchPaddingException
-                            | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException
-                            | IllegalStateException | LimitReachedException e1) {
+                    } catch (NoSuchAlgorithmException | IOException | InvalidKeyException | NoSuchPaddingException | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException | IllegalStateException | LimitReachedException e1) {
                         e1.printStackTrace();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Please fill out the form!", "Missing arguments",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Please fill out the form!", "Missing arguments", JOptionPane.INFORMATION_MESSAGE);
                 }
 
             } else {
-                JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -292,8 +281,7 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if (e.getKeyCode() == KeyEvent.VK_ENTER)
-            createDatabase.doClick();
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) createDatabase.doClick();
     }
 
     @Override

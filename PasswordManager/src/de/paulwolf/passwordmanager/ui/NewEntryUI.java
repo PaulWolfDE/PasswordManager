@@ -7,10 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.security.SecureRandom;
 
-public class NewEntryUI {
+public class NewEntryUI extends JFrame {
 
     private static final int NOTES_ROWS = 5;
-    final JFrame frame = new JFrame("Create New Entry");
     final JPanel wrapper = new JPanel();
     final JTextField title = new JTextField(20);
     final JLabel titleLabel = new JLabel("Title");
@@ -27,8 +26,7 @@ public class NewEntryUI {
     final JButton submit = new JButton("Submit Entry");
     final JLabel notesLabel = new JLabel("Notes");
     final JTextArea textArea = new JTextArea(5, 0);
-    final JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    final JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
     public NewEntryUI(Entry e, int index) {
 
@@ -91,7 +89,8 @@ public class NewEntryUI {
             password.setText(e.getPassword());
             confirmPassword.setText(e.getPassword());
             textArea.setText(e.getNotes().replaceAll("\\\\n", "\n"));
-        }
+            this.setTitle("PasswordManager - Edit Entry");
+        } else this.setTitle("PasswordManager - Create Entry");
 
         password.setFont(new Font("Consolas", Font.PLAIN, 14));
         password.putClientProperty("JPasswordField.cutCopyAllowed", true);
@@ -109,33 +108,29 @@ public class NewEntryUI {
         password.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
         confirmPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
 
-        frame.add(wrapper);
-        frame.setIconImage(Main.IMAGE);
-        frame.pack();
-        frame.setMinimumSize(frame.getSize());
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        this.add(wrapper);
+        this.setIconImage(Main.IMAGE);
+        this.pack();
+        this.setMinimumSize(this.getSize());
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
 
         submit.addActionListener(e1 -> {
 
-            if (new String(password.getPassword()).equals(new String(confirmPassword.getPassword()))
-                    && !new String(password.getPassword()).equals("")) {
+            if (new String(password.getPassword()).equals(new String(confirmPassword.getPassword())) && !new String(password.getPassword()).equals("")) {
 
                 String notes = textArea.getText().replaceAll("\n", "\\\\n");
 
                 if (index == -1) {
-                    DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(),
-                            new String(password.getPassword()), notes));
+                    DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(), new String(password.getPassword()), notes));
                 } else {
-                    DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(),
-                            new String(password.getPassword()), notes), index);
+                    DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(), new String(password.getPassword()), notes), index);
                 }
 
-                frame.setVisible(false);
+                this.setVisible(false);
             } else {
 
-                JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
