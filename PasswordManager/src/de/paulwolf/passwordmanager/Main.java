@@ -2,9 +2,16 @@ package de.paulwolf.passwordmanager;
 
 import de.paulwolf.passwordmanager.ui.MainUI;
 import de.paulwolf.passwordmanager.ui.OpenDatabaseUI;
+import de.paulwolf.passwordmanager.ui.tetris.Field;
+import de.paulwolf.passwordmanager.ui.tetris.KeyHandler;
+import de.paulwolf.passwordmanager.ui.tetris.Movement;
+import de.paulwolf.passwordmanager.ui.tetris.Painting;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -28,9 +35,9 @@ public class Main {
     // DATE FORMAT
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd@HH:mm");
     // VERSION NUMBER
-    public static final String VERSION_NUMBER = "1.3.6";
+    public static final String VERSION_NUMBER = "1.3.7";
     // VERIONS COMPATIBLE WITH
-    public static final String[] COMPATIBLE_VERSIONS = {"1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2"};
+    public static final String[] COMPATIBLE_VERSIONS = {"1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2"};
     // STANDARD ECHO CHAR
     public static final char ECHO_CHAR = 0x2022;
     // JFRAME ICON
@@ -50,12 +57,79 @@ public class Main {
         }
     }
 
+    public static void runTetris() {
+
+        frameSize = new Dimension(400, 800);
+        fieldLabelSize = new Dimension(320, 640);
+
+        Movement.lose=false;
+        for (int i = 0; i < 20; i++)
+            Movement.lines[i]=0;
+
+        loadFields();
+        loadGui();
+        Movement.startMovement();
+    }
+
     private static void loadIconImage() {
 
         try {
             IMAGE = ImageIO.read(Objects.requireNonNull(Main.class.getResource("/icon.jpg")));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    static int maxX = 10;
+    static int maxY = 20;
+
+    public static Field[][] fields = new Field[maxX][maxY];
+
+    static JFrame frame;
+    public static Painting fieldLabel;
+    static Dimension frameSize;
+    static Dimension fieldLabelSize;
+
+    private static void loadGui() {
+
+        frame = new JFrame();
+        frame.setSize(frameSize);
+        frame.setLocationRelativeTo(null);
+        frame.setTitle("Tetris");
+        frame.addKeyListener(new KeyHandler());
+        frame.setResizable(false);
+        frame.setLayout(null);
+        frame.getContentPane().setBackground(Color.WHITE);
+
+        fieldLabel = new Painting();
+        fieldLabel.setSize(fieldLabelSize);
+
+        // 20px = width of title bar, 10px borders on both sides (WINDOWS ONLY)
+
+        fieldLabel.setLocation((frameSize.width - fieldLabelSize.width) / 2 - 10,
+                (frameSize.height - fieldLabelSize.height) / 2 - 20);
+        fieldLabel.setBackground(Color.BLACK);
+        fieldLabel.setVisible(true);
+        frame.add(fieldLabel);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);Movement.lose = true;
+            }
+        });
+
+        frame.setVisible(true);
+    }
+    private static void loadFields() {
+
+        for (int x = 0; x < maxX; x++) {
+            for (int y = 0; y < maxY; y++) {
+
+                fields[x][y] = new Field();
+                fields[x][y].setOccupied(false);
+                fields[x][y].setColor(Color.WHITE);
+            }
         }
     }
 }
