@@ -16,17 +16,21 @@ public class Block {
 
 	Random random = new Random();
 
-	public void setRandomShape() {
+	public void setShape(char shape) {
+		this.shape=shape;
+	}
+
+	public char getRandomShape() {
 		int t = random.nextInt(7);
-		switch(t) {
-			case 0 -> shape = 'I';
-			case 1 -> shape = 'J';
-			case 2 -> shape = 'L';
-			case 3 -> shape = 'O';
-			case 4 -> shape = 'S';
-			case 5 -> shape = 'T';
-			default -> shape = 'Z';
-		}
+		return switch(t) {
+			case 0 -> 'I';
+			case 1 -> 'J';
+			case 2 -> 'L';
+			case 3 -> 'O';
+			case 4 -> 'S';
+			case 5 -> 'T';
+			default -> 'Z';
+		};
 	}
 
 	public Field getSquare(int s) {

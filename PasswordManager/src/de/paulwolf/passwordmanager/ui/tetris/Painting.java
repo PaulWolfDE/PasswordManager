@@ -2,9 +2,7 @@ package de.paulwolf.passwordmanager.ui.tetris;
 
 import de.paulwolf.passwordmanager.Main;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serial;
@@ -44,6 +42,59 @@ public class Painting extends JLabel {
 				g.drawImage(field, x*32, y*32, 32, 32, null);
 				g.drawImage(grid, x*32, y*32, 32, 32, null);
 
+			}
+		}
+		g.setFont(new Font("Verdana", Font.PLAIN, 30));
+		g.drawString("Score:", 350, 50);
+		g.drawString(String.valueOf(Movement.score), 350, 90);
+		g.drawString("Level:", 350, 150);
+		g.drawString(String.valueOf(Movement.level), 350, 190);
+		g.drawString("Next:", 350, 380);
+
+		g.setColor(Field.getColor(Movement.next));
+
+		switch (Movement.next) {
+			case 'I' -> {
+				g.fillRect(350, 416, 32, 32);
+				g.fillRect(350 + 32, 416, 32, 32);
+				g.fillRect(350 + 32*2, 416, 32, 32);
+				g.fillRect(350 + 32*3, 416, 32, 32);
+			}
+			case 'J' -> {
+				g.fillRect(350, 416, 32, 32);
+				g.fillRect(350, 416 + 32, 32, 32);
+				g.fillRect(350 + 32, 416 + 32, 32, 32);
+				g.fillRect(350 + 32*2, 416 + 32, 32, 32);
+			}
+			case 'L' -> {
+				g.fillRect(350, 416+32, 32, 32);
+				g.fillRect(350 + 32, 416+32, 32, 32);
+				g.fillRect(350 + 32*2, 416+32, 32, 32);
+				g.fillRect(350 + 32*2, 416, 32, 32);
+			}
+			case 'O' -> {
+				g.fillRect(350, 416, 32, 32);
+				g.fillRect(350 + 32, 416, 32, 32);
+				g.fillRect(350, 416 + 32, 32, 32);
+				g.fillRect(350 + 32, 416 + 32, 32, 32);
+			}
+			case 'S' -> {
+				g.fillRect(350, 416 + 32, 32, 32);
+				g.fillRect(350 + 32, 416 + 32, 32, 32);
+				g.fillRect(350 + 32, 416, 32, 32);
+				g.fillRect(350 + 32 * 2, 416, 32, 32);
+			}
+			case 'T' -> {
+				g.fillRect(350, 416+32, 32, 32);
+				g.fillRect(350 + 32, 416+32, 32, 32);
+				g.fillRect(350+32, 416, 32, 32);
+				g.fillRect(350 + 32*2, 416+32, 32, 32);
+			}
+			case 'Z' -> {
+				g.fillRect(350, 416, 32, 32);
+				g.fillRect(350 + 32, 416, 32, 32);
+				g.fillRect(350+32, 416+32, 32, 32);
+				g.fillRect(350 + 32*2, 416+32, 32, 32);
 			}
 		}
 	}

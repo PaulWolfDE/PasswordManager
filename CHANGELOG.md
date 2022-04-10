@@ -22,3 +22,6 @@
 ## Release 1.3.6
 - All recently opened files are stored in the `.pmrc` file
     - At startup, no file is directly opened, but a combo box will let one select a file from rc
+
+## Release 1.3.7
+- Added little secret game to password manager

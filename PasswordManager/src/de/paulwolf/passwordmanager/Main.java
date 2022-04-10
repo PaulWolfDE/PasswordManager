@@ -59,10 +59,13 @@ public class Main {
 
     public static void runTetris() {
 
-        frameSize = new Dimension(400, 800);
-        fieldLabelSize = new Dimension(320, 640);
+        frameSize = new Dimension(400+200, 800);
+        fieldLabelSize = new Dimension(320+200, 640);
 
         Movement.lose=false;
+        Movement.level=0;
+        Movement.score=0;
+        Movement.achievedLines=0;
         for (int i = 0; i < 20; i++)
             Movement.lines[i]=0;
 
@@ -106,8 +109,13 @@ public class Main {
 
         // 20px = width of title bar, 10px borders on both sides (WINDOWS ONLY)
 
-        fieldLabel.setLocation((frameSize.width - fieldLabelSize.width) / 2 - 10,
-                (frameSize.height - fieldLabelSize.height) / 2 - 20);
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win"))
+            fieldLabel.setLocation((frameSize.width - fieldLabelSize.width) / 2 - 10, (frameSize.height - fieldLabelSize.height) / 2 - 20);
+        else
+            fieldLabel.setLocation((frameSize.width - fieldLabelSize.width) / 2, (frameSize.height - fieldLabelSize.height) / 2 - 20);
+
         fieldLabel.setBackground(Color.BLACK);
         fieldLabel.setVisible(true);
         frame.add(fieldLabel);

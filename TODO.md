@@ -9,4 +9,4 @@ Pack database before encryption (only suitable for large databases)
 
 Advanced password generation
 
-Add possibility to play Tetris
+~~Add possibility to play Tetris~~

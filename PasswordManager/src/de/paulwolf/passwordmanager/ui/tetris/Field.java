@@ -25,21 +25,19 @@ public class Field {
 	}
 	
 	public void setColor(char shape) {
-		if (shape == 'I') {
-			color = Color.CYAN;
-		} else if (shape == 'J') {
-			color = Color.BLUE;
-		} else if (shape == 'L') {
-			color = Color.ORANGE;
-		} else if (shape == 'O') {
-			color = Color.YELLOW;
-		} else if (shape == 'S') {
-			color = Color.GREEN;
-		} else if (shape == 'T') {
-			color = Color.MAGENTA;
-		} else if (shape == 'Z') {
-			color = Color.RED;
-		}
+		color = getColor(shape);
+	}
+
+	public static Color getColor(char shape) {
+		return switch(shape){
+			case 'I' -> Color.CYAN;
+			case 'J' -> Color.BLUE;
+			case 'L' -> Color.ORANGE;
+			case 'O' -> Color.YELLOW;
+			case 'S' -> Color.GREEN;
+			case 'T' -> Color.MAGENTA;
+			default -> Color.RED;
+		};
 	}
 
 	public Color getColor() {
