@@ -24,10 +24,12 @@ Cryptographic hash checksums can be generated using these algorithms:
 - SHA-256
 - MD5
 
+Master passwords are being derived by the PBKDF#2 algorithm based on the SHA-256 hash function.
+
 The chosen algorithms and the vault key can be edited later in the database settings.
 
 ## Requirements
-- Java Runtime Environment Version 8 or above
+- Java Runtime Environment Version 17
 
 ## How to use
 ### Create a database
