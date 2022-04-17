@@ -40,6 +40,8 @@ public class Movement {
     public static int achievedLines = 0;
     public static char next = '\0';
 
+    public static boolean tetris = true;
+
     private static int getLevelSpeed() {
         switch (level) {
             case 0:
@@ -138,6 +140,20 @@ public class Movement {
         }
     }
 
+    private static void blink(BlinkObject obj) {
+
+        Color c = Main.fields[obj.getX()][obj.getY()].getColor();
+        Main.fields[obj.getX()][obj.getY()].setColor(new Color(255, 254, 255));
+        Main.fieldLabel.repaint();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Main.fields[obj.getX()][obj.getY()].setColor(c);
+                Main.fieldLabel.repaint();
+            }
+        }, 100);
+    }
+
     public static void moveDown() {
 
         if (block.getSquare(0).getY() + 1 < 20 && block.getSquare(1).getY() + 1 < 20 && block.getSquare(2).getY() + 1 < 20 && block.getSquare(3).getY() + 1 < 20) {
@@ -145,14 +161,11 @@ public class Movement {
             if (temp && !(!Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied())) {
                 temp = false;
                 timer.cancel();
-                Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY()].setOccupied(true);
-                Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY()].setOccupied(true);
-                Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY()].setOccupied(true);
-                Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY()].setOccupied(true);
                 for (int i = 0; i < 4; i++) {
+                    Main.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
                     lines[block.getSquare(i).getY()]++;
                 }
-                checkLines(true);
+                checkLines(true, new BlinkObject(block.getSquare(0).getX(), block.getSquare(0).getY()), new BlinkObject(block.getSquare(1).getX(), block.getSquare(1).getY()), new BlinkObject(block.getSquare(2).getX(), block.getSquare(2).getY()), new BlinkObject(block.getSquare(3).getX(), block.getSquare(3).getY()));
                 Main.fieldLabel.repaint();
                 startMovement();
             }
@@ -163,7 +176,7 @@ public class Movement {
                 Main.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
                 lines[block.getSquare(i).getY()]++;
             }
-            checkLines(true);
+            checkLines(true, new BlinkObject(block.getSquare(0).getX(), block.getSquare(0).getY()), new BlinkObject(block.getSquare(1).getX(), block.getSquare(1).getY()), new BlinkObject(block.getSquare(2).getX(), block.getSquare(2).getY()), new BlinkObject(block.getSquare(3).getX(), block.getSquare(3).getY()));
             startMovement();
 
         } else {
@@ -219,7 +232,9 @@ public class Movement {
         t1.start();
     }
 
-    public static void checkLines(boolean countPoints) {
+    public static void checkLines(boolean countPoints, BlinkObject... objects) {
+
+        boolean doBlink = objects.length == 4;
 
         int n = 0;
         for (int i = 19; i >= 0; i--)
@@ -235,6 +250,7 @@ public class Movement {
         for (int i = 19; i >= 0; i--) {
             if (lines[i] == 10) {
                 cleanLines(i);
+                doBlink = false;
             }
         }
 
@@ -244,15 +260,42 @@ public class Movement {
                 break;
             }
         }
+        if (doBlink)
+            for (BlinkObject bo : objects)
+                blink(bo);
     }
 
     public static void cleanLines(int height) {
+
+        for (int k = 0; k < 2; k++) {
+            Color[] colors = new Color[10];
+
+            for (int i = 0; i < 10; i++) {
+                colors[i] = Main.fields[i][height].getColor();
+                Main.fields[i][height].setColor(new Color(255, 254, 255));
+            }
+
+            Main.fieldLabel.repaint();
+            try {
+                Thread.sleep(25L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < 10; i++)
+                Main.fields[i][height].setColor(colors[i]);
+            Main.fieldLabel.repaint();
+            Main.fieldLabel.repaint();
+            try {
+                Thread.sleep(25L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         achievedLines++;
         for (int x = 0; x < 10; x++) {
             Main.fields[x][height].setOccupied(false);
             Main.fields[x][height].setColor(Color.WHITE);
-            Main.fieldLabel.repaint();
         }
         lines[height] = 0;
 
@@ -278,5 +321,31 @@ public class Movement {
             Main.fields[i][height].setOccupied(false);
             Main.fields[i][height].setColor(Color.WHITE);
         }
+    }
+}
+
+class BlinkObject {
+
+    private int x, y;
+
+    public BlinkObject(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

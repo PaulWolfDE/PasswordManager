@@ -51,17 +51,21 @@ public class Main {
     static Dimension frameSize;
     static Dimension fieldLabelSize;
 
+    public static boolean windows = false;
+
     public static void main(String[] args) {
 
         loadIconImage();
 
-        ui = new MainUI();
+       ui = new MainUI();
 
         if (args.length > 0) {
 
             ui.databaseFile = new File(args[0]);
             new OpenDatabaseUI(new File(args[0]).getAbsolutePath());
         }
+
+        // runTetris();
     }
 
     public static void runTetris() {
@@ -99,7 +103,7 @@ public class Main {
         frame.addKeyListener(new KeyHandler());
         frame.setResizable(false);
         frame.setLayout(null);
-        frame.getContentPane().setBackground(Color.WHITE);
+        frame.getContentPane().setBackground(new Color(60, 63, 65));
 
         fieldLabel = new Painting();
         fieldLabel.setSize(fieldLabelSize);
@@ -108,12 +112,13 @@ public class Main {
 
         String os = System.getProperty("os.name").toLowerCase();
 
-        if (os.contains("win"))
+        if (os.contains("win")) {
             fieldLabel.setLocation((frameSize.width - fieldLabelSize.width) / 2 - 10, (frameSize.height - fieldLabelSize.height) / 2 - 20);
-        else
+            windows = true;
+        } else
             fieldLabel.setLocation((frameSize.width - fieldLabelSize.width) / 2, (frameSize.height - fieldLabelSize.height) / 2 - 20);
 
-        fieldLabel.setBackground(Color.BLACK);
+        // fieldLabel.setBackground(Color.BLACK);
         fieldLabel.setVisible(true);
         frame.add(fieldLabel);
 
