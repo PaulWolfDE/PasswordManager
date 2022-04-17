@@ -25,3 +25,7 @@
 
 ## Release 1.3.7
 - Added little secret game to password manager
+
+## Release 1.3.8
+- Tetris updates
+- Switched back to Java 8 language standard
