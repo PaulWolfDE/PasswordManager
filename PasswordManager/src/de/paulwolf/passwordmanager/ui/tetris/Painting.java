@@ -36,24 +36,30 @@ public class Painting extends JLabel {
             for (int y = 0; y < 20; y++) {
 
                 graphics.setPaint(Main.fields[x][y].getColor());
-                if (Main.fields[x][y].getColor() != Color.WHITE)
-                    graphics.fillRect(0, 0, 32, 32);
+                if (Main.fields[x][y].getColor() != Color.WHITE) graphics.fillRect(0, 0, 32, 32);
 
                 g.drawImage(field, x * 32, y * 32, 32, 32, null);
-                if (Main.fields[x][y].getColor() == Color.WHITE)
-                    g.drawImage(emptyField, x * 32, y * 32, 32, 32, null);
-                else
-                    g.drawImage(grid, x * 32, y * 32, 32, 32, null);
+                if (Main.fields[x][y].getColor() == Color.WHITE) g.drawImage(emptyField, x * 32, y * 32, 32, 32, null);
+                else g.drawImage(grid, x * 32, y * 32, 32, 32, null);
 
             }
         }
+        int minReach = 20;
+        int reach;
 
-        //g.setColor(new Color(187, 187, 187));
+        for (int i = 0; i < 4; i++) {
+            reach = Movement.block.getSquare(i).getY();
+            while (reach + 1 < 20 && !Main.fields[Movement.block.getSquare(i).getX()][reach + 1].isOccupied()) reach++;
+            if (reach - Movement.block.getSquare(i).getY() < minReach)
+                minReach = reach - Movement.block.getSquare(i).getY();
+        }
+        g.setColor(new Color(Main.fields[Movement.block.getSquare(0).getX()][Movement.block.getSquare(0).getY()].getColor().getRed(), Main.fields[Movement.block.getSquare(0).getX()][Movement.block.getSquare(0).getY()].getColor().getGreen(), Main.fields[Movement.block.getSquare(0).getX()][Movement.block.getSquare(0).getY()].getColor().getBlue(), 50));
+        for (int i = 0; i < 4; i++)
+            g.fillRect(Movement.block.getSquare(i).getX() * 32, (minReach + Movement.block.getSquare(i).getY()) * 32, 32, 32);
 
         g.setColor(Color.WHITE);
 
-        if (!Main.windows)
-            g.setFont(new Font("Nimbus Mono PS", Font.BOLD, 40));
+        if (!Main.windows) g.setFont(new Font("Nimbus Mono PS", Font.BOLD, 40));
 
         g.drawString("SCORE:", 350, 50);
         g.drawString(String.valueOf(Movement.score), 350, 90);

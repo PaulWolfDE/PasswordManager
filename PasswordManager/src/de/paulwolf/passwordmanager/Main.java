@@ -44,6 +44,7 @@ public class Main {
     public static Image IMAGE;
     public static MainUI ui;
     public static Painting fieldLabel;
+    public static boolean windows = false;
     static int maxX = 10;
     static int maxY = 20;
     public static Field[][] fields = new Field[maxX][maxY];
@@ -51,21 +52,17 @@ public class Main {
     static Dimension frameSize;
     static Dimension fieldLabelSize;
 
-    public static boolean windows = false;
-
     public static void main(String[] args) {
 
         loadIconImage();
 
-       ui = new MainUI();
+        ui = new MainUI();
 
         if (args.length > 0) {
 
             ui.databaseFile = new File(args[0]);
             new OpenDatabaseUI(new File(args[0]).getAbsolutePath());
         }
-
-        // runTetris();
     }
 
     public static void runTetris() {
