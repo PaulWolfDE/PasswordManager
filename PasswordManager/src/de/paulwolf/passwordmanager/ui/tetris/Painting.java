@@ -5,7 +5,6 @@ import de.paulwolf.passwordmanager.Main;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.Serial;
 import java.util.Objects;
 
 import javax.imageio.ImageIO;
@@ -13,7 +12,6 @@ import javax.swing.JLabel;
 
 public class Painting extends JLabel {
 
-	@Serial
 	private static final long serialVersionUID = 1L;
 
 	BufferedImage field;
@@ -54,48 +52,48 @@ public class Painting extends JLabel {
 		g.setColor(Field.getColor(Movement.next));
 
 		switch (Movement.next) {
-			case 'I' -> {
+			case 'I':
 				g.fillRect(350, 416, 32, 32);
 				g.fillRect(350 + 32, 416, 32, 32);
 				g.fillRect(350 + 32*2, 416, 32, 32);
 				g.fillRect(350 + 32*3, 416, 32, 32);
-			}
-			case 'J' -> {
+				break;
+			case 'J':
 				g.fillRect(350, 416, 32, 32);
 				g.fillRect(350, 416 + 32, 32, 32);
 				g.fillRect(350 + 32, 416 + 32, 32, 32);
 				g.fillRect(350 + 32*2, 416 + 32, 32, 32);
-			}
-			case 'L' -> {
+				break;
+			case 'L':
 				g.fillRect(350, 416+32, 32, 32);
 				g.fillRect(350 + 32, 416+32, 32, 32);
 				g.fillRect(350 + 32*2, 416+32, 32, 32);
 				g.fillRect(350 + 32*2, 416, 32, 32);
-			}
-			case 'O' -> {
+				break;
+			case 'O':
 				g.fillRect(350, 416, 32, 32);
 				g.fillRect(350 + 32, 416, 32, 32);
 				g.fillRect(350, 416 + 32, 32, 32);
 				g.fillRect(350 + 32, 416 + 32, 32, 32);
-			}
-			case 'S' -> {
+				break;
+			case 'S':
 				g.fillRect(350, 416 + 32, 32, 32);
 				g.fillRect(350 + 32, 416 + 32, 32, 32);
 				g.fillRect(350 + 32, 416, 32, 32);
 				g.fillRect(350 + 32 * 2, 416, 32, 32);
-			}
-			case 'T' -> {
+				break;
+			case 'T':
 				g.fillRect(350, 416+32, 32, 32);
 				g.fillRect(350 + 32, 416+32, 32, 32);
 				g.fillRect(350+32, 416, 32, 32);
 				g.fillRect(350 + 32*2, 416+32, 32, 32);
-			}
-			case 'Z' -> {
+				break;
+			case 'Z':
 				g.fillRect(350, 416, 32, 32);
 				g.fillRect(350 + 32, 416, 32, 32);
 				g.fillRect(350+32, 416+32, 32, 32);
 				g.fillRect(350 + 32*2, 416+32, 32, 32);
-			}
+				break;
 		}
 	}
 }

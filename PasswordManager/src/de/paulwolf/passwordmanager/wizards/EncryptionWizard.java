@@ -95,44 +95,46 @@ public class EncryptionWizard {
         byte[] ciphertext;
 
         switch (algorithm) {
-            case "Twofish/CTR/NoPadding" -> {
+            case "Twofish/CTR/NoPadding":
                 CipherAlgorithm ca = new CipherAlgorithm("Twofish");
                 return bytesToHex(ca.ctrEncrypt(input.getBytes(), key.getEncoded(), iv));
-            }
-            case "Twofish/CBC/ISO10126" -> {
+            case "Twofish/CBC/ISO10126":
                 CipherAlgorithm ca1 = new CipherAlgorithm("Twofish");
                 return bytesToHex(ca1.cbcEncrypt(input.getBytes(), key.getEncoded(), iv));
-            }
-            case "Twofish/ECB/ISO10126" -> {
+            case "Twofish/ECB/ISO10126":
                 CipherAlgorithm ca2 = new CipherAlgorithm("Twofish");
                 return bytesToHex(ca2.ecbEncrypt(input.getBytes(), key.getEncoded()));
-            }
-            case "Serpent/CTR/NoPadding" -> {
+            case "Serpent/CTR/NoPadding":
                 CipherAlgorithm ca3 = new CipherAlgorithm("Serpent");
                 return bytesToHex(ca3.ctrEncrypt(input.getBytes(), key.getEncoded(), iv));
-            }
-            case "Serpent/CBC/ISO10126" -> {
+            case "Serpent/CBC/ISO10126":
                 CipherAlgorithm ca4 = new CipherAlgorithm("Serpent");
                 return bytesToHex(ca4.cbcEncrypt(input.getBytes(), key.getEncoded(), iv));
-            }
-            case "Serpent/ECB/ISO10126" -> {
+            case "Serpent/ECB/ISO10126":
                 CipherAlgorithm ca5 = new CipherAlgorithm("Serpent");
                 return bytesToHex(ca5.ecbEncrypt(input.getBytes(), key.getEncoded()));
-            }
-            default -> {
+            default:
                 Cipher cipher = Cipher.getInstance(algorithm);
                 switch (algorithm) {
-                    case "Blowfish/ECB/PKCS5Padding", "AES/ECB/PKCS5Padding" -> cipher.init(1, key);
-                    case "AES/CBC/PKCS5Padding", "AES/CTR/NoPadding" -> cipher.init(1, key, new IvParameterSpec(iv));
-                    case "AES/GCM/NoPadding" -> cipher.init(1, key, new GCMParameterSpec(128, iv));
-                    case "Blowfish/CBC/PKCS5Padding", "Blowfish/CTR/NoPadding" -> {
+                    case "Blowfish/ECB/PKCS5Padding":
+                    case "AES/ECB/PKCS5Padding":
+                        cipher.init(1, key);
+                        break;
+                    case "AES/CBC/PKCS5Padding":
+                    case "AES/CTR/NoPadding":
+                        cipher.init(1, key, new IvParameterSpec(iv));
+                        break;
+                    case "AES/GCM/NoPadding":
+                        cipher.init(1, key, new GCMParameterSpec(128, iv));
+                        break;
+                    case "Blowfish/CBC/PKCS5Padding":
+                    case "Blowfish/CTR/NoPadding":
                         byte[] bfIV = new byte[8];
                         System.arraycopy(iv, 0, bfIV, 0, bfIV.length);
                         cipher.init(1, key, new IvParameterSpec(bfIV));
-                    }
+                        break;
                 }
                 ciphertext = cipher.doFinal(input.getBytes());
-            }
         }
         return bytesToHex(ciphertext);
     }
@@ -143,44 +145,46 @@ public class EncryptionWizard {
         byte[] plainText;
 
         switch (algorithm) {
-            case "Twofish/CTR/NoPadding" -> {
+            case "Twofish/CTR/NoPadding":
                 CipherAlgorithm ca = new CipherAlgorithm("Twofish");
                 return new String(ca.ctrDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
-            }
-            case "Twofish/CBC/ISO10126" -> {
+            case "Twofish/CBC/ISO10126":
                 CipherAlgorithm ca1 = new CipherAlgorithm("Twofish");
                 return new String(ca1.cbcDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
-            }
-            case "Twofish/ECB/ISO10126" -> {
+            case "Twofish/ECB/ISO10126":
                 CipherAlgorithm ca2 = new CipherAlgorithm("Twofish");
                 return new String(ca2.ecbDecrypt(hexToBytes(cipherText), key.getEncoded()));
-            }
-            case "Serpent/CTR/NoPadding" -> {
+            case "Serpent/CTR/NoPadding":
                 CipherAlgorithm ca3 = new CipherAlgorithm("Serpent");
                 return new String(ca3.ctrDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
-            }
-            case "Serpent/CBC/ISO10126" -> {
+            case "Serpent/CBC/ISO10126":
                 CipherAlgorithm ca4 = new CipherAlgorithm("Serpent");
                 return new String(ca4.cbcDecrypt(hexToBytes(cipherText), key.getEncoded(), iv));
-            }
-            case "Serpent/ECB/ISO10126" -> {
+            case "Serpent/ECB/ISO10126":
                 CipherAlgorithm ca5 = new CipherAlgorithm("Serpent");
                 return new String(ca5.ecbDecrypt(hexToBytes(cipherText), key.getEncoded()));
-            }
-            default -> {
+            default:
                 Cipher cipher = Cipher.getInstance(algorithm);
                 switch (algorithm) {
-                    case "Blowfish/ECB/PKCS5Padding", "AES/ECB/PKCS5Padding" -> cipher.init(2, key);
-                    case "AES/CBC/PKCS5Padding", "AES/CTR/NoPadding" -> cipher.init(2, key, new IvParameterSpec(iv));
-                    case "AES/GCM/NoPadding" -> cipher.init(2, key, new GCMParameterSpec(128, iv));
-                    case "Blowfish/CBC/PKCS5Padding", "Blowfish/CTR/NoPadding" -> {
+                    case "Blowfish/ECB/PKCS5Padding":
+                    case "AES/ECB/PKCS5Padding":
+                        cipher.init(2, key);
+                        break;
+                    case "AES/CBC/PKCS5Padding":
+                    case "AES/CTR/NoPadding":
+                        cipher.init(2, key, new IvParameterSpec(iv));
+                        break;
+                    case "AES/GCM/NoPadding":
+                        cipher.init(2, key, new GCMParameterSpec(128, iv));
+                        break;
+                    case "Blowfish/CBC/PKCS5Padding":
+                    case "Blowfish/CTR/NoPadding":
                         byte[] bfIV = new byte[8];
                         System.arraycopy(iv, 0, bfIV, 0, bfIV.length);
                         cipher.init(2, key, new IvParameterSpec(bfIV));
-                    }
+                        break;
                 }
                 plainText = cipher.doFinal(hexToBytes(cipherText));
-            }
         }
 
         return new String(plainText);

@@ -25,7 +25,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serial;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -264,7 +263,6 @@ public class DatabaseUI extends JFrame {
 
         dtm = new DefaultTableModel(asteriskContents, columnNames) {
 
-            @Serial
             private static final long serialVersionUID = 1L;
 
             @Override

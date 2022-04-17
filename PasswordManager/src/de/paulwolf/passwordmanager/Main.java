@@ -43,6 +43,13 @@ public class Main {
     // JFRAME ICON
     public static Image IMAGE;
     public static MainUI ui;
+    public static Painting fieldLabel;
+    static int maxX = 10;
+    static int maxY = 20;
+    public static Field[][] fields = new Field[maxX][maxY];
+    static JFrame frame;
+    static Dimension frameSize;
+    static Dimension fieldLabelSize;
 
     public static void main(String[] args) {
 
@@ -59,15 +66,15 @@ public class Main {
 
     public static void runTetris() {
 
-        frameSize = new Dimension(400+200, 800);
-        fieldLabelSize = new Dimension(320+200, 640);
+        frameSize = new Dimension(400 + 200, 800);
+        fieldLabelSize = new Dimension(320 + 200, 640);
 
-        Movement.lose=false;
-        Movement.level=0;
-        Movement.score=0;
-        Movement.achievedLines=0;
+        Movement.lose = false;
+        Movement.level = 0;
+        Movement.score = 0;
+        Movement.achievedLines = 0;
         for (int i = 0; i < 20; i++)
-            Movement.lines[i]=0;
+            Movement.lines[i] = 0;
 
         loadFields();
         loadGui();
@@ -82,16 +89,6 @@ public class Main {
             e.printStackTrace();
         }
     }
-
-    static int maxX = 10;
-    static int maxY = 20;
-
-    public static Field[][] fields = new Field[maxX][maxY];
-
-    static JFrame frame;
-    public static Painting fieldLabel;
-    static Dimension frameSize;
-    static Dimension fieldLabelSize;
 
     private static void loadGui() {
 
@@ -123,12 +120,14 @@ public class Main {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);Movement.lose = true;
+                super.windowClosing(e);
+                Movement.lose = true;
             }
         });
 
         frame.setVisible(true);
     }
+
     private static void loadFields() {
 
         for (int x = 0; x < maxX; x++) {
