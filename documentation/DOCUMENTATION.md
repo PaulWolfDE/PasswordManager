@@ -53,7 +53,7 @@ Passwords are being generated either with
 - The plaintext database is displayed in the GUI
 
 ### Run Commands/Variables
-Paths of recently opened files are saved in `%Appdata%/PasswordManager/.pmrc`.
+Paths of recently opened files are saved in `%user.home%/PasswordManger/.pmrc` (Linux) or `%Appdata%/PasswordManager/.pmrc` (Windows).
 If and only if a file exists and the database is compatible, it is displayed in a combo box during startup.
 The run commands should never be edited by something other than the PasswordManager!
 

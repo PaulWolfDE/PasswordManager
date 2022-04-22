@@ -51,7 +51,12 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
         openDatabase = new JButton("Open Database At Entered Path");
         uri = new JTextField(25);
 
-        File recentlyOpened = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
+        File recentlyOpened;
+        if (System.getenv("Appdata") == null)
+            recentlyOpened = new File(System.getProperty("user.home") + "/PasswordManager/.pmrc"); // Linux
+        else
+            recentlyOpened = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc"); // Windows
+
         if (Files.exists(recentlyOpened.toPath())) {
             Scanner scanner = null;
             try {
@@ -184,8 +189,14 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
                 new OpenDatabaseUI(path.toFile().getAbsolutePath());
                 databaseFile = path.toFile();
 
-                File rc = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
-                File rcDir = new File(System.getenv("Appdata") + "/PasswordManager/");
+                File rc, rcDir;
+                if (System.getenv("Appdata") == null) { // Linux
+                    rc = new File(System.getProperty("user.home") + "/PasswordManager/.pmrc");
+                    rcDir = new File(System.getProperty("user.home") + "PasswordManager/");
+                } else { // Windows
+                    rc = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
+                    rcDir = new File(System.getenv("Appdata") + "/PasswordManager/");
+                }
                 boolean directoryCreation = rcDir.mkdirs();
                 if (!directoryCreation) System.out.println("Directory creation failed.");
                 try {

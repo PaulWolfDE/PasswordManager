@@ -29,3 +29,6 @@
 ## Release 1.3.8
 - Tetris updates
 - Switched back to Java 8 language standard
+
+## Release 1.3.9 (pre)
+- `.pmrc` in user home -> Linux

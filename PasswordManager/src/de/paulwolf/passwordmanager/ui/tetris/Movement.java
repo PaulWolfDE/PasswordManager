@@ -40,8 +40,6 @@ public class Movement {
     public static int achievedLines = 0;
     public static char next = '\0';
 
-    public static boolean tetris = true;
-
     private static int getLevelSpeed() {
         switch (level) {
             case 0:
@@ -326,7 +324,8 @@ public class Movement {
 
 class BlinkObject {
 
-    private int x, y;
+    private final int x;
+    private final int y;
 
     public BlinkObject(int x, int y) {
         this.x = x;
@@ -336,16 +335,7 @@ class BlinkObject {
     public int getX() {
         return x;
     }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 }
