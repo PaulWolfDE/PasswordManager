@@ -192,7 +192,7 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
                 File rc, rcDir;
                 if (System.getenv("Appdata") == null) { // Linux
                     rc = new File(System.getProperty("user.home") + "/PasswordManager/.pmrc");
-                    rcDir = new File(System.getProperty("user.home") + "PasswordManager/");
+                    rcDir = new File(System.getProperty("user.home") + "/PasswordManager/");
                 } else { // Windows
                     rc = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
                     rcDir = new File(System.getenv("Appdata") + "/PasswordManager/");
