@@ -184,7 +184,12 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
 
             Path path = Paths.get(tempURI);
 
-            if (Files.exists(path) && !uri.getText().equals("")) {
+            if (uri.getText().equals(""))
+            {
+                if (Files.exists(new File((String) Objects.requireNonNull(box.getSelectedItem())).toPath()))
+                    path = new File((String) box.getSelectedItem()).toPath();
+            }
+            if (Files.exists(path)) {
 
                 new OpenDatabaseUI(path.toFile().getAbsolutePath());
                 databaseFile = path.toFile();
