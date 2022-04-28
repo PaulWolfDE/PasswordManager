@@ -21,8 +21,6 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -89,33 +87,6 @@ public class DatabaseUI extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-
-        filter.addKeyListener(new KeyListener() {
-
-            int i = 0;
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-                if (e.getKeyCode() == KeyEvent.VK_T && i == 0) i++;
-                else if (e.getKeyCode() == KeyEvent.VK_E && i == 1) i++;
-                else if (e.getKeyCode() == KeyEvent.VK_T && i == 2) i++;
-                else if (e.getKeyCode() == KeyEvent.VK_R && i == 3) i++;
-                else if (e.getKeyCode() == KeyEvent.VK_I && i == 4) i++;
-                else if (e.getKeyCode() == KeyEvent.VK_S && i == 5) {
-                    Main.runTetris();
-                    i = 0;
-                } else i = 0;
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-        });
 
         addEntry.addActionListener(e -> new NewEntryUI(null, -1));
 
@@ -282,6 +253,11 @@ public class DatabaseUI extends JFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 String text = filter.getText();
+                if (text.equalsIgnoreCase("Tetris187") || text.equalsIgnoreCase("Malle ist nur einmal im Jahr") || text.equalsIgnoreCase("69420")) {
+
+                    Main.runTetris();
+                    SwingUtilities.invokeLater(() -> filter.setText(""));
+                }
                 text = text.replaceAll("\\*", "").replaceAll("\\+", "").replaceAll("\\?", "").replaceAll("\\\\", "");
                 if (text.trim().length() == 0) rowSorter.setRowFilter(null);
                 else rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
