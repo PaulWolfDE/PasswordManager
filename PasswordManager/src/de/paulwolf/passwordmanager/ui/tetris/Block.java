@@ -136,92 +136,65 @@ public class Block {
 
     }
 
-    public void appear() {
+    public boolean appear() {
 
-        if (shape == 'I') {
-            if (!(Main.fields[3][0].isOccupied() || Main.fields[4][0].isOccupied() || Main.fields[5][0].isOccupied()
-                    || Main.fields[6][0].isOccupied())) {
-                square0.setLocation(3, 0);
-                square1.setLocation(4, 0);
-                square2.setLocation(5, 0);
-                square3.setLocation(6, 0);
-            } else {
-                Movement.lose = true;
-                Movement.timer.cancel();
-            }
+        if (shape == 'I' && !(Main.fields[3][0].isOccupied() || Main.fields[4][0].isOccupied() || Main.fields[5][0].isOccupied()
+                || Main.fields[6][0].isOccupied())) {
+            square0.setLocation(3, 0);
+            square1.setLocation(4, 0);
+            square2.setLocation(5, 0);
+            square3.setLocation(6, 0);
+            return true;
 
-        } else if (shape == 'J') {
-            if (!(Main.fields[4][0].isOccupied() || Main.fields[4][1].isOccupied() || Main.fields[5][1].isOccupied()
-                    || Main.fields[6][1].isOccupied())) {
-                square0.setLocation(4, 0);
-                square1.setLocation(4, 1);
-                square2.setLocation(5, 1);
-                square3.setLocation(6, 1);
-            } else {
-                Movement.lose = true;
-                Movement.timer.cancel();
-            }
+        } else if (shape == 'J' && !(Main.fields[4][0].isOccupied() || Main.fields[4][1].isOccupied() || Main.fields[5][1].isOccupied()
+                || Main.fields[6][1].isOccupied())) {
+            square0.setLocation(4, 0);
+            square1.setLocation(4, 1);
+            square2.setLocation(5, 1);
+            square3.setLocation(6, 1);
+            return true;
 
-        } else if (shape == 'L') {
-            if (!(Main.fields[6][0].isOccupied() || Main.fields[6][1].isOccupied() || Main.fields[5][1].isOccupied()
-                    || Main.fields[4][1].isOccupied())) {
-                square0.setLocation(6, 0);
-                square1.setLocation(4, 1);
-                square2.setLocation(5, 1);
-                square3.setLocation(6, 1);
-            } else {
-                Movement.lose = true;
-                Movement.timer.cancel();
-            }
+        } else if (shape == 'L' && !(Main.fields[6][0].isOccupied() || Main.fields[6][1].isOccupied() || Main.fields[5][1].isOccupied()
+                || Main.fields[4][1].isOccupied())) {
+            square0.setLocation(6, 0);
+            square1.setLocation(4, 1);
+            square2.setLocation(5, 1);
+            square3.setLocation(6, 1);
+            return true;
 
-        } else if (shape == 'O') {
-            if (!(Main.fields[4][0].isOccupied() || Main.fields[5][0].isOccupied() || Main.fields[4][1].isOccupied()
-                    || Main.fields[5][1].isOccupied())) {
-                square0.setLocation(4, 0);
-                square1.setLocation(5, 0);
-                square2.setLocation(4, 1);
-                square3.setLocation(5, 1);
-            } else {
-                Movement.lose = true;
-                Movement.timer.cancel();
-            }
+        } else if (shape == 'O' && !(Main.fields[4][0].isOccupied() || Main.fields[5][0].isOccupied() || Main.fields[4][1].isOccupied()
+                || Main.fields[5][1].isOccupied())) {
+            square0.setLocation(4, 0);
+            square1.setLocation(5, 0);
+            square2.setLocation(4, 1);
+            square3.setLocation(5, 1);
+            return true;
 
-        } else if (shape == 'S') {
-            if (!(Main.fields[4][1].isOccupied() || Main.fields[5][1].isOccupied() || Main.fields[5][0].isOccupied()
-                    || Main.fields[6][0].isOccupied())) {
-                square0.setLocation(5, 0);
-                square1.setLocation(6, 0);
-                square2.setLocation(4, 1);
-                square3.setLocation(5, 1);
-            } else {
-                Movement.lose = true;
-                Movement.timer.cancel();
-            }
+        } else if (shape == 'S' && !(Main.fields[4][1].isOccupied() || Main.fields[5][1].isOccupied() || Main.fields[5][0].isOccupied()
+                || Main.fields[6][0].isOccupied())) {
+            square0.setLocation(5, 0);
+            square1.setLocation(6, 0);
+            square2.setLocation(4, 1);
+            square3.setLocation(5, 1);
+            return true;
 
-        } else if (shape == 'T') {
-            if (!(Main.fields[4][1].isOccupied() || Main.fields[5][1].isOccupied() || Main.fields[6][1].isOccupied()
-                    || Main.fields[5][0].isOccupied())) {
-                square0.setLocation(5, 0);
-                square1.setLocation(4, 1);
-                square2.setLocation(5, 1);
-                square3.setLocation(6, 1);
-            } else {
-                Movement.lose = true;
-                Movement.timer.cancel();
-            }
+        } else if (shape == 'T' && !(Main.fields[4][1].isOccupied() || Main.fields[5][1].isOccupied() || Main.fields[6][1].isOccupied()
+                || Main.fields[5][0].isOccupied())) {
+            square0.setLocation(5, 0);
+            square1.setLocation(4, 1);
+            square2.setLocation(5, 1);
+            square3.setLocation(6, 1);
+            return true;
 
-        } else if (shape == 'Z') {
-            if (!(Main.fields[4][0].isOccupied() || Main.fields[5][0].isOccupied() || Main.fields[5][1].isOccupied()
-                    || Main.fields[6][1].isOccupied())) {
-                square0.setLocation(4, 0);
-                square1.setLocation(5, 0);
-                square2.setLocation(5, 1);
-                square3.setLocation(6, 1);
-            } else {
-                Movement.lose = true;
-                Movement.timer.cancel();
-            }
+        } else if (shape == 'Z' && !(Main.fields[4][0].isOccupied() || Main.fields[5][0].isOccupied() || Main.fields[5][1].isOccupied()
+                || Main.fields[6][1].isOccupied())) {
+            square0.setLocation(4, 0);
+            square1.setLocation(5, 0);
+            square2.setLocation(5, 1);
+            square3.setLocation(6, 1);
+            return true;
         }
+        return false;
     }
 
     public void rotate() {

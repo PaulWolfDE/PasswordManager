@@ -94,7 +94,10 @@ public class Movement {
 
         next = block.getRandomShape();
 
-        block.appear();
+        if (!block.appear()) {
+            Movement.lose = true;
+            Movement.timer.cancel();
+        }
         timer = new Timer();
         if (lose) {
             System.out.println("u lose");

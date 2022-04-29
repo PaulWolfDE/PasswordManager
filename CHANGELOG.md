@@ -32,3 +32,6 @@
 
 ## Release 1.3.9 (pre)
 - `.pmrc` in user home -> Linux
+- Tetris block update
+- Tetris access update
+- default combo box index as path
