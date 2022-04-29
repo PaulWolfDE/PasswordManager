@@ -33,6 +33,7 @@ import java.util.Scanner;
 public class MainUI extends JFrame implements ActionListener, KeyListener {
 
     final ArrayList<String> data = new ArrayList<>();
+    final ArrayList<String> pureData = new ArrayList<>();
     final JPanel wrapper;
     final JFileChooser fileChooser;
     final JButton browse;
@@ -68,21 +69,29 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
                 assert scanner != null;
                 if (!scanner.hasNextLine()) break;
                 String s = scanner.nextLine();
-                if (Files.exists(new File(s).toPath())) {
-                    File file = new File(s);
-                    if (Files.exists(file.toPath())) {
-                        Scanner scanner2 = null;
+                File file = new File(s);
+                if (Files.exists(file.toPath())) {
+                    Scanner scanner2 = null;
+                    try {
+                        scanner2 = new Scanner(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    assert scanner2 != null;
+                    String ver = scanner2.nextLine();
+                    if (FileWizard.isCompatible(ver)) {
                         try {
-                            scanner2 = new Scanner(file);
-                        } catch (FileNotFoundException e) {
+                            if (!data.contains(file.getCanonicalPath())) data.add(file.getCanonicalPath());
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        assert scanner2 != null;
-                        String ver = scanner2.nextLine();
-                        if (FileWizard.isCompatible(ver))
-                            if (!data.contains(file.getAbsolutePath())) data.add(file.getAbsolutePath());
-                        scanner2.close();
                     }
+                    try {
+                        if (!pureData.contains(file.getCanonicalPath())) pureData.add(file.getCanonicalPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    scanner2.close();
                 }
             }
             scanner.close();
@@ -184,14 +193,17 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
 
             Path path = Paths.get(tempURI);
 
-            if (uri.getText().equals(""))
-            {
+            if (uri.getText().equals("")) {
                 if (Files.exists(new File((String) Objects.requireNonNull(box.getSelectedItem())).toPath()))
                     path = new File((String) box.getSelectedItem()).toPath();
             }
             if (Files.exists(path)) {
 
-                new OpenDatabaseUI(path.toFile().getAbsolutePath());
+                try {
+                    new OpenDatabaseUI(path.toFile().getCanonicalPath());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
                 databaseFile = path.toFile();
 
                 File rc, rcDir;
@@ -203,16 +215,16 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
                     rcDir = new File(System.getenv("Appdata") + "/PasswordManager/");
                 }
                 boolean directoryCreation = rcDir.mkdirs();
-                if (!directoryCreation) System.out.println("Directory creation failed.");
+                if (!directoryCreation) System.out.println("Directory creation failed or directory already exists.");
                 try {
                     boolean fileCreation = rc.createNewFile();
-                    if (!fileCreation) System.out.println("File could not be created.");
+                    if (!fileCreation) System.out.println("File could not be created or already exists.");
                     FileWriter writer = new FileWriter(rc);
-                    Object[] arr = data.toArray();
-                    writer.write(databaseFile.getAbsolutePath() + "\n");
+                    Object[] arr = pureData.toArray();
+                    writer.write(databaseFile.getCanonicalPath() + "\n");
                     for (Object o : arr) {
-                        if (!new File(o.toString()).getAbsolutePath().equals(databaseFile.getAbsolutePath()))
-                            writer.write(new File(o.toString()).getAbsolutePath() + "\n");
+                        if (!new File(o.toString()).getCanonicalPath().equals(databaseFile.getCanonicalPath()))
+                            writer.write(new File(o.toString()).getCanonicalPath() + "\n");
                     }
 
                     writer.close();
