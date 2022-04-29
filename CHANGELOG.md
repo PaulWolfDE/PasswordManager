@@ -30,8 +30,10 @@
 - Tetris updates
 - Switched back to Java 8 language standard
 
-## Release 1.3.9 (pre)
-- `.pmrc` in user home -> Linux
+## Release 1.3.9
+- `.pmrc` 
+  - in user home -> Linux
+  - hiding invalid files instead of deleting them
 - Tetris block update
 - Tetris access update
 - default combo box index as path
