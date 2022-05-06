@@ -236,7 +236,6 @@ public class Movement {
     public static void checkLines(boolean countPoints, BlinkObject... objects) {
 
         boolean doBlink = objects.length == 4;
-
         int n = 0;
         for (int i = 19; i >= 0; i--)
             if (lines[i] == 10) n++;
@@ -248,9 +247,13 @@ public class Movement {
         }
         System.out.println("Score: " + score);
 
-        for (int i = 19; i >= 0; i--) {
+        for (int i = 0; i < 20; i++) {
             if (lines[i] == 10) {
-                cleanLines(i);
+                try {
+                    cleanLines(i, n);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 doBlink = false;
             }
         }
@@ -266,48 +269,59 @@ public class Movement {
                 blink(bo);
     }
 
-    public static void cleanLines(int height) {
+    public static void cleanLines(int height, int numOfLines) throws InterruptedException {
 
-        for (int k = 0; k < 2; k++) {
-            Color[] colors = new Color[10];
+        Color[] colors = new Color[10];
 
-            for (int i = 0; i < 10; i++) {
-                colors[i] = Main.fields[i][height].getColor();
-                Main.fields[i][height].setColor(new Color(255, 254, 255));
+        for (int j = 0; j < (numOfLines == 4 ? 9 : 2); j++) {
+
+            // Lines get blinked
+            for (int i = 0; i < numOfLines; i++) {
+
+                // Colors get saved
+                if (j == 0)
+                    for (int k = 0; k < 10; k++)
+                        colors[k] = Main.fields[j][height + i].getColor();
+
+                // Colors set to white
+                for (int k = 0; k < 10; k++) {
+                    if (numOfLines == 4)
+                        Main.fields[k][height + i].setColor(new Color(j%3*127, (j+1)%3*127, (j+2)%3*127));
+                    else
+                        Main.fields[k][height + i].setColor(new Color(255, 254, 255));
+                }
             }
+            Main.fieldLabel.repaint();
+            Thread.sleep(25L);
+
+            for (int i = 0; i < numOfLines; i++)
+                for (int k = 0; k < 10; k++)
+                    Main.fields[k][height + i].setColor(colors[k]);
 
             Main.fieldLabel.repaint();
-            try {
-                Thread.sleep(25L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            Thread.sleep(25L);
+        }
+        // Adding score
+        achievedLines += numOfLines;
+
+        // Clearing lines
+        for (int i = 0; i < numOfLines; i++) {
+
+            // Setting lines to zero
+            for (int j = 0; j < 10; j++) {
+                Main.fields[j][height + i].setOccupied(false);
+                Main.fields[j][height + i].setColor(Color.WHITE);
             }
-            for (int i = 0; i < 10; i++)
-                Main.fields[i][height].setColor(colors[i]);
-            Main.fieldLabel.repaint();
-            Main.fieldLabel.repaint();
-            try {
-                Thread.sleep(25L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+            lines[height + i] = 0;
 
-        achievedLines++;
-        for (int x = 0; x < 10; x++) {
-            Main.fields[x][height].setOccupied(false);
-            Main.fields[x][height].setColor(Color.WHITE);
-        }
-        lines[height] = 0;
+            // Match level
+            level = achievedLines / 10;
 
-        if (achievedLines % 10 == 0) {
-            level++;
-            System.out.println("Level up: " + level);
+            // Lines above down
+            for (int j = height - 1 + i; j >= 0; j--)
+                lineDown(j);
         }
-        for (int i = height - 1; i >= 0; i--) {
-            lineDown(i);
-            Main.fieldLabel.repaint();
-        }
+        Main.fieldLabel.repaint();
     }
 
     public static void lineDown(int height) {
@@ -338,6 +352,7 @@ class BlinkObject {
     public int getX() {
         return x;
     }
+
     public int getY() {
         return y;
     }
