@@ -97,6 +97,7 @@ public class Movement {
         if (!block.appear()) {
             Movement.lose = true;
             Movement.timer.cancel();
+            Main.fieldLabel.repaint();
         }
         timer = new Timer();
         if (lose) {
@@ -247,16 +248,22 @@ public class Movement {
         }
         System.out.println("Score: " + score);
 
+        int[] h = new int[n];
+        int k = 0;
+
         for (int i = 0; i < 20; i++) {
             if (lines[i] == 10) {
-                try {
-                    cleanLines(i, n);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                h[k++] = i;
                 doBlink = false;
             }
         }
+
+        if (k > 0)
+            try {
+                cleanLines(h);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         for (int i = 19; i >= 0; i--) {
             if (lines[i] == 10) {
@@ -269,56 +276,56 @@ public class Movement {
                 blink(bo);
     }
 
-    public static void cleanLines(int height, int numOfLines) throws InterruptedException {
+    public static void cleanLines(int[] height) throws InterruptedException {
 
         Color[] colors = new Color[10];
 
-        for (int j = 0; j < (numOfLines == 4 ? 9 : 2); j++) {
+        for (int j = 0; j < (height.length == 4 ? 9 : 2); j++) {
 
             // Lines get blinked
-            for (int i = 0; i < numOfLines; i++) {
+            for (int value : height) {
 
                 // Colors get saved
                 if (j == 0)
                     for (int k = 0; k < 10; k++)
-                        colors[k] = Main.fields[j][height + i].getColor();
+                        colors[k] = Main.fields[j][value].getColor();
 
                 // Colors set to white
                 for (int k = 0; k < 10; k++) {
-                    if (numOfLines == 4)
-                        Main.fields[k][height + i].setColor(new Color(j%3*127, (j+1)%3*127, (j+2)%3*127));
+                    if (height.length == 4)
+                        Main.fields[k][value].setColor(new Color(j % 3 * 127, (j + 1) % 3 * 127, (j + 2) % 3 * 127));
                     else
-                        Main.fields[k][height + i].setColor(new Color(255, 254, 255));
+                        Main.fields[k][value].setColor(new Color(255, 254, 255));
                 }
             }
             Main.fieldLabel.repaint();
             Thread.sleep(25L);
 
-            for (int i = 0; i < numOfLines; i++)
+            for (int value : height)
                 for (int k = 0; k < 10; k++)
-                    Main.fields[k][height + i].setColor(colors[k]);
+                    Main.fields[k][value].setColor(colors[k]);
 
             Main.fieldLabel.repaint();
             Thread.sleep(25L);
         }
         // Adding score
-        achievedLines += numOfLines;
+        achievedLines += height.length;
 
         // Clearing lines
-        for (int i = 0; i < numOfLines; i++) {
+        for (int k : height) {
 
             // Setting lines to zero
             for (int j = 0; j < 10; j++) {
-                Main.fields[j][height + i].setOccupied(false);
-                Main.fields[j][height + i].setColor(Color.WHITE);
+                Main.fields[j][k].setOccupied(false);
+                Main.fields[j][k].setColor(Color.WHITE);
             }
-            lines[height + i] = 0;
+            lines[k] = 0;
 
             // Match level
             level = achievedLines / 10;
 
             // Lines above down
-            for (int j = height - 1 + i; j >= 0; j--)
+            for (int j = k - 1; j >= 0; j--)
                 lineDown(j);
         }
         Main.fieldLabel.repaint();
