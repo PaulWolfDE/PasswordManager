@@ -37,3 +37,6 @@
 - Tetris block update
 - Tetris access update
 - default combo box index as path
+
+## Release 1.4.o
+- Major Tetris graphics update

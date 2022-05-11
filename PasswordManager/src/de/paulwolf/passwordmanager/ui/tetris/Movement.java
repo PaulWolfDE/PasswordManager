@@ -35,6 +35,7 @@ public class Movement {
     public static boolean temp = false;
     public static int[] lines = new int[20];
 
+    public static boolean lockRotate;
     public static long score;
     public static int level = 0;
     public static int achievedLines = 0;
@@ -192,13 +193,13 @@ public class Movement {
 
     public static void skipDown() {
 
+        lockRotate = true;
         timer.cancel();
 
         Thread t1 = new Thread(() -> {
 
             while (true) {
                 if (!Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied()) {
-
                     if (block.getSquare(0).getY() >= 18 || block.getSquare(1).getY() >= 18 || block.getSquare(2).getY() >= 18 || block.getSquare(3).getY() >= 18) {
                         timer.cancel();
                         block.moveDown();
@@ -211,6 +212,7 @@ public class Movement {
                         }
                         checkLines(true);
                         startMovement();
+                        lockRotate = false;
                         return;
                     } else {
                         block.moveDown();
@@ -227,6 +229,7 @@ public class Movement {
                     }
                     checkLines(true);
                     startMovement();
+                    lockRotate = false;
                     return;
                 }
             }
@@ -322,7 +325,8 @@ public class Movement {
             lines[k] = 0;
 
             // Match level
-            level = achievedLines / 10;
+            if (achievedLines / 10 > level)
+                level = achievedLines / 10;
 
             // Lines above down
             for (int j = k - 1; j >= 0; j--)

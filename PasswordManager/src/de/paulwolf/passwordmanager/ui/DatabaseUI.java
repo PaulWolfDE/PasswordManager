@@ -254,10 +254,11 @@ public class DatabaseUI extends JFrame {
             public void insertUpdate(DocumentEvent e) {
                 String text = filter.getText();
                 if (text.equalsIgnoreCase("Tetris187") || text.equalsIgnoreCase("Malle ist nur einmal im Jahr") || text.equalsIgnoreCase("69420")) {
-
-                    Main.runTetris();
+                    Main.runTetris(0);
                     SwingUtilities.invokeLater(() -> filter.setText(""));
                 }
+                if (text.length() == 9 /*tetris:nn*/ && text.substring(0, 7).equalsIgnoreCase("tetris:") && Integer.parseInt(text.substring(7)) <= 29 && Integer.parseInt(text.substring(7)) >= 0)
+                    Main.runTetris(Integer.parseInt(text.substring(7)));
                 text = text.replaceAll("\\*", "").replaceAll("\\+", "").replaceAll("\\?", "").replaceAll("\\\\", "");
                 if (text.trim().length() == 0) rowSorter.setRowFilter(null);
                 else rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));

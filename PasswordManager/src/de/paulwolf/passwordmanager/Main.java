@@ -35,9 +35,9 @@ public class Main {
     // DATE FORMAT
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd@HH:mm");
     // VERSION NUMBER
-    public static final String VERSION_NUMBER = "1.3.9";
+    public static final String VERSION_NUMBER = "1.4.0";
     // VERIONS COMPATIBLE WITH
-    public static final String[] COMPATIBLE_VERSIONS = {"1.3.9", "1.3.8", "1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2"};
+    public static final String[] COMPATIBLE_VERSIONS = {"1.4.0", "1.3.9", "1.3.8", "1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2"};
     // STANDARD ECHO CHAR
     public static final char ECHO_CHAR = 0x2022;
     // JFRAME ICON
@@ -65,13 +65,13 @@ public class Main {
         }
     }
 
-    public static void runTetris() {
+    public static void runTetris(int level) {
 
         frameSize = new Dimension(400 + 200, 800);
         fieldLabelSize = new Dimension(320 + 200, 640);
 
         Movement.lose = false;
-        Movement.level = 0;
+        Movement.level = level;
         Movement.score = 0;
         Movement.achievedLines = 0;
         for (int i = 0; i < 20; i++)
@@ -102,6 +102,11 @@ public class Main {
         frame.setLayout(null);
         frame.getContentPane().setBackground(new Color(60, 63, 65));
 
+        try {
+            Painting.loadImages();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         fieldLabel = new Painting();
         fieldLabel.setSize(fieldLabelSize);
 

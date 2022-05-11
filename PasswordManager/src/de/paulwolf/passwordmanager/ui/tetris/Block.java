@@ -199,6 +199,9 @@ public class Block {
 
     public void rotate() {
 
+        if (Movement.lockRotate)
+            return;
+
         if (shape == 'I') {
             if (rotation == 0 || rotation == 2) {
                 if (square0.getX() + 1 <= 9 && square0.getY() - 1 >= 0 && square2.getX() - 1 >= 0
@@ -219,7 +222,7 @@ public class Block {
                     System.out.println("out of bounds");
                 }
             } else if (rotation == 1 || rotation == 3) {
-                if (square0.getY() - 1 >= 0 && square0.getX() + 1 <= 9 && square1.getY() - 1 >= 0
+                if (square0.getY() - 1 >= 0 && square0.getX() - 1 >= 0 && square1.getY() - 1 >= 0
                         && square1.getX() + 1 <= 9 && square3.getY() - 2 >= 0 && square3.getX() + 2 <= 9) {
                     if (!(Main.fields[square0.getX() - 1][square0.getY() + 1].isOccupied()
                             || Main.fields[square1.getX()][square1.getY()].isOccupied()
