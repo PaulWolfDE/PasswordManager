@@ -25,6 +25,10 @@ Copying email addresses, usernames and passwords is easily done by right-clickin
 
 Settings over the entire database can be changed by clicking on "Settings" in the database window. After entering the master password again, you can now freely select this and the algorithms used again. Also after this action the database should be saved.
 
+### Running Tetris
+
+To play Tetris, the user must enter `tetris:NN` in the filter field in the database. `NN` is then to be replaced with the desired level, where the level must be ≥ 0 and ≤ 29. For numbers with one digit, a `0` must also be added at the beginning, so that the level always represents 2 characters (`8` --> `08`).
+
 ## Password manager in the background
 
 This chapter shows how the password manager works in the background, for example when a button is pressed to encrypt.

@@ -25,6 +25,10 @@ Das Kopieren von E-Mail-Adressen, Nutzernamen und Passwörtern ist einfach über
 
 Die Einstellungen über die gesamte Datenbank können durch einen Klick auf "Settings" im Datenbank-Fenster geändert werden. Nach einer erneuten Eingabe des Master-Passworts kann man jetzt dieses und die verwendeten Algorithmen erneut frei auswählen. Auch nach dieser Aktion sollte die Datenbank gespeichert werden.
 
+### Tetris spielen
+
+Um Tetris zu spielen, muss der Nutzer `tetris:NN` in das Filterfeld in der Datenbank eingeben. `NN` ist dann mit dem gewünschten Level zu ersetzen, wobei gilt, dass das Level ≥ 0 und ≤ 29 sein muss. Bei Zahlen mit einer Stelle, muss ebenso eine `0` am Anfang hinzugefügt werden, sodass das Level immer 2 Zeichen darstellt (`8` --> `08`).  
+
 ## Passwortmanager im Hintergrund
 
 Dieses Kapitel zeigt, wie der Passwortmanager im Hintergrund arbeitet, wenn zum Beispiel ein Knopf zum Verschlüsseln gedrückt wird.
