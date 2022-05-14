@@ -15,7 +15,7 @@
 - Allowing empty entries
 
 ## Release 1.3.5
-- Added saving of previously opended database as run command
+- Added saving of previously opened database as run command
     - `.pmrc` in `%Appdata%/PasswordManager/`
     - Changing of the database to open in password input
 
@@ -38,5 +38,11 @@
 - Tetris access update
 - default combo box index as path
 
-## Release 1.4.o
+## Release 1.4.0
 - Major Tetris graphics update
+
+## Release 1.4.1
+- "Tetris bugfix release"
+  - Block rotation
+  - Visibility of non-existent blocks
+  - Moving blocks within animations
