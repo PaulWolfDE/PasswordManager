@@ -14,6 +14,7 @@ public class Block {
     Random random = new Random();
     private int rotation = 0;
     private char shape;
+    private boolean exists = true;
 
     public void setShape(char shape) {
         this.shape = shape;
@@ -59,7 +60,8 @@ public class Block {
         square1.setY(square1.getY() + 1);
         square2.setY(square2.getY() + 1);
         square3.setY(square3.getY() + 1);
-        updateDownGui();
+        if (exists)
+            updateDownGui();
     }
 
     public void moveRight() {
@@ -194,6 +196,7 @@ public class Block {
             square3.setLocation(6, 1);
             return true;
         }
+        exists = false;
         return false;
     }
 
@@ -539,5 +542,9 @@ public class Block {
         } else {
             rotation = 0;
         }
+    }
+
+    public boolean exists() {
+        return exists;
     }
 }

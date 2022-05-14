@@ -97,7 +97,6 @@ public class Movement {
         if (!block.appear()) {
             Movement.lose = true;
             Movement.timer.cancel();
-            Main.fieldLabel.repaint();
         }
         timer = new Timer();
         if (lose) {
@@ -119,7 +118,7 @@ public class Movement {
                 moveDown();
             }
         }, getLevelSpeed(), getLevelSpeed());
-        lockMove=false;
+        lockMove = false;
     }
 
     public static void moveRight() {
@@ -237,7 +236,7 @@ public class Movement {
 
     public static void checkLines(boolean countPoints, BlinkObject... objects) {
 
-        lockMove=true;
+        lockMove = true;
 
         boolean doBlink = objects.length == 4;
         int n = 0;

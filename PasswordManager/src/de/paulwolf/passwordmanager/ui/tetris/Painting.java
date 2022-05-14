@@ -135,7 +135,7 @@ public class Painting extends JLabel {
         }
 
         int minReach = 20;
-        int reach = 0;
+        int reach;
 
         for (int i = 0; i < 4; i++) {
             reach = Movement.block.getSquare(i).getY();
@@ -145,6 +145,7 @@ public class Painting extends JLabel {
         }
         AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .3F);
         ((Graphics2D) g).setComposite(ac);
+        if (Movement.block.exists())
         for (int i = 0; i < 4; i++)
             g.drawImage(colorToImage(Main.fields[Movement.block.getSquare(0).getX()][Movement.block.getSquare(0).getY()].getColor(), true), Movement.block.getSquare(i).getX() * 32, (minReach + Movement.block.getSquare(i).getY()) * 32, 32, 32, null);
 
