@@ -35,7 +35,7 @@ public class Movement {
     public static boolean temp = false;
     public static int[] lines = new int[20];
 
-    public static boolean lockRotate;
+    public static boolean lockRotate, lockMove;
     public static long score;
     public static int level = 0;
     public static int achievedLines = 0;
@@ -87,11 +87,10 @@ public class Movement {
         timer.cancel();
 
         block = new Block();
-        if (next == '\0') {
+        if (next == '\0')
             block.setShape(block.getRandomShape());
-        } else {
+        else
             block.setShape(next);
-        }
 
         next = block.getRandomShape();
 
@@ -120,7 +119,7 @@ public class Movement {
                 moveDown();
             }
         }, getLevelSpeed(), getLevelSpeed());
-
+        lockMove=false;
     }
 
     public static void moveRight() {
@@ -159,6 +158,9 @@ public class Movement {
 
     public static void moveDown() {
 
+        if (lockMove)
+            return;
+
         if (block.getSquare(0).getY() + 1 < 20 && block.getSquare(1).getY() + 1 < 20 && block.getSquare(2).getY() + 1 < 20 && block.getSquare(3).getY() + 1 < 20) {
 
             if (temp && !(!Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied())) {
@@ -170,7 +172,6 @@ public class Movement {
                 }
                 checkLines(true, new BlinkObject(block.getSquare(0).getX(), block.getSquare(0).getY()), new BlinkObject(block.getSquare(1).getX(), block.getSquare(1).getY()), new BlinkObject(block.getSquare(2).getX(), block.getSquare(2).getY()), new BlinkObject(block.getSquare(3).getX(), block.getSquare(3).getY()));
                 Main.fieldLabel.repaint();
-                startMovement();
             }
         }
 
@@ -180,7 +181,6 @@ public class Movement {
                 lines[block.getSquare(i).getY()]++;
             }
             checkLines(true, new BlinkObject(block.getSquare(0).getX(), block.getSquare(0).getY()), new BlinkObject(block.getSquare(1).getX(), block.getSquare(1).getY()), new BlinkObject(block.getSquare(2).getX(), block.getSquare(2).getY()), new BlinkObject(block.getSquare(3).getX(), block.getSquare(3).getY()));
-            startMovement();
 
         } else {
             if (!Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied()) {
@@ -211,7 +211,6 @@ public class Movement {
                             lines[block.getSquare(i).getY()]++;
                         }
                         checkLines(true);
-                        startMovement();
                         lockRotate = false;
                         return;
                     } else {
@@ -228,7 +227,6 @@ public class Movement {
                         lines[block.getSquare(i).getY()]++;
                     }
                     checkLines(true);
-                    startMovement();
                     lockRotate = false;
                     return;
                 }
@@ -238,6 +236,8 @@ public class Movement {
     }
 
     public static void checkLines(boolean countPoints, BlinkObject... objects) {
+
+        lockMove=true;
 
         boolean doBlink = objects.length == 4;
         int n = 0;
@@ -277,6 +277,8 @@ public class Movement {
         if (doBlink)
             for (BlinkObject bo : objects)
                 blink(bo);
+
+        startMovement();
     }
 
     public static void cleanLines(int[] height) throws InterruptedException {
