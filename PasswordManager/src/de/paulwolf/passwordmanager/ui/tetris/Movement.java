@@ -41,7 +41,7 @@ public class Movement {
     public static int achievedLines = 0;
     public static char next = '\0';
 
-    private static int getLevelSpeed() {
+    public static int getLevelSpeed() {
         switch (level) {
             case 0:
                 return LEVEL_00_SPEED;
@@ -122,6 +122,10 @@ public class Movement {
     }
 
     public static void moveRight() {
+
+        if (lockMove)
+            return;
+
         if (!(block.getSquare(0).getX() >= 9 || block.getSquare(1).getX() >= 9 || block.getSquare(2).getX() >= 9 || block.getSquare(3).getX() >= 9)) {
 
             if (!Main.fields[block.getSquare(0).getX() + 1][block.getSquare(0).getY()].isOccupied() && !Main.fields[block.getSquare(1).getX() + 1][block.getSquare(1).getY()].isOccupied() && !Main.fields[block.getSquare(2).getX() + 1][block.getSquare(2).getY()].isOccupied() && !Main.fields[block.getSquare(3).getX() + 1][block.getSquare(3).getY()].isOccupied()) {
@@ -132,6 +136,10 @@ public class Movement {
     }
 
     public static void moveLeft() {
+
+        if (lockMove)
+            return;
+
         if (!(block.getSquare(0).getX() <= 0 || block.getSquare(1).getX() <= 0 || block.getSquare(2).getX() <= 0 || block.getSquare(3).getX() <= 0)) {
 
             if (!Main.fields[block.getSquare(0).getX() - 1][block.getSquare(0).getY()].isOccupied() && !Main.fields[block.getSquare(1).getX() - 1][block.getSquare(1).getY()].isOccupied() && !Main.fields[block.getSquare(2).getX() - 1][block.getSquare(2).getY()].isOccupied() && !Main.fields[block.getSquare(3).getX() - 1][block.getSquare(3).getY()].isOccupied()) {
@@ -191,6 +199,9 @@ public class Movement {
     }
 
     public static void skipDown() {
+
+        if (lockMove)
+            return;
 
         lockRotate = true;
         timer.cancel();

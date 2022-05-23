@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
+import java.util.TimerTask;
+import java.util.Timer;
 
 public class Main {
 
@@ -49,6 +51,7 @@ public class Main {
     static int maxY = 20;
     public static Field[][] fields = new Field[maxX][maxY];
     static JFrame frame;
+    static JToggleButton pauseButton;
     static Dimension frameSize;
     static Dimension fieldLabelSize;
 
@@ -107,6 +110,37 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        pauseButton = new JToggleButton("Pause");
+        pauseButton.setBounds(350, 350, 32, 32);
+        pauseButton.setFocusable(false);
+        pauseButton.addActionListener(e -> {
+            if (pauseButton.isSelected()) {
+                Movement.timer.cancel();
+                Movement.lockMove = true;
+                Movement.lockRotate = true;
+            } else {
+                Movement.lockMove =false;
+                Movement.lockRotate = false;
+                frame.requestFocus();
+                (Movement.timer = new Timer()).scheduleAtFixedRate(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        if (Movement.lose) {
+                            Movement.timer.cancel();
+                            return;
+                        }
+                        Movement.moveDown();
+                    }
+                }, Movement.getLevelSpeed(), Movement.getLevelSpeed());
+            }
+        });
+
+        JLabel cpmLabel = new JLabel();
+        cpmLabel.add(pauseButton);
+        cpmLabel.setSize(fieldLabelSize);
+
         fieldLabel = new Painting();
         fieldLabel.setSize(fieldLabelSize);
 
@@ -122,6 +156,7 @@ public class Main {
 
         // fieldLabel.setBackground(Color.BLACK);
         fieldLabel.setVisible(true);
+        frame.add(cpmLabel);
         frame.add(fieldLabel);
 
         frame.addWindowListener(new WindowAdapter() {
