@@ -16,6 +16,7 @@ public class Painting extends JLabel {
     static BufferedImage field;
     static BufferedImage emptyField;
     static BufferedImage grid;
+    public static BufferedImage pause, play;
     static BufferedImage[] blocks = new BufferedImage[7];
     static BufferedImage[] darkBlocks = new BufferedImage[7];
 
@@ -23,6 +24,8 @@ public class Painting extends JLabel {
         field = ImageIO.read(Objects.requireNonNull(Painting.class.getResource("/empty_field.png")));
         emptyField = ImageIO.read(Objects.requireNonNull(Painting.class.getResource("/empty_field.png")));
         grid = ImageIO.read(Objects.requireNonNull(Painting.class.getResource("/grid.png")));
+        pause = ImageIO.read(Objects.requireNonNull(Painting.class.getResource("/pause.png")));
+        play = ImageIO.read(Objects.requireNonNull(Painting.class.getResource("/play.png")));
 
         blocks[0] = ImageIO.read(Objects.requireNonNull(Painting.class.getResource("/blue.png")));
         blocks[1] = ImageIO.read(Objects.requireNonNull(Painting.class.getResource("/cyan.png")));

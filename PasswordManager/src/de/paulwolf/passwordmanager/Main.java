@@ -73,6 +73,9 @@ public class Main {
         frameSize = new Dimension(400 + 200, 800);
         fieldLabelSize = new Dimension(320 + 200, 640);
 
+        Movement.pause = false;
+        Movement.lockMove = false;
+        Movement.lockRotate = false;
         Movement.lose = false;
         Movement.level = level;
         Movement.score = 0;
@@ -111,17 +114,22 @@ public class Main {
             e.printStackTrace();
         }
 
-        pauseButton = new JToggleButton("Pause");
-        pauseButton.setBounds(350, 350, 32, 32);
+        pauseButton = new JToggleButton();
+        pauseButton.setBounds(420, 420, 50, 50);
         pauseButton.setFocusable(false);
+        pauseButton.setIcon(new ImageIcon(Painting.pause));
+        pauseButton.setBorder(BorderFactory.createEmptyBorder());
+        pauseButton.setContentAreaFilled(false);
         pauseButton.addActionListener(e -> {
             if (pauseButton.isSelected()) {
+                pauseButton.setIcon(new ImageIcon(Painting.play));
                 Movement.timer.cancel();
                 Movement.pause = true;
                 Movement.lockMove = true;
                 Movement.lockRotate = true;
                 fieldLabel.repaint();
             } else {
+                pauseButton.setIcon(new ImageIcon(Painting.pause));
                 Movement.pause = false;
                 Movement.lockMove = false;
                 Movement.lockRotate = false;
