@@ -33,6 +33,7 @@ public class Movement {
     public static Timer timer = new Timer();
     public static boolean lose = false;
     public static boolean temp = false;
+    public static boolean pause = false;
     public static int[] lines = new int[20];
 
     public static boolean lockRotate, lockMove;

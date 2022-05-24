@@ -117,12 +117,16 @@ public class Main {
         pauseButton.addActionListener(e -> {
             if (pauseButton.isSelected()) {
                 Movement.timer.cancel();
+                Movement.pause = true;
                 Movement.lockMove = true;
                 Movement.lockRotate = true;
+                fieldLabel.repaint();
             } else {
+                Movement.pause = false;
                 Movement.lockMove =false;
                 Movement.lockRotate = false;
                 frame.requestFocus();
+                fieldLabel.repaint();
                 (Movement.timer = new Timer()).scheduleAtFixedRate(new TimerTask() {
 
                     @Override

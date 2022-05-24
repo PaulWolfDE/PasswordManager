@@ -64,12 +64,14 @@ public class Painting extends JLabel {
 
                 // graphics.setPaint(Main.fields[x][y].getColor());
                 BufferedImage blockImg = colorToImage(Main.fields[x][y].getColor(), false);
-                if (blockImg != null) {
+                if (blockImg != null && !Movement.pause) {
                     g.drawImage(blockImg, x * 32, y * 32, 32, 32, null);
                 } else {
-                    if (Main.fields[x][y].getColor() != Color.WHITE) graphics.fillRect(0, 0, 32, 32);
+                    if (Main.fields[x][y].getColor() != Color.WHITE)
+                        graphics.fillRect(0, 0, 32, 32);
                     g.drawImage(field, x * 32, y * 32, 32, 32, null);
-                    if (Main.fields[x][y].getColor() == Color.WHITE) g.drawImage(emptyField, x * 32, y * 32, 32, 32, null);
+                    if (Main.fields[x][y].getColor() == Color.WHITE || Movement.pause)
+                        g.drawImage(emptyField, x * 32, y * 32, 32, 32, null);
                     else g.drawImage(grid, x * 32, y * 32, 32, 32, null);
                 }
             }
@@ -98,7 +100,7 @@ public class Painting extends JLabel {
                 break;
             case 'J':
                 g.drawImage(blocks[0], 350, 544, 32, 32, null);
-                g.drawImage(blocks[0], 350, 544 +32, 32, 32, null);
+                g.drawImage(blocks[0], 350, 544 + 32, 32, 32, null);
                 g.drawImage(blocks[0], 350 + 32, 544 + 32, 32, 32, null);
                 g.drawImage(blocks[0], 350 + 32 * 2, 544 + 32, 32, 32, null);
                 break;
@@ -145,9 +147,9 @@ public class Painting extends JLabel {
         }
         AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .3F);
         ((Graphics2D) g).setComposite(ac);
-        if (Movement.block.exists())
-        for (int i = 0; i < 4; i++)
-            g.drawImage(colorToImage(Main.fields[Movement.block.getSquare(0).getX()][Movement.block.getSquare(0).getY()].getColor(), true), Movement.block.getSquare(i).getX() * 32, (minReach + Movement.block.getSquare(i).getY()) * 32, 32, 32, null);
+        if (Movement.block.exists() && !Movement.pause)
+            for (int i = 0; i < 4; i++)
+                g.drawImage(colorToImage(Main.fields[Movement.block.getSquare(0).getX()][Movement.block.getSquare(0).getY()].getColor(), true), Movement.block.getSquare(i).getX() * 32, (minReach + Movement.block.getSquare(i).getY()) * 32, 32, 32, null);
 
     }
 }
