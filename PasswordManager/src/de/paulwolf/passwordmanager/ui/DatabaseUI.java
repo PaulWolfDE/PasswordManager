@@ -257,8 +257,10 @@ public class DatabaseUI extends JFrame {
                     Main.runTetris(0);
                     SwingUtilities.invokeLater(() -> filter.setText(""));
                 }
-                if (text.length() == 9 /*tetris:nn*/ && text.substring(0, 7).equalsIgnoreCase("tetris:") && Integer.parseInt(text.substring(7)) <= 29 && Integer.parseInt(text.substring(7)) >= 0)
+                if (text.length() == 9 /*tetris:nn*/ && text.substring(0, 7).equalsIgnoreCase("tetris:") && Integer.parseInt(text.substring(7)) <= 29 && Integer.parseInt(text.substring(7)) >= 0) {
                     Main.runTetris(Integer.parseInt(text.substring(7)));
+                    SwingUtilities.invokeLater(() -> filter.setText(""));
+                }
                 text = text.replaceAll("\\*", "").replaceAll("\\+", "").replaceAll("\\?", "").replaceAll("\\\\", "");
                 if (text.trim().length() == 0) rowSorter.setRowFilter(null);
                 else rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
