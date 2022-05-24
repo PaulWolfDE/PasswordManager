@@ -91,50 +91,51 @@ public class Painting extends JLabel {
 
         g.setColor(Field.getColor(Movement.next));
 
-        switch (Movement.next) {
-            case 'I':
-                g.drawImage(blocks[1], 350, 544, 32, 32, null);
-                g.drawImage(blocks[1], 350 + 32, 544, 32, 32, null);
-                g.drawImage(blocks[1], 350 + 32 * 2, 544, 32, 32, null);
-                g.drawImage(blocks[1], 350 + 32 * 3, 544, 32, 32, null);
-                break;
-            case 'J':
-                g.drawImage(blocks[0], 350, 544, 32, 32, null);
-                g.drawImage(blocks[0], 350, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[0], 350 + 32, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[0], 350 + 32 * 2, 544 + 32, 32, 32, null);
-                break;
-            case 'L':
-                g.drawImage(blocks[3], 350, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[3], 350 + 32, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[3], 350 + 32 * 2, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[3], 350 + 32 * 2, 544, 32, 32, null);
-                break;
-            case 'O':
-                g.drawImage(blocks[6], 350, 544, 32, 32, null);
-                g.drawImage(blocks[6], 350 + 32, 544, 32, 32, null);
-                g.drawImage(blocks[6], 350, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[6], 350 + 32, 544 + 32, 32, 32, null);
-                break;
-            case 'S':
-                g.drawImage(blocks[2], 350, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[2], 350 + 32, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[2], 350 + 32, 544, 32, 32, null);
-                g.drawImage(blocks[2], 350 + 32 * 2, 544, 32, 32, null);
-                break;
-            case 'T':
-                g.drawImage(blocks[4], 350, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[4], 350 + 32, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[4], 350 + 32, 544, 32, 32, null);
-                g.drawImage(blocks[4], 350 + 32 * 2, 544 + 32, 32, 32, null);
-                break;
-            case 'Z':
-                g.drawImage(blocks[5], 350, 544, 32, 32, null);
-                g.drawImage(blocks[5], 350 + 32, 544, 32, 32, null);
-                g.drawImage(blocks[5], 350 + 32, 544 + 32, 32, 32, null);
-                g.drawImage(blocks[5], 350 + 32 * 2, 544 + 32, 32, 32, null);
-                break;
-        }
+        if (!Movement.pause)
+            switch (Movement.next) {
+                case 'I':
+                    g.drawImage(blocks[1], 350, 544, 32, 32, null);
+                    g.drawImage(blocks[1], 350 + 32, 544, 32, 32, null);
+                    g.drawImage(blocks[1], 350 + 32 * 2, 544, 32, 32, null);
+                    g.drawImage(blocks[1], 350 + 32 * 3, 544, 32, 32, null);
+                    break;
+                case 'J':
+                    g.drawImage(blocks[0], 350, 544, 32, 32, null);
+                    g.drawImage(blocks[0], 350, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[0], 350 + 32, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[0], 350 + 32 * 2, 544 + 32, 32, 32, null);
+                    break;
+                case 'L':
+                    g.drawImage(blocks[3], 350, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[3], 350 + 32, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[3], 350 + 32 * 2, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[3], 350 + 32 * 2, 544, 32, 32, null);
+                    break;
+                case 'O':
+                    g.drawImage(blocks[6], 350, 544, 32, 32, null);
+                    g.drawImage(blocks[6], 350 + 32, 544, 32, 32, null);
+                    g.drawImage(blocks[6], 350, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[6], 350 + 32, 544 + 32, 32, 32, null);
+                    break;
+                case 'S':
+                    g.drawImage(blocks[2], 350, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[2], 350 + 32, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[2], 350 + 32, 544, 32, 32, null);
+                    g.drawImage(blocks[2], 350 + 32 * 2, 544, 32, 32, null);
+                    break;
+                case 'T':
+                    g.drawImage(blocks[4], 350, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[4], 350 + 32, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[4], 350 + 32, 544, 32, 32, null);
+                    g.drawImage(blocks[4], 350 + 32 * 2, 544 + 32, 32, 32, null);
+                    break;
+                case 'Z':
+                    g.drawImage(blocks[5], 350, 544, 32, 32, null);
+                    g.drawImage(blocks[5], 350 + 32, 544, 32, 32, null);
+                    g.drawImage(blocks[5], 350 + 32, 544 + 32, 32, 32, null);
+                    g.drawImage(blocks[5], 350 + 32 * 2, 544 + 32, 32, 32, null);
+                    break;
+            }
 
         int minReach = 20;
         int reach;
