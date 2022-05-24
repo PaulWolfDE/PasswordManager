@@ -16,8 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
-import java.util.TimerTask;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main {
 
@@ -51,7 +51,7 @@ public class Main {
     static int maxY = 20;
     public static Field[][] fields = new Field[maxX][maxY];
     static JFrame frame;
-    static JToggleButton pauseButton;
+    public static JToggleButton pauseButton;
     static Dimension frameSize;
     static Dimension fieldLabelSize;
 
@@ -123,7 +123,7 @@ public class Main {
                 fieldLabel.repaint();
             } else {
                 Movement.pause = false;
-                Movement.lockMove =false;
+                Movement.lockMove = false;
                 Movement.lockRotate = false;
                 frame.requestFocus();
                 fieldLabel.repaint();

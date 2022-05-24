@@ -120,6 +120,7 @@ public class Movement {
             }
         }, getLevelSpeed(), getLevelSpeed());
         lockMove = false;
+        Main.pauseButton.setEnabled(true);
     }
 
     public static void moveRight() {
@@ -249,6 +250,7 @@ public class Movement {
     public static void checkLines(boolean countPoints, BlinkObject... objects) {
 
         lockMove = true;
+        Main.pauseButton.setEnabled(false);
 
         boolean doBlink = objects.length == 4;
         int n = 0;
