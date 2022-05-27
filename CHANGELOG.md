@@ -46,3 +46,8 @@
   - Block rotation
   - Visibility of non-existent blocks
   - Moving blocks within animations
+
+## Release 1.4.2
+- Added compilation script
+- Added Tetris pause
+- Improved README
