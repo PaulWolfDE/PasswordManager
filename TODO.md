@@ -11,4 +11,6 @@ Advanced password generation
 
 Adding API request to find out whether older versions still supports a newer database file. If signature is not supported by the old version, a second check should confirm if this version still can open this database file. 
 
+Saving IV and Salt in hexadecimal dorm like the database hash value. 
+
 ~~Add possibility to play Tetris~~
