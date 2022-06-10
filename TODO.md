@@ -9,4 +9,6 @@ Pack database before encryption (only suitable for large databases)
 
 Advanced password generation
 
+Adding API request to find out whether older versions still supports a newer database file. If signature is not supported by the old version, a second check should confirm if this version still can open this database file. 
+
 ~~Add possibility to play Tetris~~
