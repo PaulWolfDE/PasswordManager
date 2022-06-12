@@ -4,6 +4,7 @@ import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.WrongPasswordException;
 import de.paulwolf.passwordmanager.ui.DatabaseUI;
+import de.paulwolf.passwordmanager.utility.JSONParser;
 import gnu.crypto.mac.HMacFactory;
 import gnu.crypto.mac.IMac;
 import gnu.crypto.prng.LimitReachedException;
@@ -99,11 +100,15 @@ public class FileWizard {
         return true;
     }
 
-    public static boolean isCompatible(String version) {
+    public static boolean isCompatible(String signature) {
+
+        String version = signature.substring(signature.indexOf("<") + 1);
+        version = version.substring(0, version.indexOf(">"));
+
         for (int i = 0; i < Main.COMPATIBLE_VERSIONS.length; i++) {
-            if (version.equals("PasswordManager<" + Main.COMPATIBLE_VERSIONS[i] + ">"))
+            if (version.equals(Main.COMPATIBLE_VERSIONS[i]))
                 return true;
         }
-        return false;
+        return JSONParser.checkRemoteCompatibility(version);
     }
 }

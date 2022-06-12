@@ -51,3 +51,10 @@
 - Added compilation script
 - Added Tetris pause
 - Improved README
+
+## Release 1.4.3
+- Added remote compatibility JSON
+  - Checking whether newer versions still are available
+  - Remote script getting updated
+  - Old versions staying the same
+  - Works only with internet connection!
