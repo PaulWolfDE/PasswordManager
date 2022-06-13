@@ -34,7 +34,7 @@ public class FileWizard {
         byte[] iv = new byte[16], salt = new byte[16];
         sr.nextBytes(iv);
         sr.nextBytes(salt);
-        byte[] derivatedKey = new byte[32];
+        byte[] derivedKey = new byte[32];
         IMac prf = HMacFactory.getInstance(Main.HMAC_ALGORITHM);
         PBKDF2 pbkdf2 = new PBKDF2(prf);
         Map<String, Object> map = new HashMap<>();
@@ -42,9 +42,9 @@ public class FileWizard {
         map.put("gnu.crypto.pbe.password", new String(db.getMasterKey()).toCharArray());
         map.put("gnu.crypto.pbe.iteration.count", Main.ITERATIONS);
         pbkdf2.init(map);
-        pbkdf2.nextBytes(derivatedKey, 0, derivatedKey.length);
+        pbkdf2.nextBytes(derivedKey, 0, derivedKey.length);
 
-        writer.write(EncryptionWizard.encrypt(StringWizard.makeString(db, iv, salt), derivatedKey, iv));
+        writer.write(EncryptionWizard.encrypt(StringWizard.makeString(db, iv, salt), derivedKey, iv));
         writer.close();
     }
 
@@ -79,7 +79,7 @@ public class FileWizard {
             MessageDigest md = MessageDigest.getInstance(splitbase[3]);
             derivedKey = md.digest(key);
         } else {
-            // New database --> password derivated with pbkdf2
+            // New database --> password derived with pbkdf2
             byte[] salt = new byte[16];
             for (int j = 0; j < iv.length; j++)
                 salt[j] = Byte.parseByte(splitbase[5].split(",")[j]);
