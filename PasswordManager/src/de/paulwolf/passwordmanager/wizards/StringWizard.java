@@ -60,17 +60,9 @@ public class StringWizard {
         databaseString.append(separator);
         databaseString.append(database.getHashAlgorithm());
         databaseString.append(separator);
-        for (int i = 0; i < iv.length; i++) {
-            databaseString.append(iv[i]);
-            if (i != 15)
-                databaseString.append(",");
-        }
+        databaseString.append(EncryptionWizard.bytesToHex(iv));
         databaseString.append(separator);
-        for (int i = 0; i < salt.length; i++) {
-            databaseString.append(salt[i]);
-            if (i != 15)
-                databaseString.append(",");
-        }
+        databaseString.append(EncryptionWizard.bytesToHex(salt));
         databaseString.append(headBodySeparator);
         databaseString.append(databaseBody);
         return databaseString.toString();

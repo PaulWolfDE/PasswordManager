@@ -70,8 +70,12 @@ public class FileWizard {
             return false;
         }
         byte[] iv = new byte[16];
-        for (int j = 0; j < iv.length; j++)
-            iv[j] = Byte.parseByte(splitbase[4].split(",")[j]);
+        if (splitbase[4].contains(",")) // Version prior 1.4.4
+            for (int j = 0; j < iv.length; j++)
+                iv[j] = Byte.parseByte(splitbase[4].split(",")[j]);
+        else // Later versions
+            iv = EncryptionWizard.hexToBytes(splitbase[4]);
+
 
         byte[] derivedKey = new byte[32];
         if (splitbase[5].equals("")) {
@@ -81,8 +85,12 @@ public class FileWizard {
         } else {
             // New database --> password derived with pbkdf2
             byte[] salt = new byte[16];
-            for (int j = 0; j < iv.length; j++)
-                salt[j] = Byte.parseByte(splitbase[5].split(",")[j]);
+            if (splitbase[5].contains(",")) // Version prior 1.4.4
+                for (int j = 0; j < iv.length; j++)
+                    salt[j] = Byte.parseByte(splitbase[5].split(",")[j]);
+            else // Later version
+                salt = EncryptionWizard.hexToBytes(splitbase[5]);
+
             IMac prf = HMacFactory.getInstance(Main.HMAC_ALGORITHM);
             PBKDF2 pbkdf2 = new PBKDF2(prf);
             Map<String, Object> map = new HashMap<>();
