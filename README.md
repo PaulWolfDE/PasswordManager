@@ -8,7 +8,7 @@ Release files compiled to Java 1.8 language standard can be found at https://git
 
 For compiling the project, a Java development kit (JDK) is required. To create a JAR file, one must run the `compile.sh` script with a UNIX-like shell found in the folder `PasswordManager`. This will create a runnable JAR file in the same folder. 
 
-```
+```sh
 $ ./compile.sh
 ```
 
@@ -17,7 +17,7 @@ On Windows, a Linux subsystem can be downloaded for running said file.
 ## Execution
 The execution requires a Java runtime environment (JRE) at least at version `1.8` for running release files or the version compiled with.
 
-```
+```sh
 $ java -jar PasswordManager.jar
 ```
 
@@ -30,4 +30,4 @@ For tutorials on using the program, check the documentation.
 [<img src="https://img.shields.io/badge/Inspiration-KeePass-green.svg">](https://keepass.info/)
 
 ## License
-[<img src="https://img.shields.io/badge/License-GPL 3-important.svg">](https://www.gnu.org/licenses/gpl-3.0.html)
+[<img src="https://img.shields.io/badge/License-GPLv3-important.svg">](https://www.gnu.org/licenses/gpl-3.0.html)

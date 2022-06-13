@@ -2,10 +2,12 @@ package de.paulwolf.passwordmanager;
 
 import de.paulwolf.passwordmanager.ui.MainUI;
 import de.paulwolf.passwordmanager.ui.OpenDatabaseUI;
+import de.paulwolf.passwordmanager.ui.UpdateUI;
 import de.paulwolf.passwordmanager.ui.tetris.Field;
 import de.paulwolf.passwordmanager.ui.tetris.KeyHandler;
 import de.paulwolf.passwordmanager.ui.tetris.Movement;
 import de.paulwolf.passwordmanager.ui.tetris.Painting;
+import de.paulwolf.passwordmanager.utility.JSONParser;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,9 +39,9 @@ public class Main {
     // DATE FORMAT
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd@HH:mm");
     // VERSION NUMBER
-    public static final String VERSION_NUMBER = "1.4.4";
+    public static final String VERSION_NUMBER = "1.4.5";
     // VERSIONS COMPATIBLE WITH
-    public static final String[] COMPATIBLE_VERSIONS = {"1.4.4", "1.4.3", "1.4.2", "1.4.1", "1.4.0", "1.3.9", "1.3.8", "1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2"};
+    public static final String[] COMPATIBLE_VERSIONS = {"1.4.5", "1.4.4", "1.4.3", "1.4.2", "1.4.1", "1.4.0", "1.3.9", "1.3.8", "1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2"};
     // STANDARD ECHO CHAR
     public static final char ECHO_CHAR = 0x2022;
     // JFRAME ICON
@@ -60,6 +62,8 @@ public class Main {
         loadIconImage();
 
         ui = new MainUI();
+       if (!JSONParser.isUpToDate())
+            new UpdateUI();
 
         if (args.length > 0) {
 

@@ -42,30 +42,18 @@ public class JSONParser {
         }
     }
 
-    public static void printJSON() {
+    public static boolean isUpToDate() {
 
-        JSONObject root = new JSONObject();
-        JSONObject jo1 = new JSONObject();
-
-        JSONObject compatible = new JSONObject();
-        compatible.put("compatible", true);
-        JSONObject incompatible = new JSONObject();
-        incompatible.put("compatible", false);
-
-        jo1.put("1.3.2", compatible);
-        jo1.put("1.3.3", compatible);
-        jo1.put("1.3.4", compatible);
-        jo1.put("1.3.5", compatible);
-        jo1.put("1.3.6", compatible);
-        jo1.put("1.3.7", compatible);
-        jo1.put("1.3.8", compatible);
-        jo1.put("1.3.9", compatible);
-        jo1.put("1.4.0", compatible);
-        jo1.put("1.4.1", compatible);
-        jo1.put("1.4.2", compatible);
-        jo1.put("1.4.3", compatible);
-        root.put("1.4.3", jo1);
-
-        System.out.println(root.toString(4));
+        try {
+            JSONObject json = getCompatibilityJSON();
+            String newestVersion = (String) json.get("newestVersion");
+            if (!Main.VERSION_NUMBER.equals(newestVersion))
+                return false;
+        } catch (JSONException e) {
+            return true; // JSON problem
+        } catch (IOException e) {
+            return true; // Connection problem
+        }
+        return true;
     }
 }

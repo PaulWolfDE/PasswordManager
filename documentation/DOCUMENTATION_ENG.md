@@ -120,6 +120,7 @@ Key derivation refers to a technique in which a cryptographic key is derived fro
 
 ## References
 
-[<img src="https://img.shields.io/badge/License-GPL 3-important.svg">](https://www.gnu.org/licenses/gpl-3.0.html)
+[<img src="https://img.shields.io/badge/License-GPLv3-important.svg">](https://www.gnu.org/licenses/gpl-3.0.html)
 [<img src="https://img.shields.io/badge/Library-GNU Crypto-blue.svg">](https://www.gnu.org/software/gnu-crypto/)
+[<img src="https://img.shields.io/badge/Library-JSON Java-blue.svg">](https://github.com/stleary/JSON-java)
 [<img src="https://img.shields.io/badge/Inspiration-KeePass-green.svg">](https://keepass.info/)

@@ -61,3 +61,6 @@
 
 ## Release 1.4.4
 - Saving IV and Salt in hexadecimal form
+
+## Release 1.4.5
+- Added automatic update indication
