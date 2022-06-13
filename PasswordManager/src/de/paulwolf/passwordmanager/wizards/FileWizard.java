@@ -73,11 +73,11 @@ public class FileWizard {
         for (int j = 0; j < iv.length; j++)
             iv[j] = Byte.parseByte(splitbase[4].split(",")[j]);
 
-        byte[] derivatedKey = new byte[32];
+        byte[] derivedKey = new byte[32];
         if (splitbase[5].equals("")) {
             // Old database --> password hashed with std algo
             MessageDigest md = MessageDigest.getInstance(splitbase[3]);
-            derivatedKey = md.digest(key);
+            derivedKey = md.digest(key);
         } else {
             // New database --> password derivated with pbkdf2
             byte[] salt = new byte[16];
@@ -90,10 +90,10 @@ public class FileWizard {
             map.put("gnu.crypto.pbe.password", new String(key).toCharArray());
             map.put("gnu.crypto.pbe.iteration.count", Main.ITERATIONS);
             pbkdf2.init(map);
-            pbkdf2.nextBytes(derivatedKey, 0, derivatedKey.length);
+            pbkdf2.nextBytes(derivedKey, 0, derivedKey.length);
         }
 
-        Database dtb = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString.toString(), derivatedKey, iv));
+        Database dtb = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString.toString(), derivedKey, iv));
         dtb.setPath(file);
         dtb.setMasterKey(key);
         new DatabaseUI(dtb);
