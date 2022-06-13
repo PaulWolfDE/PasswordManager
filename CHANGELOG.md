@@ -58,3 +58,6 @@
   - Remote script getting updated
   - Old versions staying the same
   - Works only with internet connection!
+
+## Release 1.4.4
+- Saving IV and Salt in hexadecimal form

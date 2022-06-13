@@ -1,7 +1,5 @@
 # TODOs
 
-Saving IV and Salt in hexadecimal dorm like the database hash value.
-
 Advanced password generation.
 
 Pack database before encryption (only suitable for large databases)
@@ -14,3 +12,5 @@ Pack database before encryption (only suitable for large databases)
 ~~Add possibility to play Tetris~~ **(1.3.7)**
 
 ~~Adding API request to find out whether older versions still supports a newer database file. If signature is not supported by the old version, a second check should confirm if this version still can open this database file.~~ **(1.4.3)**
+
+~~Saving IV and Salt in hexadecimal dorm like the database hash value.~~ **(1.4.4)**

@@ -42,12 +42,12 @@ During decryption, the file is read first and the individual information in the 
 ### Cipher file
 The cipher file is stored on the hard disk. It contains all encrypted information as well as important metadata. What a cipher file might look like now follows.
 ```
-PasswordManager<1.4.0>  | Version signature
+PasswordManager<1.4.4>  | Version signature
 c93a91e148ae8a27e4d...  | Hash of the plaintext
 Serpent/CBC/ISO10126    | Encryption algorithm
 SHA-256                 | Hash algorithm
-56,70,34,-40,-87,32...  | Initialization vector
--100,-54,-84,119,...    | KDF Salt
+92b07c7d54031c0e514...  | Initialization vector
+8c23a17448f473ef99b...  | KDF Salt
 
 
 d4051db02d30ca57293...  | Ciphertext

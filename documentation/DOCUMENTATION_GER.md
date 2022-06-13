@@ -41,12 +41,12 @@ Bei der Entschlüsselung wird zuerst die Datei eingelesen und die einzelnen Info
 ### Chiffredatei
 Die Chiffredatei wird auf der Festplatte gespeichert. Sie enthält alle verschlüsselten Informationen sowie wichtige Metadaten. Wie eine Chiffredatei aussehen könnte, folgt nun.
 ```
-PasswordManager<1.4.0>  | Versionssignatur
+PasswordManager<1.4.4>  | Versionssignatur
 c93a91e148ae8a27e4d...  | Hash des Klartexts
 Serpent/CBC/ISO10126    | Verschlüsselungsalgorithmus
 SHA-256                 | Hashalgorithmus
-56,70,34,-40,-87,32...  | Initialisierungsvektor
--100,-54,-84,119,...    | KDF-Salt
+92b07c7d54031c0e514...  | Initialisierungsvektor
+8c23a17448f473ef99b...  | KDF-Salt
 
 
 d4051db02d30ca57293...  | Chiffretext
