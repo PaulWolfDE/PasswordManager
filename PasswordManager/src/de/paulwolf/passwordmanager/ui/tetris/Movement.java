@@ -172,32 +172,32 @@ public class Movement {
 
         if (block.getSquare(0).getY() + 1 < 20 && block.getSquare(1).getY() + 1 < 20 && block.getSquare(2).getY() + 1 < 20 && block.getSquare(3).getY() + 1 < 20) {
 
-            if (temp && !(!Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied())) {
+            if (temp && !isClearUnder()) {
                 temp = false;
                 timer.cancel();
-                for (int i = 0; i < 4; i++) {
-                    Main.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
-                    lines[block.getSquare(i).getY()]++;
-                }
-                checkLines(true, new BlinkObject(block.getSquare(0).getX(), block.getSquare(0).getY()), new BlinkObject(block.getSquare(1).getX(), block.getSquare(1).getY()), new BlinkObject(block.getSquare(2).getX(), block.getSquare(2).getY()), new BlinkObject(block.getSquare(3).getX(), block.getSquare(3).getY()));
+                setFieldsOccupied();
                 Main.fieldLabel.repaint();
             }
         }
 
         if (block.getSquare(0).getY() == 19 || block.getSquare(1).getY() == 19 || block.getSquare(2).getY() == 19 || block.getSquare(3).getY() == 19) {
-            for (int i = 0; i < 4; i++) {
-                Main.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
-                lines[block.getSquare(i).getY()]++;
-            }
-            checkLines(true, new BlinkObject(block.getSquare(0).getX(), block.getSquare(0).getY()), new BlinkObject(block.getSquare(1).getX(), block.getSquare(1).getY()), new BlinkObject(block.getSquare(2).getX(), block.getSquare(2).getY()), new BlinkObject(block.getSquare(3).getX(), block.getSquare(3).getY()));
+            setFieldsOccupied();
 
         } else {
-            if (!Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied()) {
+            if (isClearUnder()) {
                 block.moveDown();
             } else {
                 temp = true;
             }
         }
+    }
+
+    private static void setFieldsOccupied() {
+        for (int i = 0; i < 4; i++) {
+            Main.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
+            lines[block.getSquare(i).getY()]++;
+        }
+        checkLines(true, new BlinkObject(block.getSquare(0).getX(), block.getSquare(0).getY()), new BlinkObject(block.getSquare(1).getX(), block.getSquare(1).getY()), new BlinkObject(block.getSquare(2).getX(), block.getSquare(2).getY()), new BlinkObject(block.getSquare(3).getX(), block.getSquare(3).getY()));
     }
 
     public static void skipDown() {
@@ -211,19 +211,11 @@ public class Movement {
         Thread t1 = new Thread(() -> {
 
             while (true) {
-                if (!Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied()) {
+                if (isClearUnder()) {
                     if (block.getSquare(0).getY() >= 18 || block.getSquare(1).getY() >= 18 || block.getSquare(2).getY() >= 18 || block.getSquare(3).getY() >= 18) {
                         timer.cancel();
                         block.moveDown();
-                        Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY()].setOccupied(true);
-                        Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY()].setOccupied(true);
-                        Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY()].setOccupied(true);
-                        Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY()].setOccupied(true);
-                        for (int i = 0; i < 4; i++) {
-                            lines[block.getSquare(i).getY()]++;
-                        }
-                        checkLines(true);
-                        lockRotate = false;
+                        setAnimFieldsOccupied();
                         return;
                     } else {
                         block.moveDown();
@@ -231,20 +223,21 @@ public class Movement {
 
                 } else {
                     timer.cancel();
-                    Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY()].setOccupied(true);
-                    Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY()].setOccupied(true);
-                    Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY()].setOccupied(true);
-                    Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY()].setOccupied(true);
-                    for (int i = 0; i < 4; i++) {
-                        lines[block.getSquare(i).getY()]++;
-                    }
-                    checkLines(true);
-                    lockRotate = false;
-                    return;
+                    setAnimFieldsOccupied();
                 }
             }
         });
         t1.start();
+    }
+
+    private static void setAnimFieldsOccupied() {
+
+        for (int i = 0; i < 4; i++) {
+            Main.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
+            lines[block.getSquare(i).getY()]++;
+        }
+        checkLines(true);
+        lockRotate = false;
     }
 
     public static void checkLines(boolean countPoints, BlinkObject... objects) {
@@ -362,6 +355,9 @@ public class Movement {
             Main.fields[i][height].setOccupied(false);
             Main.fields[i][height].setColor(Color.WHITE);
         }
+    }
+    private static boolean isClearUnder() {
+        return !Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied();
     }
 }
 

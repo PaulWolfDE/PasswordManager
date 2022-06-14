@@ -82,12 +82,7 @@ public class Block {
 
     public void updateGui() {
 
-        Main.fields[square0.getX()][square0.getY()].setColor(shape);
-        Main.fields[square1.getX()][square1.getY()].setColor(shape);
-        Main.fields[square2.getX()][square2.getY()].setColor(shape);
-        Main.fields[square3.getX()][square3.getY()].setColor(shape);
-
-        Main.fieldLabel.repaint();
+        setFieldsToShape();
     }
 
     public void updateRightGui() {
@@ -97,13 +92,16 @@ public class Block {
         Main.fields[square2.getX() - 1][square2.getY()].setColor(Color.WHITE);
         Main.fields[square3.getX() - 1][square3.getY()].setColor(Color.WHITE);
 
+        setFieldsToShape();
+    }
+
+    private void setFieldsToShape() {
         Main.fields[square0.getX()][square0.getY()].setColor(shape);
         Main.fields[square1.getX()][square1.getY()].setColor(shape);
         Main.fields[square2.getX()][square2.getY()].setColor(shape);
         Main.fields[square3.getX()][square3.getY()].setColor(shape);
 
         Main.fieldLabel.repaint();
-
     }
 
     public void updateLeftGui() {
@@ -113,12 +111,7 @@ public class Block {
         Main.fields[square2.getX() + 1][square2.getY()].setColor(Color.WHITE);
         Main.fields[square3.getX() + 1][square3.getY()].setColor(Color.WHITE);
 
-        Main.fields[square0.getX()][square0.getY()].setColor(shape);
-        Main.fields[square1.getX()][square1.getY()].setColor(shape);
-        Main.fields[square2.getX()][square2.getY()].setColor(shape);
-        Main.fields[square3.getX()][square3.getY()].setColor(shape);
-
-        Main.fieldLabel.repaint();
+        setFieldsToShape();
 
     }
 
@@ -129,12 +122,7 @@ public class Block {
         Main.fields[square2.getX()][square2.getY() - 1].setColor(Color.WHITE);
         Main.fields[square3.getX()][square3.getY() - 1].setColor(Color.WHITE);
 
-        Main.fields[square0.getX()][square0.getY()].setColor(shape);
-        Main.fields[square1.getX()][square1.getY()].setColor(shape);
-        Main.fields[square2.getX()][square2.getY()].setColor(shape);
-        Main.fields[square3.getX()][square3.getY()].setColor(shape);
-
-        Main.fieldLabel.repaint();
+        setFieldsToShape();
 
     }
 

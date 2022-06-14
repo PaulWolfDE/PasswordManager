@@ -13,7 +13,7 @@ public class Entry {
     private final String email;
     private final Date lastModified;
     private final String notes;
-    private String password;
+    private final String password;
 
     // CONSTRUCTOR FOR CREATING AN ENTRY
     public Entry(String title, String username, String email, String password, String notes) {
@@ -61,14 +61,6 @@ public class Entry {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Date getLastModified() {
         return lastModified;
     }
@@ -88,5 +80,9 @@ public class Entry {
                 sb.append(", ");
         }
         return sb.toString();
+    }
+
+    public String getPassword() {
+        return this.password;
     }
 }

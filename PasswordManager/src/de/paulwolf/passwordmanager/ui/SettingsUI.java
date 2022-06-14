@@ -127,23 +127,9 @@ public class SettingsUI extends JFrame implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        wrapper.add(keyLabel, gbc);
-        gbc.gridwidth = 1;
-        gbc.gridx = 1;
-        wrapper.add(keyField, gbc);
-        gbc.gridx = 2;
-        wrapper.add(showKey, gbc);
-
-        gbc.gridx = 0;
+        makePasswordFields(gbc, keyLabel, keyField, showKey);
         gbc.gridy = 3;
-        wrapper.add(keyVerificationLabel, gbc);
-        gbc.gridwidth = 1;
-        gbc.gridx = 1;
-        wrapper.add(keyVerificationField, gbc);
-        gbc.gridx = 2;
-        wrapper.add(showKeyVerification, gbc);
-
-        gbc.gridx = 0;
+        makePasswordFields(gbc, keyVerificationLabel, keyVerificationField, showKeyVerification);
         gbc.gridy = 4;
         gbc.gridwidth = 3;
         wrapper.add(button, gbc);
@@ -170,6 +156,17 @@ public class SettingsUI extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
+    }
+
+    private void makePasswordFields(GridBagConstraints gbc, JLabel keyLabel, JPasswordField keyField, JToggleButton showKey) {
+        wrapper.add(keyLabel, gbc);
+        gbc.gridwidth = 1;
+        gbc.gridx = 1;
+        wrapper.add(keyField, gbc);
+        gbc.gridx = 2;
+        wrapper.add(showKey, gbc);
+
+        gbc.gridx = 0;
     }
 
     @Override

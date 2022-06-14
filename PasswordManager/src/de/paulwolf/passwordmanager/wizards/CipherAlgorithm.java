@@ -30,7 +30,7 @@ public class CipherAlgorithm {
         return ret;
     }
 
-    public static byte[] unpad(byte[] in) {
+    public static byte[] removePadding(byte[] in) {
         byte[] ret = new byte[in.length - in[in.length - 1] - 1];
         if (ret.length > in.length)
             return in;
@@ -52,7 +52,7 @@ public class CipherAlgorithm {
         byte[] plaintext = new byte[ciphertext.length];
         for (int i = 0; i < ciphertext.length; i += BLOCK_SIZE)
             cipher.decrypt(ciphertext, i, plaintext, i, sKey, BLOCK_SIZE);
-        return unpad(plaintext);
+        return removePadding(plaintext);
     }
 
     public byte[] cbcEncrypt(byte[] plaintext, byte[] key, byte[] iv) throws InvalidKeyException {
@@ -81,7 +81,7 @@ public class CipherAlgorithm {
             for (int j = 0; j < BLOCK_SIZE; j++)
                 plaintext[i + j] ^= ciphertext[i + j - BLOCK_SIZE];
         }
-        return unpad(plaintext);
+        return removePadding(plaintext);
     }
 
     public byte[] ctrEncrypt(byte[] plaintext, byte[] key, byte[] iv) throws InvalidKeyException {
