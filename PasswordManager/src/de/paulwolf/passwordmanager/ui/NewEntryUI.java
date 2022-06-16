@@ -17,10 +17,10 @@ public class NewEntryUI extends JFrame {
     final JLabel usernameLabel = new JLabel("Username");
     final JTextField email = new JTextField(20);
     final JLabel emailLabel = new JLabel("Email Address");
-    final JPasswordField password = new JPasswordField(20);
+    final PasswordStrengthField password = new PasswordStrengthField(20);
     final JLabel passwordLabel = new JLabel("Password");
     final JButton generatePassword = new JButton("Generate Password");
-    final JPasswordField confirmPassword = new JPasswordField();
+    final PasswordStrengthField confirmPassword = new PasswordStrengthField(20);
     final JLabel confirmPasswordLabel = new JLabel("Confirm Password");
     final JToggleButton showPassword = new JToggleButton("Show Password");
     final JButton submit = new JButton("Submit Entry");
@@ -91,6 +91,9 @@ public class NewEntryUI extends JFrame {
             textArea.setText(e.getNotes().replaceAll("\\\\n", "\n"));
             this.setTitle("PasswordManager - Edit Entry");
         } else this.setTitle("PasswordManager - Create Entry");
+
+        password.evaluatePassword();
+        confirmPassword.evaluatePassword();
 
         password.setFont(new Font("Consolas", Font.PLAIN, 14));
         password.putClientProperty("JPasswordField.cutCopyAllowed", true);

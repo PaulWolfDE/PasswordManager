@@ -52,8 +52,8 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
     final JToggleButton showKey = new JToggleButton("Show");
     final JToggleButton showKeyVerification = new JToggleButton("Show");
 
-    final JPasswordField keyField = new JPasswordField(30);
-    final JPasswordField keyVerificationField = new JPasswordField(30);
+    final PasswordStrengthField keyField = new PasswordStrengthField(30);
+    final PasswordStrengthField keyVerificationField = new PasswordStrengthField(30);
 
     final JTextField pathField = new JTextField(20);
 
@@ -182,6 +182,8 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
                 password.append(alphabet.charAt(sr.nextInt(alphabet.length())));
             keyField.setText(password.toString());
             keyVerificationField.setText(password.toString());
+            keyField.evaluatePassword();
+            keyVerificationField.evaluatePassword();
         }
 
         if (e.getSource() == generateKey) {
@@ -192,6 +194,8 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
                 e1.printStackTrace();
             }
             keyVerificationField.setText(new String(keyField.getPassword()));
+            keyField.evaluatePassword();
+            keyVerificationField.evaluatePassword();
         }
 
         if (e.getSource() == showKey) {
