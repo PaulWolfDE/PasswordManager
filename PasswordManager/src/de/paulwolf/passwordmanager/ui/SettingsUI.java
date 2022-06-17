@@ -40,7 +40,7 @@ public class SettingsUI extends JFrame implements ActionListener {
 
         f = new JFrame("Enter Master Password");
         p = new JPanel();
-        pf = new JPasswordField(20);
+        pf = new JPasswordField(30);
         b = new JToggleButton("Show");
         b2 = new JButton("Submit Password");
 
