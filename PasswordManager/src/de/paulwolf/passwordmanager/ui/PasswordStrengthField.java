@@ -35,10 +35,10 @@ public class PasswordStrengthField extends JPasswordField implements KeyListener
             }
         }
         else {
-            passwordScore -= 20;
+            passwordScore -= 30;
         }
 
-        passwordScore += cleanPassword.length() * 6;
+        passwordScore += cleanPassword.length() * 5;
         if (passwordScore > 100)
             passwordScore = 100;
 
