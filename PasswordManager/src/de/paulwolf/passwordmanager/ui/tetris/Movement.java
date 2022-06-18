@@ -224,6 +224,7 @@ public class Movement {
                 } else {
                     timer.cancel();
                     setAnimFieldsOccupied();
+                    return;
                 }
             }
         });
