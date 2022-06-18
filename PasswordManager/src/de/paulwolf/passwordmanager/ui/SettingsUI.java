@@ -20,10 +20,10 @@ public class SettingsUI extends JFrame implements ActionListener {
     final JComboBox<String> eaBox = new JComboBox<>(Main.ENCRYPTION_ALGORITHMS);
     final JLabel hashLabel = new JLabel("Hash Algorithm");
     final JComboBox<String> hashBox = new JComboBox<>(Main.HASH_ALGORITHMS);
-    final JPasswordField keyField = new JPasswordField(30);
+    final PasswordStrengthField keyField = new PasswordStrengthField(20);
     final JToggleButton showKey = new JToggleButton("Show");
     final JLabel keyLabel = new JLabel("Master Key");
-    final JPasswordField keyVerificationField = new JPasswordField(30);
+    final PasswordStrengthField keyVerificationField = new PasswordStrengthField(20);
     final JToggleButton showKeyVerification = new JToggleButton("Show");
     final JLabel keyVerificationLabel = new JLabel("Repeat Master Key");
     final JButton button = new JButton("Save Changes");
@@ -40,7 +40,7 @@ public class SettingsUI extends JFrame implements ActionListener {
 
         f = new JFrame("Enter Master Password");
         p = new JPanel();
-        pf = new JPasswordField(30);
+        pf = new JPasswordField(20);
         b = new JToggleButton("Show");
         b2 = new JButton("Submit Password");
 
@@ -63,17 +63,10 @@ public class SettingsUI extends JFrame implements ActionListener {
         gbc.gridwidth = 2;
         p.add(b2, gbc);
 
-        f.add(p);
-        f.pack();
-        f.setMinimumSize(f.getSize());
-        f.setIconImage(Main.IMAGE);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-
         b.addActionListener(this);
         b2.addActionListener(this);
         pf.setFont(new Font("Consolas", Font.PLAIN, 14));
-        pf.setPreferredSize(new Dimension(400, 26));
+        pf.setPreferredSize(new Dimension(200, 26));
 
         pf.addKeyListener(new KeyListener() {
 
@@ -91,6 +84,13 @@ public class SettingsUI extends JFrame implements ActionListener {
             public void keyReleased(KeyEvent e) {
             }
         });
+
+        f.add(p);
+        f.pack();
+        f.setMinimumSize(f.getSize());
+        f.setIconImage(Main.IMAGE);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
     }
 
     static byte[] toBytes(char[] chars) {
@@ -147,7 +147,9 @@ public class SettingsUI extends JFrame implements ActionListener {
         eaBox.setSelectedItem(DatabaseUI.database.getEncryptionAlgorithm());
         hashBox.setSelectedItem(DatabaseUI.database.getHashAlgorithm());
         keyField.setText(new String(DatabaseUI.database.getMasterKey()));
+        keyField.evaluatePassword();
         keyVerificationField.setText(new String(DatabaseUI.database.getMasterKey()));
+        keyVerificationField.evaluatePassword();
 
         this.add(wrapper);
         this.pack();
@@ -158,14 +160,13 @@ public class SettingsUI extends JFrame implements ActionListener {
 
     }
 
-    private void makePasswordFields(GridBagConstraints gbc, JLabel keyLabel, JPasswordField keyField, JToggleButton showKey) {
+    private void makePasswordFields(GridBagConstraints gbc, JLabel keyLabel, PasswordStrengthField keyField, JToggleButton showKey) {
         wrapper.add(keyLabel, gbc);
         gbc.gridwidth = 1;
         gbc.gridx = 1;
         wrapper.add(keyField, gbc);
         gbc.gridx = 2;
         wrapper.add(showKey, gbc);
-
         gbc.gridx = 0;
     }
 
