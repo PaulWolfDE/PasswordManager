@@ -64,3 +64,6 @@
 
 ## Release 1.4.5
 - Added automatic update indication
+
+## Release 1.4.6
+- Added password strength checkers to editable password fields
