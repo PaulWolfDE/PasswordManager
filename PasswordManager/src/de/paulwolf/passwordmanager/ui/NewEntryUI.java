@@ -146,6 +146,8 @@ public class NewEntryUI extends JFrame {
                 pw.append(alphabet.charAt(sr.nextInt(alphabet.length())));
             password.setText(pw.toString());
             confirmPassword.setText(pw.toString());
+            password.evaluatePassword();
+            confirmPassword.evaluatePassword();
         });
 
         showPassword.addActionListener(e13 -> {
