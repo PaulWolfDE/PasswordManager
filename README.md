@@ -27,6 +27,7 @@ For tutorials on using the program, check the documentation.
 ## Credits
 [<img src="https://img.shields.io/badge/Library-GNU Crypto-blue.svg">](https://www.gnu.org/software/gnu-crypto/)
 [<img src="https://img.shields.io/badge/Library-JSON Java-blue.svg">](https://github.com/stleary/JSON-java)
+[<img src="https://img.shields.io/badge/Library-zxcvbn4j-blue.svg">](https://github.com/nulab/zxcvbn4j)
 [<img src="https://img.shields.io/badge/Inspiration-KeePass-green.svg">](https://keepass.info/)
 
 ## License
