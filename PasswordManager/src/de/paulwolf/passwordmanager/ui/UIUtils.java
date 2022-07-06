@@ -22,4 +22,11 @@ public class UIUtils {
         return gbc;
     }
 
+    public static GridBagConstraints createGBC(int x, int y, int fill, int width, int height, double weightx) {
+
+        GridBagConstraints gbc = createGBC(x, y, fill, width, height);
+        gbc.weightx = weightx;
+        return gbc;
+    }
+
 }

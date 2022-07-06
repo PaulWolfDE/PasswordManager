@@ -55,7 +55,7 @@ public class NewEntryUI extends JFrame {
         wrapper.add(passwordLabel, gbc);
         gbc = UIUtils.createGBC(1, row, GridBagConstraints.HORIZONTAL, 1, 1);
         wrapper.add(password, gbc);
-        gbc = UIUtils.createGBC(2, row, GridBagConstraints.HORIZONTAL, 1, 1);
+        gbc = UIUtils.createGBC(2, row, GridBagConstraints.HORIZONTAL, 1, 1, 0.0);
         wrapper.add(generatePassword, gbc);
 
         row++;
@@ -63,7 +63,7 @@ public class NewEntryUI extends JFrame {
         wrapper.add(confirmPasswordLabel, gbc);
         gbc = UIUtils.createGBC(1, row, GridBagConstraints.HORIZONTAL, 1, 1);
         wrapper.add(confirmPassword, gbc);
-        gbc = UIUtils.createGBC(2, row, GridBagConstraints.HORIZONTAL, 1, 1);
+        gbc = UIUtils.createGBC(2, row, GridBagConstraints.HORIZONTAL, 1, 1, 0.0);
         wrapper.add(showPassword, gbc);
 
         row++;
