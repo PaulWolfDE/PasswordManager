@@ -30,6 +30,12 @@ public class NewEntryUI extends JFrame {
 
     public NewEntryUI(Entry e, int index) {
 
+        if (e.getTitle().equals(Main.BACKUP_TITLE)) {
+            title.setEditable(false);
+            emailLabel.setText("Hostname");
+            this.setTitle("Edit SFTP Backup Settings");
+        }
+
         wrapper.setLayout(new GridBagLayout());
 
         int row = 0;

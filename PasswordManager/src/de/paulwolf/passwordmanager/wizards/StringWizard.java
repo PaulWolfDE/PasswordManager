@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StringWizard {
 
@@ -101,6 +102,12 @@ public class StringWizard {
                         entryString[5].equals("-") ? "" : entryString[5]));
         }
 
+        ArrayList<Entry> entries = database.getEntries();
+        for (Entry e : entries)
+            if (e.getTitle().equals(Main.BACKUP_TITLE))
+                return database;
+
+        database.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".", ""));
         return database;
     }
 }
