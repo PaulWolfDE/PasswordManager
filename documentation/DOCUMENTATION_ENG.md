@@ -25,6 +25,12 @@ Copying email addresses, usernames and passwords is easily done by right-clickin
 
 Settings over the entire database can be changed by clicking on "Settings" in the database window. After entering the master password again, you can now freely select this and the algorithms used again. Also after this action the database should be saved.
 
+### Setting up an automatic SFTP backup.
+
+The password manager provides an automatic backup that securely stores the latest version of the database on a remote server via SFTP each time it is saved. First, a Linux server must be set up to listen on port 22 (SSH) so that an SSH or SFTP connection can be established. Then the entry `sftp-automated-backup` reserved in the password manager must be edited. In the `Username` field, the user name on the remote server must be entered. The `Hostname` field needs a name for the server like an IP address or a domain. The password to be entered last represents the password for the SFTP connection. If everything has worked, each time a local backup is made, a file is stored remotely in `~/database_backup/` which is uniquely traceable to the backup by its name. An example name would be `MyDatabase-2022-07-19@19:52.pmdtb`.
+
+CAUTION: The hostname can include a local IP address (e.g. `192.168.178.80`) or public IP address (e.g. `52.149.246.39`) or domain (e.g. `example.com`) to it. It is important for a server in the local network that port `22` is addressable when using a public option outside the LAN.
+
 ### Running Tetris
 
 To play Tetris, the user must enter `tetris:NN` in the filter field in the database. `NN` is then to be replaced with the desired level, where the level must be ≥ 0 and ≤ 29. For numbers with one digit, a `0` must also be added at the beginning, so that the level always represents 2 characters (`8` --> `08`).

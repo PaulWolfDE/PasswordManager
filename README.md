@@ -26,9 +26,24 @@ For tutorials on using the program, check the documentation.
 
 ## Credits
 [<img src="https://img.shields.io/badge/Library-GNU Crypto-blue.svg">](https://www.gnu.org/software/gnu-crypto/)
+
+Library containing various cryptographic methods.
+
 [<img src="https://img.shields.io/badge/Library-JSON Java-blue.svg">](https://github.com/stleary/JSON-java)
+
+Library for JSON en- and decoding to check compatibilities.
+
 [<img src="https://img.shields.io/badge/Library-zxcvbn4j-blue.svg">](https://github.com/nulab/zxcvbn4j)
+
+Java implementation of the zxcvbn password checker.
+
+[<img src="https://img.shields.io/badge/Library-Jsch-blue.svg">](http://www.jcraft.com/jsch/)
+
+Library for secure tunnel connection to perform SFTP.
+
 [<img src="https://img.shields.io/badge/Inspiration-KeePass-green.svg">](https://keepass.info/)
+
+Open-source password manager.
 
 ## License
 [<img src="https://img.shields.io/badge/License-GPLv3-important.svg">](https://www.gnu.org/licenses/gpl-3.0.html)

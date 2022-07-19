@@ -67,3 +67,7 @@
 
 ## Release 1.4.6
 - Added password strength checkers to editable password fields
+
+## Release 1.4.7
+- Added automatic backup to remote server via SFTP
+  - Explanations can be found in the documentation
