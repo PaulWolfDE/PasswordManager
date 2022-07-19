@@ -1,7 +1,10 @@
 package de.paulwolf.passwordmanager.wizards;
 
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
+import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.information.WrongPasswordException;
 import de.paulwolf.passwordmanager.ui.DatabaseUI;
 import de.paulwolf.passwordmanager.utility.JSONParser;
@@ -20,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.*;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -46,6 +50,23 @@ public class FileWizard {
 
         writer.write(EncryptionWizard.encrypt(StringWizard.makeString(db, iv, salt), derivedKey, iv));
         writer.close();
+
+        ArrayList<Entry> entries = db.getEntries();
+        for (Entry e : entries) {
+            if (e.getTitle().equals(Main.BACKUP_TITLE)) {
+                if (!e.getUsername().equals("") && !e.getEmail().equals("")) {
+                    try {
+                        BackupWizard.createBackup(e.getUsername(), e.getEmail(), e.getPassword().getBytes(), db);
+                    } catch (SftpException ex) {
+                        System.out.println("SftpException");
+                        throw new RuntimeException(ex);
+                    } catch (JSchException ex) {
+                        System.out.println("JSchException - Connection unavailable");
+                        // throw new RuntimeException(ex);
+                    }
+                }
+            }
+        }
     }
 
     public static boolean openDatabase(File file, byte[] key)

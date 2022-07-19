@@ -1,5 +1,14 @@
 package de.paulwolf.passwordmanager.wizards;
 
+import com.jcraft.jsch.*;
+import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.information.Database;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Properties;
+
 /**
  * SFTP AUTOMATED BACKUP CONCEPT
  * -----------------------------
@@ -18,4 +27,38 @@ package de.paulwolf.passwordmanager.wizards;
  */
 
 public class BackupWizard {
+
+    public static boolean createBackup(String username, String hostname, byte[] password, Database database) throws SftpException, JSchException {
+
+        Session session = null;
+        ChannelSftp sftp = null;
+
+        try {
+            session = new JSch().getSession(username, hostname);
+            session.setPassword(password);
+            Properties config = new Properties();
+            config.put("StrictHostKeyChecking", "no");
+            config.put("PreferredAuthentications", "password");
+            session.setConfig(config);
+            session.connect();
+
+            sftp = (ChannelSftp) session.openChannel("sftp");
+            sftp.connect();
+            try {
+                sftp.mkdir("database_backup");
+            } catch (SftpException ignored) {
+                System.out.println("Remote directory already exists.");
+            }
+            sftp.cd("database_backup");
+            System.out.println(session.isConnected());
+            sftp.put(database.getPath().getAbsolutePath(), String.format("database-%s.pmdtb", Main.DATE_FORMAT.format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))));
+
+        } finally {
+            if (session != null)
+                session.disconnect();
+            if (sftp != null)
+                sftp.disconnect();
+        }
+        return true;
+    }
 }
