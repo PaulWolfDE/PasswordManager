@@ -50,8 +50,9 @@ public class BackupWizard {
                 System.out.println("Remote directory already exists.");
             }
             sftp.cd("database_backup");
-            System.out.println(session.isConnected());
-            sftp.put(database.getPath().getAbsolutePath(), String.format("database-%s.pmdtb", Main.DATE_FORMAT.format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))));
+            String localDatabasePath = database.getPath().getAbsolutePath();
+            String localDatabaseName = localDatabasePath.substring(localDatabasePath.lastIndexOf('/') + 1);
+            sftp.put(localDatabasePath, String.format("%s-%s.pmdtb", localDatabaseName.substring(0, localDatabaseName.length() - 6), Main.DATE_FORMAT.format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))));
 
         } finally {
             if (session != null)
