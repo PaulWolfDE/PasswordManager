@@ -25,6 +25,12 @@ Das Kopieren von E-Mail-Adressen, Nutzernamen und Passwörtern ist einfach über
 
 Die Einstellungen über die gesamte Datenbank können durch einen Klick auf "Settings" im Datenbank-Fenster geändert werden. Nach einer erneuten Eingabe des Master-Passworts kann man jetzt dieses und die verwendeten Algorithmen erneut frei auswählen. Auch nach dieser Aktion sollte die Datenbank gespeichert werden.
 
+### Einrichten eines automatischen SFTP-Backups
+
+Der Passwortmanager stellt ein automatisches Backup zur Verfügung, das bei jeder Speicherung die neuste Version der Datenbank auf einem entfernten Server sicher per SFTP speichert. Zunächst muss ein Linux-Server eingerichtet werden, der auf Port 22 (SSH) lauscht, sodass eine SSH- bzw. SFTP-Verbindung hergestellt werden kann. Anschließend muss der im Passwortmanager reservierte Eintrag `sftp-automated-backup` bearbeitet werden. Im Feld `Username` ist der Nutzername auf dem entfernten Server einzutragen. Das Feld `Hostname` benötigt einen Namen für den Server wie eine IP-Adresse oder eine Domain. Das einzutragende Passwort stellt zuletzt das Passwort für die SFTP-Verbindung dar. Hat alles geklappt, wird bei jeder lokalen Speicherung entfernt eine Datei in `~/database_backup/` abgelegt, die durch ihren Namen eindeutig auf das Backup zurückführbar ist. Ein beispielhafter Name wäre `MyDatabase-2022-07-19@19:52.pmdtb`.
+
+ACHTUNG: Der Hostname kann eine lokale IP-Adresse (z. B. `192.168.178.80`) oder öffentliche IP-Adresse (z. B. `52.149.246.39`) bzw. eine Domain (z. B. `example.com`) dazu beinhalten. Wichtig bei einem Server im lokalen Netz ist, dass der Port `22` beim Nutzen einer öffentlichen Möglichkeit außerhalb des LANs ansprechbar ist.
+
 ### Tetris spielen
 
 Um Tetris zu spielen, muss der Nutzer `tetris:NN` in das Filterfeld in der Datenbank eingeben. `NN` ist dann mit dem gewünschten Level zu ersetzen, wobei gilt, dass das Level ≥ 0 und ≤ 29 sein muss. Bei Zahlen mit einer Stelle, muss ebenso eine `0` am Anfang hinzugefügt werden, sodass das Level immer 2 Zeichen darstellt (`8` --> `08`).  
