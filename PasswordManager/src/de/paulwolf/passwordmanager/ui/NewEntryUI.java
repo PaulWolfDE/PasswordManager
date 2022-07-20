@@ -30,7 +30,7 @@ public class NewEntryUI extends JFrame {
 
     public NewEntryUI(Entry e, int index) {
 
-        if (e.getTitle().equals(Main.BACKUP_TITLE)) {
+        if (index != -1 && e.getTitle().equals(Main.BACKUP_TITLE)) {
             title.setEditable(false);
             emailLabel.setText("Hostname");
             this.setTitle("Edit SFTP Backup Settings");
@@ -126,7 +126,19 @@ public class NewEntryUI extends JFrame {
 
         submit.addActionListener(e1 -> {
 
-            if (new String(password.getPassword()).equals(new String(confirmPassword.getPassword())) && !new String(password.getPassword()).equals("")) {
+            if (!new String(password.getPassword()).equals(new String(confirmPassword.getPassword()))) {
+
+                JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error", JOptionPane.ERROR_MESSAGE);
+
+            } else if (new String(password.getPassword()).equals("")) {
+
+                JOptionPane.showMessageDialog(null, "Passwords can't be left empty!", "Argument error", JOptionPane.ERROR_MESSAGE);
+
+            } else if (title.getText().equals(Main.BACKUP_TITLE) && title.isEditable()) {
+
+                JOptionPane.showMessageDialog(null, "Entry name is reserved!", "Argument error", JOptionPane.ERROR_MESSAGE);
+
+            } else {
 
                 String notes = textArea.getText().replaceAll("\n", "\\\\n");
 
@@ -137,9 +149,6 @@ public class NewEntryUI extends JFrame {
                 }
 
                 this.setVisible(false);
-            } else {
-
-                JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
