@@ -6,7 +6,7 @@ import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.information.WrongPasswordException;
-import de.paulwolf.passwordmanager.ui.DatabaseUI;
+import de.paulwolf.passwordmanager.ui.windows.DatabaseUI;
 import de.paulwolf.passwordmanager.utility.JSONParser;
 import gnu.crypto.mac.HMacFactory;
 import gnu.crypto.mac.IMac;

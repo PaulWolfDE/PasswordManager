@@ -1,7 +1,8 @@
-package de.paulwolf.passwordmanager.ui;
+package de.paulwolf.passwordmanager.ui.windows;
 
 import com.nulabinc.zxcvbn.Zxcvbn;
 import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.ui.UIUtils;
 import de.paulwolf.passwordmanager.wizards.ConversionWizard;
 import de.paulwolf.passwordmanager.wizards.PasswordWizard;
 
@@ -24,10 +25,13 @@ public class PasswordGeneratorUI extends JFrame {
             "'(),./:;<=>{}[]_~\\\""
     };
 
+    private static final String PRINTABLE_ASCII_CHARACTERS = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
     private static final PasswordGeneratorConfiguration[] CONFIGURATIONS = {
             new PasswordGeneratorConfiguration("Standard", 16, 0b01111, ""),
             new PasswordGeneratorConfiguration("Letters & Digits", 20, 0b00111, ""),
-            new PasswordGeneratorConfiguration("Paul's config", 20, 0b01111, ".,/:;=_{}[]")
+            new PasswordGeneratorConfiguration("Paul's config", 20, 0b01111, ".,/:;=_{}[]"),
+            new PasswordGeneratorConfiguration("All printable ASCII (including space)", 16,0, PRINTABLE_ASCII_CHARACTERS)
     };
 
     final JPanel wrapper = new JPanel();
@@ -58,7 +62,7 @@ public class PasswordGeneratorUI extends JFrame {
     final JTextField base64PasswordField = new JTextField(20);
 
     final JLabel entropyLabel = new JLabel("Password entropy:");
-    final JLabel entropyDisplay = new JLabel("0 Bits");
+    final JLabel entropyDisplay = new JLabel("0.00 Bits (Weak)");
 
     final JButton generatePassword = new JButton("Generate Password");
     final JButton acceptPassword = new JButton("Accept Password");
@@ -66,14 +70,26 @@ public class PasswordGeneratorUI extends JFrame {
 
     final PasswordAcceptingUI ui;
 
-    public PasswordGeneratorUI(PasswordAcceptingUI ui, String password) {
+    public PasswordGeneratorUI(PasswordAcceptingUI ui, String password, int encoding) {
+
+        System.out.println(PRINTABLE_ASCII_CHARACTERS.length());
 
         this.ui = ui;
 
         if (password != null) {
-            this.asciiPasswordField.setText(password);
-            this.hexPasswordField.setText(ConversionWizard.bytesToHex(password.getBytes()));
-            this.base64PasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(password.getBytes()))));
+            if (encoding == 0) {
+                this.asciiPasswordField.setText(password);
+                this.hexPasswordField.setText(ConversionWizard.bytesToHex(password.getBytes()));
+                this.base64PasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(password.getBytes()))));
+            } else if (encoding == 1) {
+                this.hexPasswordField.setText(password);
+                this.asciiPasswordField.setText(new String(ConversionWizard.hexToBytes(password)));
+                this.base64PasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
+            } else {
+                this.base64PasswordField.setText(password);
+                this.asciiPasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.base64ToBytes(password.getBytes()))));
+                this.hexPasswordField.setText(ConversionWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
+            }
         }
 
         // Letting the length field only accept numbers
@@ -161,7 +177,7 @@ public class PasswordGeneratorUI extends JFrame {
         this.setTitle("Random Password Generator");
         this.pack();
         this.setMinimumSize(this.getSize());
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo((Component) ui);
         this.setVisible(true);
 
         setConfiguration(CONFIGURATIONS[0]);
@@ -309,6 +325,25 @@ public class PasswordGeneratorUI extends JFrame {
         return charset.toString().getBytes();
     }
 
+    private int getCharsetLength(String password) {
+
+        int charsetLength = getCharset(password).length;
+
+        character:
+        for (int i = 0; i < password.length(); i++) {
+            for (int j = 0; j < CHARSETS.length; j++) {
+                if (CHARSETS[j].contains(String.valueOf(password.charAt(i))))
+                    break character;
+            }
+            if (PRINTABLE_ASCII_CHARACTERS.contains(String.valueOf(password.charAt(i)))) {
+                charsetLength = PRINTABLE_ASCII_CHARACTERS.length();
+                break;
+            }
+            return 128;
+        }
+        return charsetLength;
+    }
+
     private void setConfiguration(PasswordGeneratorConfiguration configuration) {
 
         lengthField.setText(String.valueOf(configuration.getPasswordLength()));
@@ -332,10 +367,9 @@ public class PasswordGeneratorUI extends JFrame {
 
         Zxcvbn zxcvbn = new Zxcvbn();
         int passwordScore = zxcvbn.measure(asciiPasswordField.getText()).getScore();
-        int charsetLength = getCharset(asciiPasswordField.getText()).length;
-        double passwordEntropy = 0;
-        if (charsetLength != 0)
-            passwordEntropy = Math.log(Math.pow(charsetLength, asciiPasswordField.getText().length())) / Math.log(2);
+        int charsetLength = getCharsetLength(asciiPasswordField.getText());
+
+        double passwordEntropy = Math.log(Math.pow(charsetLength, asciiPasswordField.getText().length())) / Math.log(2);
 
         String passwordStrength;
 

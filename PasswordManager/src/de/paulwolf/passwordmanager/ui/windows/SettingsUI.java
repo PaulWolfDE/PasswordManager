@@ -1,6 +1,8 @@
-package de.paulwolf.passwordmanager.ui;
+package de.paulwolf.passwordmanager.ui.windows;
 
 import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
+import de.paulwolf.passwordmanager.ui.passwordfields.PasswordStrengthField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,10 +22,10 @@ public class SettingsUI extends JFrame implements ActionListener {
     final JComboBox<String> eaBox = new JComboBox<>(Main.ENCRYPTION_ALGORITHMS);
     final JLabel hashLabel = new JLabel("Hash Algorithm");
     final JComboBox<String> hashBox = new JComboBox<>(Main.HASH_ALGORITHMS);
-    final PasswordStrengthField keyField = new PasswordStrengthField(20);
+    final PasswordEncodingField keyField = new PasswordEncodingField();
     final JToggleButton showKey = new JToggleButton("Show");
     final JLabel keyLabel = new JLabel("Master Key");
-    final PasswordStrengthField keyVerificationField = new PasswordStrengthField(20);
+    final PasswordEncodingField keyVerificationField = new PasswordEncodingField();
     final JToggleButton showKeyVerification = new JToggleButton("Show");
     final JLabel keyVerificationLabel = new JLabel("Repeat Master Key");
     final JButton button = new JButton("Save Changes");
@@ -127,9 +129,9 @@ public class SettingsUI extends JFrame implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        makePasswordFields(gbc, keyLabel, keyField, showKey);
+        makePasswordFields(gbc, keyLabel, keyField.getPasswordField(), showKey);
         gbc.gridy = 3;
-        makePasswordFields(gbc, keyVerificationLabel, keyVerificationField, showKeyVerification);
+        makePasswordFields(gbc, keyVerificationLabel, keyVerificationField.getPasswordField(), showKeyVerification);
         gbc.gridy = 4;
         gbc.gridwidth = 3;
         wrapper.add(button, gbc);
@@ -147,9 +149,9 @@ public class SettingsUI extends JFrame implements ActionListener {
         eaBox.setSelectedItem(DatabaseUI.database.getEncryptionAlgorithm());
         hashBox.setSelectedItem(DatabaseUI.database.getHashAlgorithm());
         keyField.setText(new String(DatabaseUI.database.getMasterKey()));
-        keyField.evaluatePassword();
+        keyField.getPasswordField().evaluatePassword();
         keyVerificationField.setText(new String(DatabaseUI.database.getMasterKey()));
-        keyVerificationField.evaluatePassword();
+        keyVerificationField.getPasswordField().evaluatePassword();
 
         this.add(wrapper);
         this.pack();

@@ -1,11 +1,13 @@
-package de.paulwolf.passwordmanager.ui;
+package de.paulwolf.passwordmanager.ui.windows;
 
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Entry;
+import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
+import de.paulwolf.passwordmanager.ui.passwordfields.PasswordStrengthField;
+import de.paulwolf.passwordmanager.ui.UIUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.security.SecureRandom;
 
 public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
@@ -17,10 +19,10 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
     final JLabel usernameLabel = new JLabel("Username");
     final JTextField email = new JTextField(20);
     final JLabel emailLabel = new JLabel("Email Address");
-    final PasswordStrengthField password = new PasswordStrengthField(20);
+    final PasswordEncodingField password = new PasswordEncodingField();
     final JLabel passwordLabel = new JLabel("Password");
     final JButton generatePassword = new JButton("Generate Password");
-    final PasswordStrengthField confirmPassword = new PasswordStrengthField(20);
+    final PasswordEncodingField confirmPassword = new PasswordEncodingField();
     final JLabel confirmPasswordLabel = new JLabel("Confirm Password");
     final JToggleButton showPassword = new JToggleButton("Show Password");
     final JButton submit = new JButton("Submit Entry");
@@ -98,8 +100,8 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
             this.setTitle("PasswordManager - Edit Entry");
         } else this.setTitle("PasswordManager - Create Entry");
 
-        password.evaluatePassword();
-        confirmPassword.evaluatePassword();
+        password.getPasswordField().evaluatePassword();
+        confirmPassword.getPasswordField().evaluatePassword();
 
         password.setFont(new Font("Consolas", Font.PLAIN, 14));
         password.putClientProperty("JPasswordField.cutCopyAllowed", true);
@@ -154,7 +156,7 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
         generatePassword.addActionListener(e12 -> {
 
-            new PasswordGeneratorUI(this, new String(this.password.getPassword()));
+            new PasswordGeneratorUI(this, new String(this.password.getPassword()), this.password.getSelectedEncoding());
         });
 
         showPassword.addActionListener(e13 -> {
@@ -174,7 +176,7 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
         this.password.setText(password);
         this.confirmPassword.setText(password);
-        this.password.evaluatePassword();
-        this.confirmPassword.evaluatePassword();
+        this.password.getPasswordField().evaluatePassword();
+        this.confirmPassword.getPasswordField().evaluatePassword();
     }
 }

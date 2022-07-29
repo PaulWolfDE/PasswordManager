@@ -1,4 +1,4 @@
-package de.paulwolf.passwordmanager.ui;
+package de.paulwolf.passwordmanager.ui.windows;
 
 public interface PasswordAcceptingUI {
 

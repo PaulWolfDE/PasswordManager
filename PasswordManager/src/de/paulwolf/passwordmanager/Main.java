@@ -1,9 +1,8 @@
 package de.paulwolf.passwordmanager;
 
-import de.paulwolf.passwordmanager.ui.MainUI;
-import de.paulwolf.passwordmanager.ui.OpenDatabaseUI;
-import de.paulwolf.passwordmanager.ui.PasswordGeneratorUI;
-import de.paulwolf.passwordmanager.ui.UpdateUI;
+import de.paulwolf.passwordmanager.ui.windows.MainUI;
+import de.paulwolf.passwordmanager.ui.windows.OpenDatabaseUI;
+import de.paulwolf.passwordmanager.ui.windows.UpdateUI;
 import de.paulwolf.passwordmanager.ui.tetris.Field;
 import de.paulwolf.passwordmanager.ui.tetris.KeyHandler;
 import de.paulwolf.passwordmanager.ui.tetris.Movement;

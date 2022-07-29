@@ -1,6 +1,7 @@
-package de.paulwolf.passwordmanager.ui;
+package de.paulwolf.passwordmanager.ui.windows;
 
 import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.ui.UIUtils;
 
 import javax.swing.*;
 import java.awt.*;
