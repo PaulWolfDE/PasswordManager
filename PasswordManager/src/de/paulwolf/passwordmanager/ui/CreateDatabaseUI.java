@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
 
-public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListener {
+public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, ActionListener, KeyListener {
 
     final JPanel wrapper = new JPanel();
     final JLabel eaLabel = new JLabel("Encryption Algorithm");
@@ -175,15 +175,8 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
 
         if (e.getSource() == generateKey2) {
 
-            String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\"";
-            SecureRandom sr = new SecureRandom();
-            StringBuilder password = new StringBuilder();
-            for (int i = 0; i < 24; i++)
-                password.append(alphabet.charAt(sr.nextInt(alphabet.length())));
-            keyField.setText(password.toString());
-            keyVerificationField.setText(password.toString());
-            keyField.evaluatePassword();
-            keyVerificationField.evaluatePassword();
+            new PasswordGeneratorUI(this, new String(keyField.getPassword()));
+
         }
 
         if (e.getSource() == generateKey) {
@@ -290,5 +283,14 @@ public class CreateDatabaseUI extends JFrame implements ActionListener, KeyListe
 
     @Override
     public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void setPassword(String password) {
+
+        keyField.setText(password);
+        keyVerificationField.setText(password);
+        keyField.evaluatePassword();
+        keyVerificationField.evaluatePassword();
     }
 }

@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.security.SecureRandom;
 
-public class NewEntryUI extends JFrame {
+public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
     private static final int NOTES_ROWS = 5;
     final JPanel wrapper = new JPanel();
@@ -154,15 +154,7 @@ public class NewEntryUI extends JFrame {
 
         generatePassword.addActionListener(e12 -> {
 
-            String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\"";
-            SecureRandom sr = new SecureRandom();
-            StringBuilder pw = new StringBuilder();
-            for (int i = 0; i < 24; i++)
-                pw.append(alphabet.charAt(sr.nextInt(alphabet.length())));
-            password.setText(pw.toString());
-            confirmPassword.setText(pw.toString());
-            password.evaluatePassword();
-            confirmPassword.evaluatePassword();
+            new PasswordGeneratorUI(this, new String(this.password.getPassword()));
         });
 
         showPassword.addActionListener(e13 -> {
@@ -175,5 +167,14 @@ public class NewEntryUI extends JFrame {
                 confirmPassword.setEchoChar((char) 0);
             }
         });
+    }
+
+    @Override
+    public void setPassword(String password) {
+
+        this.password.setText(password);
+        this.confirmPassword.setText(password);
+        this.password.evaluatePassword();
+        this.confirmPassword.evaluatePassword();
     }
 }

@@ -2,6 +2,7 @@ package de.paulwolf.passwordmanager;
 
 import de.paulwolf.passwordmanager.ui.MainUI;
 import de.paulwolf.passwordmanager.ui.OpenDatabaseUI;
+import de.paulwolf.passwordmanager.ui.PasswordGeneratorUI;
 import de.paulwolf.passwordmanager.ui.UpdateUI;
 import de.paulwolf.passwordmanager.ui.tetris.Field;
 import de.paulwolf.passwordmanager.ui.tetris.KeyHandler;
@@ -72,6 +73,7 @@ public class Main {
             ui.databaseFile = new File(args[0]);
             new OpenDatabaseUI(new File(args[0]).getAbsolutePath());
         }
+
     }
 
     public static void runTetris(int level) {

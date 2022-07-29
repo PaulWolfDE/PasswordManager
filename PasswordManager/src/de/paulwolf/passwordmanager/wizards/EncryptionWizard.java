@@ -11,6 +11,9 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import static de.paulwolf.passwordmanager.wizards.ConversionWizard.bytesToHex;
+import static de.paulwolf.passwordmanager.wizards.ConversionWizard.hexToBytes;
+
 public class EncryptionWizard {
 
     public static String encrypt(String databaseString, byte[] key, byte[] iv) throws NoSuchAlgorithmException,
@@ -62,30 +65,6 @@ public class EncryptionWizard {
             return headBodyStrings[0] + StringWizard.headBodySeparator + plaintext;
 
         throw new WrongPasswordException("The entered password is incorrect!");
-    }
-
-    public static String bytesToHex(byte[] bytes) {
-
-        StringBuilder hexString = new StringBuilder(2 * bytes.length);
-
-        for (byte aByte : bytes) {
-
-            String hex = Integer.toHexString(0xFF & aByte);
-
-            if (hex.length() == 1)
-                hexString.append('0');
-
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
-
-    public static byte[] hexToBytes(String hex) {
-        int l = hex.length();
-        byte[] data = new byte[l / 2];
-        for (int i = 0; i < l; i += 2)
-            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4) + Character.digit(hex.charAt(i + 1), 16));
-        return data;
     }
 
     private static String encrypt(String algorithm, String input, SecretKey key, byte[] iv)

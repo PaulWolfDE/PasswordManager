@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import static de.paulwolf.passwordmanager.wizards.ConversionWizard.hexToBytes;
+
 public class FileWizard {
 
     public static void saveDatabase(Database db, File file) throws NoSuchAlgorithmException, IOException,
@@ -95,7 +97,7 @@ public class FileWizard {
             for (int j = 0; j < iv.length; j++)
                 iv[j] = Byte.parseByte(splitbase[4].split(",")[j]);
         else // Later versions
-            iv = EncryptionWizard.hexToBytes(splitbase[4]);
+            iv = hexToBytes(splitbase[4]);
 
 
         byte[] derivedKey = new byte[32];
@@ -110,7 +112,7 @@ public class FileWizard {
                 for (int j = 0; j < iv.length; j++)
                     salt[j] = Byte.parseByte(splitbase[5].split(",")[j]);
             else // Later version
-                salt = EncryptionWizard.hexToBytes(splitbase[5]);
+                salt = hexToBytes(splitbase[5]);
 
             IMac prf = HMacFactory.getInstance(Main.HMAC_ALGORITHM);
             PBKDF2 pbkdf2 = new PBKDF2(prf);

@@ -10,6 +10,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static de.paulwolf.passwordmanager.wizards.ConversionWizard.bytesToHex;
+
 public class StringWizard {
 
     public final static String headBodySeparator = "\n\n\n";
@@ -51,9 +53,9 @@ public class StringWizard {
             for (int i = 0; i < databaseBody.length(); i++)
                 if (String.valueOf(databaseBody.charAt(i)).matches("\\A\\p{ASCII}*\\z"))
                     asciiBody.append(databaseBody.charAt(i));
-            databaseString.append(EncryptionWizard.bytesToHex(digest.digest(asciiBody.toString().getBytes())));
+            databaseString.append(bytesToHex(digest.digest(asciiBody.toString().getBytes())));
         } else {
-            databaseString.append(EncryptionWizard.bytesToHex(digest.digest(databaseBody.toString().getBytes())));
+            databaseString.append(bytesToHex(digest.digest(databaseBody.toString().getBytes())));
         }
 
         databaseString.append(separator);
@@ -61,9 +63,9 @@ public class StringWizard {
         databaseString.append(separator);
         databaseString.append(database.getHashAlgorithm());
         databaseString.append(separator);
-        databaseString.append(EncryptionWizard.bytesToHex(iv));
+        databaseString.append(bytesToHex(iv));
         databaseString.append(separator);
-        databaseString.append(EncryptionWizard.bytesToHex(salt));
+        databaseString.append(bytesToHex(salt));
         databaseString.append(headBodySeparator);
         databaseString.append(databaseBody);
         return databaseString.toString();
