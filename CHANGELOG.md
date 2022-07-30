@@ -71,3 +71,7 @@
 ## Release 1.4.7
 - Added automatic backup to remote server via SFTP
   - Explanations can be found in the documentation
+
+## Release 1.4.8
+- Added advanced password generated
+- Substituted password fields for fields with variable encoding
