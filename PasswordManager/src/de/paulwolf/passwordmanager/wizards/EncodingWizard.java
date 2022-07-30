@@ -1,5 +1,9 @@
 package de.paulwolf.passwordmanager.wizards;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class ConversionWizard {
@@ -37,5 +41,13 @@ public class ConversionWizard {
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+    public static byte[] charsToBytes(char[] chars) {
+        CharBuffer charBuffer = CharBuffer.wrap(chars);
+        ByteBuffer byteBuffer = StandardCharsets.US_ASCII.encode(charBuffer);
+        byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
+        Arrays.fill(byteBuffer.array(), (byte) 0);
+        return bytes;
     }
 }

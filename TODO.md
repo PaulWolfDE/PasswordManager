@@ -1,16 +1,54 @@
-# TODOs
+# TO-DOs
 
-Advanced password generation.
+## Security improvements <img src="https://img.shields.io/badge/Priority-High-important.svg">
+A few improvements at security to protect passwords to be leaked by core dumps and attacks on memory.
+- Don't store the master password in memory after the database was opened
+  - Store PBKDF2 hash of it instead
+  - Use the database salt or generate new one at each runtime
+- Consistently use Java's `SecretKey` class for storing passwords 
 
-Pack database before encryption (only suitable for large databases)
+# DONEs
 
-(Including option to perform a one-time pad on database)
+## Saving recently opened files <img src="https://img.shields.io/badge/Priority-Implemented (1.3.5)-blue.svg">
+Files opened in the database should be saved in order to display them at startup.
+- File in Appdata (Windows) or Userdir (Linux)
+- Only existing and compatible files will be displayed for opening
 
-~~-Every file is saved in another app data file during first open. One can choose recently opened files later in a combo box at startup of the password manager. Separate file to `.pmrc`. On every startup, files that don't exist anymore are being removed from the file and not loaded.~~
-~~- File name _could_ be something like `.pmro` (Password manager recently opened)~~ **(1.3.5)**
+## Adding Tetris <img src="https://img.shields.io/badge/Priority-Implemented (1.3.7)-blue.svg">
+Adding Tetris game into password manager.
 
-~~Add possibility to play Tetris~~ **(1.3.7)**
+Implementation comments:
+- See documentation for how to start Tetris
 
-~~Adding API request to find out whether older versions still supports a newer database file. If signature is not supported by the old version, a second check should confirm if this version still can open this database file.~~ **(1.4.3)**
+## Check compatibility for newer versions <img src="https://img.shields.io/badge/Priority-Implemented (1.4.3)-blue.svg">
+Old version should be able to check if newer database versions are stil compatible.
+- HTTP request to get data from remote server
+- JSON encoding for stored data
 
-~~Saving IV and Salt in hexadecimal dorm like the database hash value.~~ **(1.4.4)**
+## Saving IV and salt in hexadecimal encoding <img src="https://img.shields.io/badge/Priority-Implemented (1.4.4)-blue.svg">
+The IV and salt should be stored encoded into hexadecimal in the database file header like the database body hash.
+
+## Advanced password generation <img src="https://img.shields.io/badge/Priority-Implemented (1.4.8)-blue.svg">
+The default password generator should allow the user to define a few properties for themselves.
+- Variable password length can be chosen
+- Charsets for the password can be selected and unselected
+
+Implementation comments:
+- Also added variable encoding to ASCII, hexadecimal and base64 to every password field and the generator
+
+## Compress database before encryption <img src="https://img.shields.io/badge/Priority-Not necessary-inactive.svg">
+Compress the database before it is encrypted to prevent too large files.
+- Only suitable for large database
+
+Why not necessary:
+- Databases will never grow so large that compression would have a real effect on file size
+
+# Labels
+
+<img src="https://img.shields.io/badge/Priority-Very High-critical.svg">
+<img src="https://img.shields.io/badge/Priority-High-important.svg">
+<img src="https://img.shields.io/badge/Priority-Medium-yellow.svg">
+<img src="https://img.shields.io/badge/Priority-Low-yellowgreen.svg">
+<img src="https://img.shields.io/badge/Priority-Very Low-Green.svg">
+<img src="https://img.shields.io/badge/Priority-Implemented-informational.svg">
+<img src="https://img.shields.io/badge/Priority-Not necessary-inactive.svg">
