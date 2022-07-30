@@ -1,6 +1,6 @@
 package de.paulwolf.passwordmanager.ui.passwordfields;
 
-import de.paulwolf.passwordmanager.wizards.ConversionWizard;
+import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class PasswordEncodingField extends JComponent {
     private static final String[] ENCODINGS = {"ASCII", "HEX", "BASE64"};
     private int selectedEncoding;
 
-    private final PasswordStrengthField passwordField = new PasswordStrengthField(30) {
+    private final PasswordStrengthField passwordField = new PasswordStrengthField(20) {
         @Override
         public void keyTyped(KeyEvent e) {}
 
@@ -54,17 +54,6 @@ public class PasswordEncodingField extends JComponent {
 
     public JButton getEncodingButton() {
         return this.encodingButton;
-    }
-
-    public static boolean isEncodingValid(int encoding, String str) {
-
-        if (encoding == 0) {
-            return str.matches("\\A\\p{ASCII}*\\z");
-        } else if (encoding == 1) {
-            return str.matches("-?[0-9a-fA-F]+") && str.length() % 2 == 0;
-        } else {
-            return ConversionWizard.base64ToBytes(str.getBytes()) != null;
-        }
     }
 
     public PasswordEncodingField() {

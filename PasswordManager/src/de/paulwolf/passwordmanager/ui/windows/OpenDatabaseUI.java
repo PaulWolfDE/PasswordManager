@@ -1,8 +1,8 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
 import de.paulwolf.passwordmanager.Main;
-import de.paulwolf.passwordmanager.ui.windows.CreateDatabaseUI;
-import de.paulwolf.passwordmanager.ui.windows.MainUI;
+import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
+import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ import java.awt.event.KeyListener;
 public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListener {
 
     final JPanel wrapper = new JPanel();
-    final JPasswordField field = new JPasswordField(20);
+    final PasswordEncodingField field = new PasswordEncodingField();
     final JToggleButton show = new JToggleButton("Show");
     final JButton submit = new JButton("Submit Password");
     final JButton changeFile = new JButton("Change file");
@@ -49,9 +49,10 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
         submit.addActionListener(this);
         changeFile.addActionListener(this);
         show.addActionListener(this);
-        field.addKeyListener(this);
+        field.getPasswordField().addKeyListener(this);
 
-        field.setFont(new Font("Consolas", Font.PLAIN, 14));
+        field.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        field.getPasswordField().setDisplayPasswordStrength(false);
         field.setPreferredSize(new Dimension(400, 26));
 
         this.add(wrapper);
@@ -68,11 +69,20 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == submit) {
-            if (Main.ui.openDatabaseWithPassword(CreateDatabaseUI.toBytes(field.getPassword())))
-                this.setVisible(false);
-            else
-                JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",
-                        JOptionPane.ERROR_MESSAGE);
+
+            if (EncodingWizard.isEncodingValid(field.getSelectedEncoding(), new String(field.getPassword()))) {
+
+                String password = EncodingWizard.decodeString(field.getSelectedEncoding(), new String(field.getPassword()));
+
+                if (Main.ui.openDatabaseWithPassword(password.getBytes()))
+                    this.setVisible(false);
+                else
+                    JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",
+                            JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "The key is not correctly encoded!", "Malformed encoding", JOptionPane.ERROR_MESSAGE);
+            }
+
         } else if (e.getSource() == changeFile) {
             this.setVisible(false);
             Main.ui = new MainUI();
@@ -82,7 +92,6 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
             else
                 field.setEchoChar(Main.ECHO_CHAR);
         }
-
     }
 
     @Override

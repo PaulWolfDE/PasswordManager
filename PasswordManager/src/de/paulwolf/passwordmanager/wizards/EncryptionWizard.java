@@ -11,8 +11,8 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import static de.paulwolf.passwordmanager.wizards.ConversionWizard.bytesToHex;
-import static de.paulwolf.passwordmanager.wizards.ConversionWizard.hexToBytes;
+import static de.paulwolf.passwordmanager.wizards.EncodingWizard.bytesToHex;
+import static de.paulwolf.passwordmanager.wizards.EncodingWizard.hexToBytes;
 
 public class EncryptionWizard {
 

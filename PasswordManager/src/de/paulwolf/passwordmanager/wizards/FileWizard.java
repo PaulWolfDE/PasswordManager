@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import static de.paulwolf.passwordmanager.wizards.ConversionWizard.hexToBytes;
+import static de.paulwolf.passwordmanager.wizards.EncodingWizard.hexToBytes;
 
 public class FileWizard {
 

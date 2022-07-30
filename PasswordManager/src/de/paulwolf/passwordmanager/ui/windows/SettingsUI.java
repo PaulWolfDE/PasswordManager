@@ -1,8 +1,9 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
 import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.ui.UIUtils;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
-import de.paulwolf.passwordmanager.ui.passwordfields.PasswordStrengthField;
+import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,12 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Objects;
 
-public class SettingsUI extends JFrame implements ActionListener {
+public class SettingsUI extends JFrame implements ActionListener, PasswordAcceptingUI {
 
     final JPanel wrapper = new JPanel();
     final JLabel eaLabel = new JLabel("Encryption Algorithm");
@@ -28,11 +27,12 @@ public class SettingsUI extends JFrame implements ActionListener {
     final PasswordEncodingField keyVerificationField = new PasswordEncodingField();
     final JToggleButton showKeyVerification = new JToggleButton("Show");
     final JLabel keyVerificationLabel = new JLabel("Repeat Master Key");
+    final JButton generatePassword = new JButton("Generate Password");
     final JButton button = new JButton("Save Changes");
 
     final JFrame f;
     final JPanel p;
-    final JPasswordField pf;
+    final PasswordEncodingField pf;
     final JToggleButton b;
     final JButton b2;
 
@@ -42,35 +42,22 @@ public class SettingsUI extends JFrame implements ActionListener {
 
         f = new JFrame("Enter Master Password");
         p = new JPanel();
-        pf = new JPasswordField(20);
+        pf = new PasswordEncodingField();
         b = new JToggleButton("Show");
         b2 = new JButton("Submit Password");
 
-        GridBagConstraints gbc = new GridBagConstraints();
         p.setLayout(new GridBagLayout());
-        gbc.gridwidth = GridBagConstraints.RELATIVE;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        p.add(pf, gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        p.add(b, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        p.add(b2, gbc);
+        p.add(pf, UIUtils.createGBC(0, 0, GridBagConstraints.HORIZONTAL, 1, 1, 1.0));
+        p.add(b, UIUtils.createGBC(1, 0, GridBagConstraints.HORIZONTAL, 1, 1, .0));
+        p.add(b2, UIUtils.createGBC(0, 1, GridBagConstraints.HORIZONTAL, 2, 1));
 
         b.addActionListener(this);
         b2.addActionListener(this);
-        pf.setFont(new Font("Consolas", Font.PLAIN, 14));
-        pf.setPreferredSize(new Dimension(200, 26));
+        pf.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        pf.getPasswordField().setDisplayPasswordStrength(false);
+        pf.setPreferredSize(new Dimension(400, 26));
 
-        pf.addKeyListener(new KeyListener() {
+        pf.getPasswordField().addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
@@ -95,63 +82,47 @@ public class SettingsUI extends JFrame implements ActionListener {
         f.setVisible(true);
     }
 
-    static byte[] toBytes(char[] chars) {
-        CharBuffer charBuffer = CharBuffer.wrap(chars);
-        ByteBuffer byteBuffer = StandardCharsets.US_ASCII.encode(charBuffer);
-        byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
-        Arrays.fill(byteBuffer.array(), (byte) 0);
-        return bytes;
-    }
 
     private void go() {
 
-        GridBagConstraints gbc = new GridBagConstraints();
         wrapper.setLayout(new GridBagLayout());
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.weightx = 1;
-        gbc.weighty = 1;
 
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        wrapper.add(eaLabel, gbc);
-        gbc.gridx = 1;
-        gbc.gridwidth = 2;
-        wrapper.add(eaBox, gbc);
+        wrapper.add(eaLabel, UIUtils.createGBC(0, 0, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(eaBox, UIUtils.createGBC(1, 0, GridBagConstraints.HORIZONTAL, 2, 1));
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        wrapper.add(hashLabel, gbc);
-        gbc.gridwidth = 2;
-        gbc.gridx = 1;
-        wrapper.add(hashBox, gbc);
+        wrapper.add(hashLabel, UIUtils.createGBC(0, 1, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(hashBox, UIUtils.createGBC(1, 1, GridBagConstraints.HORIZONTAL, 2, 1));
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        makePasswordFields(gbc, keyLabel, keyField.getPasswordField(), showKey);
-        gbc.gridy = 3;
-        makePasswordFields(gbc, keyVerificationLabel, keyVerificationField.getPasswordField(), showKeyVerification);
-        gbc.gridy = 4;
-        gbc.gridwidth = 3;
-        wrapper.add(button, gbc);
+        wrapper.add(keyLabel, UIUtils.createGBC(0, 2, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(keyField, UIUtils.createGBC(1, 2, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(showKey, UIUtils.createGBC(2, 2, GridBagConstraints.HORIZONTAL, 1, 1, .0));
+
+        wrapper.add(keyVerificationLabel, UIUtils.createGBC(0, 3, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(keyVerificationField, UIUtils.createGBC(1, 3, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(showKeyVerification, UIUtils.createGBC(2, 3, GridBagConstraints.HORIZONTAL, 1, 1, .0));
+
+        wrapper.add(generatePassword, UIUtils.createGBC(0, 4, GridBagConstraints.HORIZONTAL, 3, 1));
+        wrapper.add(button, UIUtils.createGBC(0, 5, GridBagConstraints.HORIZONTAL, 3, 1));
 
         showKey.addActionListener(this);
         showKeyVerification.addActionListener(this);
         button.addActionListener(this);
-        keyField.setFont(new Font("Consolas", Font.PLAIN, 14));
-        keyField.putClientProperty("JPasswordField.cutCopyAllowed", true);
+        generatePassword.addActionListener(this);
+        keyField.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        keyField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         keyField.setPreferredSize(new Dimension(400, 26));
-        keyVerificationField.setFont(new Font("Consolas", Font.PLAIN, 14));
-        keyVerificationField.putClientProperty("JPasswordField.cutCopyAllowed", true);
+        keyVerificationField.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        keyVerificationField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         keyVerificationField.setPreferredSize(new Dimension(400, 26));
 
         eaBox.setSelectedItem(DatabaseUI.database.getEncryptionAlgorithm());
         hashBox.setSelectedItem(DatabaseUI.database.getHashAlgorithm());
-        keyField.setText(new String(DatabaseUI.database.getMasterKey()));
-        keyField.getPasswordField().evaluatePassword();
-        keyVerificationField.setText(new String(DatabaseUI.database.getMasterKey()));
-        keyVerificationField.getPasswordField().evaluatePassword();
+        keyField.setText(new String(pf.getPassword()));
+        keyField.setEncoding(pf.getSelectedEncoding());
+        keyField.getPasswordField().evaluatePassword(keyField.getSelectedEncoding());
+        keyVerificationField.setText(new String(pf.getPassword()));
+        keyVerificationField.setEncoding(pf.getSelectedEncoding());
+        keyVerificationField.getPasswordField().evaluatePassword(keyVerificationField.getSelectedEncoding());
 
         this.add(wrapper);
         this.pack();
@@ -160,16 +131,8 @@ public class SettingsUI extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-    }
-
-    private void makePasswordFields(GridBagConstraints gbc, JLabel keyLabel, PasswordStrengthField keyField, JToggleButton showKey) {
-        wrapper.add(keyLabel, gbc);
-        gbc.gridwidth = 1;
-        gbc.gridx = 1;
-        wrapper.add(keyField, gbc);
-        gbc.gridx = 2;
-        wrapper.add(showKey, gbc);
-        gbc.gridx = 0;
+        this.keyField.getEncodingButton().addActionListener(e14 -> this.keyVerificationField.setEncoding((this.keyVerificationField.getSelectedEncoding() + 1) % 3));
+        this.keyVerificationField.getEncodingButton().addActionListener(e15 -> this.keyField.setEncoding((this.keyField.getSelectedEncoding() + 1) % 3));
     }
 
     @Override
@@ -183,12 +146,19 @@ public class SettingsUI extends JFrame implements ActionListener {
                 pf.setEchoChar(Main.ECHO_CHAR);
         } else if (e.getSource() == b2) {
 
-            if (new String(pf.getPassword()).equals(new String(DatabaseUI.database.getMasterKey()))) {
-                f.setVisible(false);
-                go();
-            } else
-                JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",
-                        JOptionPane.ERROR_MESSAGE);
+            if (EncodingWizard.isEncodingValid(pf.getSelectedEncoding(), new String(pf.getPassword()))) {
+
+                String password = EncodingWizard.decodeString(pf.getSelectedEncoding(), new String(pf.getPassword()));
+
+                if (password.equals(new String(DatabaseUI.database.getMasterKey()))) {
+                    this.setVisible(false);
+                    go();
+                } else
+                    JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",
+                            JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "The key is not correctly encoded!", "Malformed encoding", JOptionPane.ERROR_MESSAGE);
+            }
         } else if (e.getSource() == showKey) {
             if (showKey.isSelected())
                 keyField.setEchoChar((char) 0);
@@ -201,11 +171,11 @@ public class SettingsUI extends JFrame implements ActionListener {
                 keyVerificationField.setEchoChar(Main.ECHO_CHAR);
         } else if (e.getSource() == button) {
 
-            if (Arrays.equals(toBytes(keyField.getPassword()), toBytes(keyVerificationField.getPassword()))) {
+            if (Arrays.equals(EncodingWizard.charsToBytes(keyField.getPassword()), EncodingWizard.charsToBytes(keyVerificationField.getPassword()))) {
 
                 if (keyField.getPassword().length != 0) {
 
-                    DatabaseUI.database.setMasterKey(toBytes(keyField.getPassword()));
+                    DatabaseUI.database.setMasterKey(EncodingWizard.charsToBytes(keyField.getPassword()));
                     DatabaseUI.database.setHashAlgorithm((String) hashBox.getSelectedItem());
                     DatabaseUI.database.setEncryptionAlgorithm((String) eaBox.getSelectedItem());
 
@@ -217,6 +187,26 @@ public class SettingsUI extends JFrame implements ActionListener {
             } else
                 JOptionPane.showMessageDialog(null, "Passwords do not match up!", "Argument error",
                         JOptionPane.ERROR_MESSAGE);
+        } else if (e.getSource() == generatePassword) {
+            new PasswordGeneratorUI(this, new String(keyField.getPassword()), keyField.getSelectedEncoding());
         }
+    }
+
+    @Override
+    public void setPassword(String password) {
+
+        if (keyField.getSelectedEncoding() == 0) {
+            keyField.setText(password);
+            keyVerificationField.setText(password);
+        } else if (keyField.getSelectedEncoding() == 1) {
+            keyField.setText(EncodingWizard.bytesToHex(password.getBytes()));
+            keyVerificationField.setText(new String(keyField.getPassword()));
+        } else {
+            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes()))));
+            keyVerificationField.setText(new String(keyField.getPassword()));
+        }
+
+        keyField.getPasswordField().evaluatePassword(keyField.getSelectedEncoding());
+        keyVerificationField.getPasswordField().evaluatePassword(keyVerificationField.getSelectedEncoding());
     }
 }

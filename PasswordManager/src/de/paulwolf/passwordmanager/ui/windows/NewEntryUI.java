@@ -3,11 +3,12 @@ package de.paulwolf.passwordmanager.ui.windows;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
-import de.paulwolf.passwordmanager.ui.passwordfields.PasswordStrengthField;
 import de.paulwolf.passwordmanager.ui.UIUtils;
+import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
@@ -100,24 +101,18 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
             this.setTitle("PasswordManager - Edit Entry");
         } else this.setTitle("PasswordManager - Create Entry");
 
-        password.getPasswordField().evaluatePassword();
-        confirmPassword.getPasswordField().evaluatePassword();
+        password.getPasswordField().evaluatePassword(password.getSelectedEncoding());
+        confirmPassword.getPasswordField().evaluatePassword(confirmPassword.getSelectedEncoding());
 
-        password.setFont(new Font("Consolas", Font.PLAIN, 14));
-        password.putClientProperty("JPasswordField.cutCopyAllowed", true);
+        password.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        password.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         password.setPreferredSize(new Dimension(300, 26));
-        confirmPassword.setFont(new Font("Consolas", Font.PLAIN, 14));
-        confirmPassword.putClientProperty("JPasswordField.cutCopyAllowed", true);
+        confirmPassword.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        confirmPassword.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         confirmPassword.setPreferredSize(new Dimension(300, 26));
         title.setPreferredSize(new Dimension(300, 26));
         username.setPreferredSize(new Dimension(300, 26));
         email.setPreferredSize(new Dimension(300, 26));
-
-        title.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
-        username.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
-        email.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
-        password.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
-        confirmPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
 
         this.add(wrapper);
         this.setIconImage(Main.IMAGE);
@@ -144,20 +139,16 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
                 String notes = textArea.getText().replaceAll("\n", "\\\\n");
 
-                if (index == -1) {
-                    DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(), new String(password.getPassword()), notes));
-                } else {
-                    DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(), new String(password.getPassword()), notes), index);
-                }
+                if (index == -1)
+                    DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())), notes));
+                else
+                    DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())), notes), index);
 
                 this.setVisible(false);
             }
         });
 
-        generatePassword.addActionListener(e12 -> {
-
-            new PasswordGeneratorUI(this, new String(this.password.getPassword()), this.password.getSelectedEncoding());
-        });
+        generatePassword.addActionListener(e12 -> new PasswordGeneratorUI(this, new String(this.password.getPassword()), this.password.getSelectedEncoding()));
 
         showPassword.addActionListener(e13 -> {
 
@@ -169,14 +160,26 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
                 confirmPassword.setEchoChar((char) 0);
             }
         });
+
+        this.password.getEncodingButton().addActionListener(e14 -> this.confirmPassword.setEncoding((this.confirmPassword.getSelectedEncoding() + 1) % 3));
+        this.confirmPassword.getEncodingButton().addActionListener(e15 -> this.password.setEncoding((this.password.getSelectedEncoding() + 1) % 3));
     }
 
     @Override
     public void setPassword(String password) {
 
-        this.password.setText(password);
-        this.confirmPassword.setText(password);
-        this.password.getPasswordField().evaluatePassword();
-        this.confirmPassword.getPasswordField().evaluatePassword();
+        if (this.password.getSelectedEncoding() == 0) {
+            this.password.setText(password);
+            this.confirmPassword.setText(password);
+        } else if (this.password.getSelectedEncoding() == 1) {
+            this.password.setText(EncodingWizard.bytesToHex(password.getBytes()));
+            this.confirmPassword.setText(new String(this.password.getPassword()));
+        } else {
+            this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes()))));
+            this.confirmPassword.setText(new String(this.password.getPassword()));
+        }
+
+        this.password.getPasswordField().evaluatePassword(this.password.getSelectedEncoding());
+        this.confirmPassword.getPasswordField().evaluatePassword(this.confirmPassword.getSelectedEncoding());
     }
 }

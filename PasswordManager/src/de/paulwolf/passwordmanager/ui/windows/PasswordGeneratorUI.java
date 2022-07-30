@@ -3,7 +3,7 @@ package de.paulwolf.passwordmanager.ui.windows;
 import com.nulabinc.zxcvbn.Zxcvbn;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.ui.UIUtils;
-import de.paulwolf.passwordmanager.wizards.ConversionWizard;
+import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 import de.paulwolf.passwordmanager.wizards.PasswordWizard;
 
 import javax.swing.*;
@@ -79,16 +79,16 @@ public class PasswordGeneratorUI extends JFrame {
         if (password != null) {
             if (encoding == 0) {
                 this.asciiPasswordField.setText(password);
-                this.hexPasswordField.setText(ConversionWizard.bytesToHex(password.getBytes()));
-                this.base64PasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(password.getBytes()))));
+                this.hexPasswordField.setText(EncodingWizard.bytesToHex(password.getBytes()));
+                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes()))));
             } else if (encoding == 1) {
                 this.hexPasswordField.setText(password);
-                this.asciiPasswordField.setText(new String(ConversionWizard.hexToBytes(password)));
-                this.base64PasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
+                this.asciiPasswordField.setText(new String(EncodingWizard.hexToBytes(password)));
+                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
             } else {
                 this.base64PasswordField.setText(password);
-                this.asciiPasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.base64ToBytes(password.getBytes()))));
-                this.hexPasswordField.setText(ConversionWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
+                this.asciiPasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(password.getBytes()))));
+                this.hexPasswordField.setText(EncodingWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
             }
         }
 
@@ -195,8 +195,8 @@ public class PasswordGeneratorUI extends JFrame {
                 byte[] pw = PasswordWizard.generatePassword(Integer.parseInt(lengthField.getText()), charset);
 
                 asciiPasswordField.setText(new String(pw));
-                hexPasswordField.setText(ConversionWizard.bytesToHex(pw));
-                base64PasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(pw))));
+                hexPasswordField.setText(EncodingWizard.bytesToHex(pw));
+                base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(pw))));
             }
 
             updateEntropy();
@@ -230,8 +230,8 @@ public class PasswordGeneratorUI extends JFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 updateEntropy();
-                hexPasswordField.setText(ConversionWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
-                base64PasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
+                hexPasswordField.setText(EncodingWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
+                base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
             }
         });
         hexPasswordField.addKeyListener(new KeyListener() {
@@ -247,8 +247,8 @@ public class PasswordGeneratorUI extends JFrame {
                 String hexPassword = hexPasswordField.getText();
                 if (hexPassword.matches("-?[0-9a-fA-F]+")) {
                     if (hexPassword.length() % 2 == 0) {
-                        asciiPasswordField.setText(new String(ConversionWizard.hexToBytes(hexPasswordField.getText())));
-                        base64PasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
+                        asciiPasswordField.setText(new String(EncodingWizard.hexToBytes(hexPasswordField.getText())));
+                        base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
                         updateEntropy();
                         hexPasswordField.setForeground(Color.BLACK);
                     }
@@ -270,9 +270,9 @@ public class PasswordGeneratorUI extends JFrame {
             public void keyReleased(KeyEvent e) {
                 String base64Password = base64PasswordField.getText();
 
-                if (ConversionWizard.base64ToBytes(base64Password.getBytes()) != null) {
-                    asciiPasswordField.setText(new String(Objects.requireNonNull(ConversionWizard.base64ToBytes(base64Password.getBytes()))));
-                    hexPasswordField.setText(ConversionWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
+                if (EncodingWizard.base64ToBytes(base64Password.getBytes()) != null) {
+                    asciiPasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(base64Password.getBytes()))));
+                    hexPasswordField.setText(EncodingWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
                     updateEntropy();
                     base64PasswordField.setForeground(Color.BLACK);
                 } else {

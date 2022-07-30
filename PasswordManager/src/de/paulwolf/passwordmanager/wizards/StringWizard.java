@@ -8,9 +8,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import static de.paulwolf.passwordmanager.wizards.ConversionWizard.bytesToHex;
+import static de.paulwolf.passwordmanager.wizards.EncodingWizard.bytesToHex;
 
 public class StringWizard {
 

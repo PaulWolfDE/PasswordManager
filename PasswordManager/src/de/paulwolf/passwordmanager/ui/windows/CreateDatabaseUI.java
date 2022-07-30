@@ -5,8 +5,7 @@ import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.ui.*;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
-import de.paulwolf.passwordmanager.ui.passwordfields.PasswordStrengthField;
-import de.paulwolf.passwordmanager.wizards.ConversionWizard;
+import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
 import gnu.crypto.prng.LimitReachedException;
 
@@ -22,9 +21,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
@@ -120,14 +116,6 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
 
     }
 
-    static byte[] toBytes(char[] chars) {
-        CharBuffer charBuffer = CharBuffer.wrap(chars);
-        ByteBuffer byteBuffer = StandardCharsets.US_ASCII.encode(charBuffer);
-        byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
-        Arrays.fill(byteBuffer.array(), (byte) 0);
-        return bytes;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -163,11 +151,11 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
 
             Path path = Paths.get(pathField.getText());
 
-            if (PasswordEncodingField.isEncodingValid(keyField.getSelectedEncoding(), new String(keyField.getPassword()))) {
+            if (EncodingWizard.isEncodingValid(keyField.getSelectedEncoding(), new String(keyField.getPassword()))) {
 
-                if (Arrays.equals(toBytes(keyField.getPassword()), toBytes(keyVerificationField.getPassword()))) {
+                if (Arrays.equals(EncodingWizard.charsToBytes(keyField.getPassword()), EncodingWizard.charsToBytes(keyVerificationField.getPassword()))) {
 
-                    if (!pathField.getText().equals("") && !Arrays.toString(toBytes(keyField.getPassword())).equals("")) {
+                    if (!pathField.getText().equals("") && !Arrays.toString(EncodingWizard.charsToBytes(keyField.getPassword())).equals("")) {
 
                         Database db = new Database();
 
@@ -194,10 +182,11 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
                             e1.printStackTrace();
                         }
 
-                        db.setMasterKey(toBytes(keyField.getPassword()));
+                        db.setMasterKey(EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes());
                         db.setHashAlgorithm(Objects.requireNonNull(hashBox.getSelectedItem()).toString());
                         db.setEncryptionAlgorithm(Objects.requireNonNull(eaBox.getSelectedItem()).toString());
                         db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123", "Note"));
+                        db.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".", ""));
 
                         this.setVisible(false);
                         new DatabaseUI(db);
@@ -243,10 +232,10 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
             keyField.setText(password);
             keyVerificationField.setText(password);
         } else if (keyField.getSelectedEncoding() == 1) {
-            keyField.setText(ConversionWizard.bytesToHex(password.getBytes()));
+            keyField.setText(EncodingWizard.bytesToHex(password.getBytes()));
             keyVerificationField.setText(new String(keyField.getPassword()));
         } else {
-            keyField.setText(new String(Objects.requireNonNull(ConversionWizard.bytesToBase64(password.getBytes()))));
+            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes()))));
             keyVerificationField.setText(new String(keyField.getPassword()));
         }
 

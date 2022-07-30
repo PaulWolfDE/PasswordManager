@@ -5,8 +5,9 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 
-public class ConversionWizard {
+public class EncodingWizard {
 
     public static byte[] hexToBytes(String hexString) {
         int length = hexString.length();
@@ -49,5 +50,25 @@ public class ConversionWizard {
         byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
         Arrays.fill(byteBuffer.array(), (byte) 0);
         return bytes;
+    }
+
+    public static String decodeString(int encoding, String str) {
+        if (encoding == 0)
+            return str;
+        else if (encoding == 1)
+            return new String(hexToBytes(str));
+        else
+            return new String(Objects.requireNonNull(base64ToBytes(str.getBytes())));
+    }
+
+    public static boolean isEncodingValid(int encoding, String str) {
+
+        if (encoding == 0) {
+            return str.matches("\\A\\p{ASCII}*\\z");
+        } else if (encoding == 1) {
+            return str.matches("-?[0-9a-fA-F]+") && str.length() % 2 == 0;
+        } else {
+            return base64ToBytes(str.getBytes()) != null;
+        }
     }
 }
