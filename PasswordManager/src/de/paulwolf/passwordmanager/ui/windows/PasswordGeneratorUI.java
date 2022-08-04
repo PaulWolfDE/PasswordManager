@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -52,8 +53,8 @@ public class PasswordGeneratorUI extends JFrame {
     final JLabel configurationLabel = new JLabel("Configurations:");
     final JComboBox<PasswordGeneratorConfiguration> configurationBox = new JComboBox<>(CONFIGURATIONS);
 
-    final JLabel asciiPasswordLabel = new JLabel("ASCII:");
-    final JTextField asciiPasswordField = new JTextField(20);
+    final JLabel utf8PasswordLabel = new JLabel("UTF-8:");
+    final JTextField utf8PasswordField = new JTextField(20);
 
     final JLabel hexPasswordLabel = new JLabel("Hexadecimal:");
     final JTextField hexPasswordField = new JTextField(20);
@@ -72,23 +73,21 @@ public class PasswordGeneratorUI extends JFrame {
 
     public PasswordGeneratorUI(PasswordAcceptingUI ui, String password, int encoding) {
 
-        System.out.println(PRINTABLE_ASCII_CHARACTERS.length());
-
         this.ui = ui;
 
         if (password != null) {
             if (encoding == 0) {
-                this.asciiPasswordField.setText(password);
-                this.hexPasswordField.setText(EncodingWizard.bytesToHex(password.getBytes()));
-                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes()))));
+                this.utf8PasswordField.setText(password);
+                this.hexPasswordField.setText(EncodingWizard.bytesToHex(password.getBytes(Main.STANDARD_CHARSET)));
+                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
             } else if (encoding == 1) {
                 this.hexPasswordField.setText(password);
-                this.asciiPasswordField.setText(new String(EncodingWizard.hexToBytes(password)));
-                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
+                this.utf8PasswordField.setText(new String(EncodingWizard.hexToBytes(password), Main.STANDARD_CHARSET));
+                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
             } else {
                 this.base64PasswordField.setText(password);
-                this.asciiPasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(password.getBytes()))));
-                this.hexPasswordField.setText(EncodingWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
+                this.utf8PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(password.getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+                this.hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET)));
             }
         }
 
@@ -102,7 +101,7 @@ public class PasswordGeneratorUI extends JFrame {
 
         lengthField.setPreferredSize(new Dimension(200, 26));
         additionalCharactersField.setPreferredSize(new Dimension(200, 26));
-        asciiPasswordField.setPreferredSize(new Dimension(200, 26));
+        utf8PasswordField.setPreferredSize(new Dimension(200, 26));
         hexPasswordField.setPreferredSize(new Dimension(200, 26));
         base64PasswordField.setPreferredSize(new Dimension(200, 26));
 
@@ -110,7 +109,7 @@ public class PasswordGeneratorUI extends JFrame {
         acceptPassword.setPreferredSize(new Dimension(200, 26));
         closeGenerator.setPreferredSize(new Dimension(200, 26));
 
-        asciiPasswordField.setFont(new Font("Consolas", Font.PLAIN, 14));
+        utf8PasswordField.setFont(new Font("Consolas", Font.PLAIN, 14));
         hexPasswordField.setFont(new Font("Consolas", Font.PLAIN, 14));
         base64PasswordField.setFont(new Font("Consolas", Font.PLAIN, 14));
 
@@ -127,8 +126,8 @@ public class PasswordGeneratorUI extends JFrame {
         additionalCharactersField.setFont(additionalCharactersField.getFont().deriveFont(14.0f));
         configurationLabel.setFont(configurationLabel.getFont().deriveFont(14.0f));
         configurationBox.setFont(configurationBox.getFont().deriveFont(14.0f));
-        asciiPasswordLabel.setFont(asciiPasswordLabel.getFont().deriveFont(14.0f));
-        asciiPasswordField.setFont(asciiPasswordField.getFont().deriveFont(14.0f));
+        utf8PasswordLabel.setFont(utf8PasswordLabel.getFont().deriveFont(14.0f));
+        utf8PasswordField.setFont(utf8PasswordField.getFont().deriveFont(14.0f));
         hexPasswordLabel.setFont(hexPasswordLabel.getFont().deriveFont(14.0f));
         hexPasswordField.setFont(hexPasswordField.getFont().deriveFont(14.0f));
         base64PasswordLabel.setFont(base64PasswordLabel.getFont().deriveFont(14.0f));
@@ -158,8 +157,8 @@ public class PasswordGeneratorUI extends JFrame {
         wrapper.add(configurationLabel, UIUtils.createGBC(0, 6, GridBagConstraints.HORIZONTAL, 1, 1));
         wrapper.add(configurationBox, UIUtils.createGBC(1, 6, GridBagConstraints.HORIZONTAL, 5, 1));
 
-        wrapper.add(asciiPasswordLabel, UIUtils.createGBC(0, 7, GridBagConstraints.HORIZONTAL, 1, 1));
-        wrapper.add(asciiPasswordField, UIUtils.createGBC(1, 7, GridBagConstraints.HORIZONTAL, 5, 1));
+        wrapper.add(utf8PasswordLabel, UIUtils.createGBC(0, 7, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(utf8PasswordField, UIUtils.createGBC(1, 7, GridBagConstraints.HORIZONTAL, 5, 1));
         wrapper.add(hexPasswordLabel, UIUtils.createGBC(0, 8, GridBagConstraints.HORIZONTAL, 1, 1));
         wrapper.add(hexPasswordField, UIUtils.createGBC(1, 8, GridBagConstraints.HORIZONTAL, 5, 1));
         wrapper.add(base64PasswordLabel, UIUtils.createGBC(0, 9, GridBagConstraints.HORIZONTAL, 1, 1));
@@ -194,9 +193,9 @@ public class PasswordGeneratorUI extends JFrame {
 
                 byte[] pw = PasswordWizard.generatePassword(Integer.parseInt(lengthField.getText()), charset);
 
-                asciiPasswordField.setText(new String(pw));
+                utf8PasswordField.setText(new String(pw, Main.STANDARD_CHARSET));
                 hexPasswordField.setText(EncodingWizard.bytesToHex(pw));
-                base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(pw))));
+                base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(pw)), StandardCharsets.US_ASCII));
             }
 
             updateEntropy();
@@ -204,14 +203,11 @@ public class PasswordGeneratorUI extends JFrame {
 
         acceptPassword.addActionListener(e -> {
 
-            ui.setPassword(asciiPasswordField.getText());
+            ui.setPassword(utf8PasswordField.getText());
             this.setVisible(false);
         });
 
-        closeGenerator.addActionListener(e -> {
-
-            this.setVisible(false);
-        });
+        closeGenerator.addActionListener(e -> this.setVisible(false));
 
         configurationBox.addActionListener(e -> setConfiguration((PasswordGeneratorConfiguration) Objects.requireNonNull(configurationBox.getSelectedItem())));
 
@@ -220,7 +216,7 @@ public class PasswordGeneratorUI extends JFrame {
             advancedSpecialsBox.setEnabled(specialsBox.isSelected());
         });
 
-        asciiPasswordField.addKeyListener(new KeyListener() {
+        utf8PasswordField.addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -230,8 +226,8 @@ public class PasswordGeneratorUI extends JFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 updateEntropy();
-                hexPasswordField.setText(EncodingWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
-                base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
+                hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET)));
+                base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
             }
         });
         hexPasswordField.addKeyListener(new KeyListener() {
@@ -245,16 +241,16 @@ public class PasswordGeneratorUI extends JFrame {
             public void keyReleased(KeyEvent e) {
                 // Check whether hex string is valid
                 String hexPassword = hexPasswordField.getText();
-                if (hexPassword.matches("-?[0-9a-fA-F]+")) {
+                if (hexPassword.matches("-?[\\da-fA-F]+")) {
                     if (hexPassword.length() % 2 == 0) {
-                        asciiPasswordField.setText(new String(EncodingWizard.hexToBytes(hexPasswordField.getText())));
-                        base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(asciiPasswordField.getText().getBytes()))));
+                        utf8PasswordField.setText(new String(EncodingWizard.hexToBytes(hexPasswordField.getText()), Main.STANDARD_CHARSET));
+                        base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
                         updateEntropy();
                         hexPasswordField.setForeground(Color.BLACK);
                     }
                 } else {
                     hexPasswordField.setForeground(Color.RED);
-                    asciiPasswordField.setText("");
+                    utf8PasswordField.setText("");
                     base64PasswordField.setText("");
                 }
             }
@@ -270,14 +266,14 @@ public class PasswordGeneratorUI extends JFrame {
             public void keyReleased(KeyEvent e) {
                 String base64Password = base64PasswordField.getText();
 
-                if (EncodingWizard.base64ToBytes(base64Password.getBytes()) != null) {
-                    asciiPasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(base64Password.getBytes()))));
-                    hexPasswordField.setText(EncodingWizard.bytesToHex(asciiPasswordField.getText().getBytes()));
+                if (EncodingWizard.base64ToBytes(base64Password.getBytes(StandardCharsets.US_ASCII)) != null) {
+                    utf8PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(base64Password.getBytes(StandardCharsets.US_ASCII)))));
+                    hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET)));
                     updateEntropy();
                     base64PasswordField.setForeground(Color.BLACK);
                 } else {
                     base64PasswordField.setForeground(Color.RED);
-                    asciiPasswordField.setText("");
+                    utf8PasswordField.setText("");
                     hexPasswordField.setText("");
                 }
             }
@@ -307,7 +303,7 @@ public class PasswordGeneratorUI extends JFrame {
                 charset.append(userChars.charAt(i));
         }
 
-        return charset.toString().getBytes();
+        return charset.toString().getBytes(Main.STANDARD_CHARSET);
     }
 
     private byte[] getCharset(String password) {
@@ -322,7 +318,7 @@ public class PasswordGeneratorUI extends JFrame {
                 }
             }
         }
-        return charset.toString().getBytes();
+        return charset.toString().getBytes(Main.STANDARD_CHARSET);
     }
 
     private int getCharsetLength(String password) {
@@ -331,13 +327,13 @@ public class PasswordGeneratorUI extends JFrame {
 
         character:
         for (int i = 0; i < password.length(); i++) {
-            for (int j = 0; j < CHARSETS.length; j++) {
-                if (CHARSETS[j].contains(String.valueOf(password.charAt(i))))
-                    break character;
+            for (String charset : CHARSETS) {
+                if (charset.contains(String.valueOf(password.charAt(i))))
+                    continue character;
             }
             if (PRINTABLE_ASCII_CHARACTERS.contains(String.valueOf(password.charAt(i)))) {
                 charsetLength = PRINTABLE_ASCII_CHARACTERS.length();
-                break;
+                continue;
             }
             return 128;
         }
@@ -366,10 +362,10 @@ public class PasswordGeneratorUI extends JFrame {
     private void updateEntropy() {
 
         Zxcvbn zxcvbn = new Zxcvbn();
-        int passwordScore = zxcvbn.measure(asciiPasswordField.getText()).getScore();
-        int charsetLength = getCharsetLength(asciiPasswordField.getText());
+        int passwordScore = zxcvbn.measure(utf8PasswordField.getText()).getScore();
+        int charsetLength = getCharsetLength(utf8PasswordField.getText());
 
-        double passwordEntropy = Math.log(Math.pow(charsetLength, asciiPasswordField.getText().length())) / Math.log(2);
+        double passwordEntropy = Math.log(Math.pow(charsetLength, utf8PasswordField.getText().length())) / Math.log(2);
 
         String passwordStrength;
 
@@ -401,10 +397,6 @@ class PasswordGeneratorConfiguration {
         this.passwordLength = passwordLength;
         this.selectedCharsets = selectedCharsets;
         this.additionalCharacters = additionalCharacters;
-    }
-
-    public String getConfigurationName() {
-        return configurationName;
     }
 
     public int getPasswordLength() {

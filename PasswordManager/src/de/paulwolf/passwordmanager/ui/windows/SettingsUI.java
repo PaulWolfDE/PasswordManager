@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -150,7 +151,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
 
                 String password = EncodingWizard.decodeString(pf.getSelectedEncoding(), new String(pf.getPassword()));
 
-                if (password.equals(new String(DatabaseUI.database.getMasterKey()))) {
+                if (password.equals(new String(DatabaseUI.database.getMasterKey(), Main.STANDARD_CHARSET))) {
                     this.setVisible(false);
                     go();
                 } else
@@ -199,10 +200,10 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
             keyField.setText(password);
             keyVerificationField.setText(password);
         } else if (keyField.getSelectedEncoding() == 1) {
-            keyField.setText(EncodingWizard.bytesToHex(password.getBytes()));
+            keyField.setText(EncodingWizard.bytesToHex(password.getBytes(Main.STANDARD_CHARSET)));
             keyVerificationField.setText(new String(keyField.getPassword()));
         } else {
-            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes()))));
+            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
             keyVerificationField.setText(new String(keyField.getPassword()));
         }
 

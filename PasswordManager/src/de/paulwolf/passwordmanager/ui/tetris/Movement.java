@@ -101,7 +101,6 @@ public class Movement {
         }
         timer = new Timer();
         if (lose) {
-            System.out.println("u lose");
             timer.cancel();
             return;
         }
@@ -256,7 +255,6 @@ public class Movement {
             else if (n == 3) score += (long) POINTS_MULTIPLICATION_3_LINES * (level + 1);
             else if (n == 4) score += (long) POINTS_MULTIPLICATION_4_LINES * (level + 1);
         }
-        System.out.println("Score: " + score);
 
         int[] h = new int[n];
         int k = 0;

@@ -75,3 +75,6 @@
 ## Release 1.4.8
 - Added advanced password generated
 - Substituted password fields for fields with variable encoding
+
+## Release 2.0.0
+- Switched to universal `UTF-8` charset

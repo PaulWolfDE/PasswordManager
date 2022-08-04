@@ -45,7 +45,7 @@ public class FileWizard {
         PBKDF2 pbkdf2 = new PBKDF2(prf);
         Map<String, Object> map = new HashMap<>();
         map.put("gnu.crypto.pbe.salt", salt);
-        map.put("gnu.crypto.pbe.password", new String(db.getMasterKey()).toCharArray());
+        map.put("gnu.crypto.pbe.password", new String(db.getMasterKey(), Main.STANDARD_CHARSET).toCharArray());
         map.put("gnu.crypto.pbe.iteration.count", Main.ITERATIONS);
         pbkdf2.init(map);
         pbkdf2.nextBytes(derivedKey, 0, derivedKey.length);
@@ -58,13 +58,10 @@ public class FileWizard {
             if (e.getTitle().equals(Main.BACKUP_TITLE)) {
                 if (!e.getUsername().equals("") && !e.getEmail().equals("")) {
                     try {
-                        BackupWizard.createBackup(e.getUsername(), e.getEmail(), e.getPassword().getBytes(), db);
+                        BackupWizard.createBackup(e.getUsername(), e.getEmail(), e.getPassword().getBytes(Main.STANDARD_CHARSET), db);
                     } catch (SftpException ex) {
-                        System.out.println("SftpException");
                         throw new RuntimeException(ex);
-                    } catch (JSchException ex) {
-                        System.out.println("JSchException - Connection unavailable");
-                        // throw new RuntimeException(ex);
+                    } catch (JSchException ignored) {
                     }
                 }
             }
@@ -118,7 +115,7 @@ public class FileWizard {
             PBKDF2 pbkdf2 = new PBKDF2(prf);
             Map<String, Object> map = new HashMap<>();
             map.put("gnu.crypto.pbe.salt", salt);
-            map.put("gnu.crypto.pbe.password", new String(key).toCharArray());
+            map.put("gnu.crypto.pbe.password", new String(key, Main.STANDARD_CHARSET).toCharArray());
             map.put("gnu.crypto.pbe.iteration.count", Main.ITERATIONS);
             pbkdf2.init(map);
             pbkdf2.nextBytes(derivedKey, 0, derivedKey.length);

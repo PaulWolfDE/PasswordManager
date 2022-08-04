@@ -74,7 +74,7 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
 
                 String password = EncodingWizard.decodeString(field.getSelectedEncoding(), new String(field.getPassword()));
 
-                if (Main.ui.openDatabaseWithPassword(password.getBytes()))
+                if (Main.ui.openDatabaseWithPassword(password.getBytes(Main.STANDARD_CHARSET)))
                     this.setVisible(false);
                 else
                     JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",

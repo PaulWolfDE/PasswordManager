@@ -7,11 +7,6 @@ A few improvements at security to protect passwords to be leaked by core dumps a
   - Use the database salt or generate new one at each runtime
 - Consistently use Java's `SecretKey` class for storing passwords 
 
-## Universal Encoding <img src="https://img.shields.io/badge/Priority-Very High-critical.svg">
-All encoding of strings like passwords should be in `UTF-8` format.
-- Every string-byte conversion must comply with this encoding
-- `ASCII` format for hex and base64 strings
-
 # DONEs
 
 ## Saving recently opened files <img src="https://img.shields.io/badge/Priority-Implemented (1.3.5)-blue.svg">
@@ -40,6 +35,11 @@ The default password generator should allow the user to define a few properties 
 
 Implementation comments:
 - Also added variable encoding to ASCII, hexadecimal and base64 to every password field and the generator
+
+## Universal Encoding <img src="https://img.shields.io/badge/Priority-Implemented (2.0.0)-informational.svg">
+All encoding of strings like passwords should be in `UTF-8` format.
+- Every string-byte conversion must comply with this encoding
+- `ASCII` format for hex and base64 strings
 
 ## Compress database before encryption <img src="https://img.shields.io/badge/Priority-Not necessary-inactive.svg">
 Compress the database before it is encrypted to prevent too large files.

@@ -97,7 +97,6 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
             scanner.close();
         }
 
-        System.out.println(data.toString());
 
         box = new JComboBox<>(data.toArray());
         box.addActionListener(e -> uri.setText(Objects.requireNonNull(box.getSelectedItem()).toString()));
@@ -214,11 +213,9 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
                     rc = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc");
                     rcDir = new File(System.getenv("Appdata") + "/PasswordManager/");
                 }
-                boolean directoryCreation = rcDir.mkdirs();
-                if (!directoryCreation) System.out.println("Directory creation failed or directory already exists.");
+                rcDir.mkdirs();
                 try {
-                    boolean fileCreation = rc.createNewFile();
-                    if (!fileCreation) System.out.println("File could not be created or already exists.");
+                    rc.createNewFile();
                     FileWriter writer = new FileWriter(rc);
                     Object[] arr = pureData.toArray();
                     writer.write(databaseFile.getCanonicalPath() + "\n");

@@ -176,13 +176,12 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
                         }
 
                         try {
-                            boolean fileCreation = db.getPath().createNewFile();
-                            if (!fileCreation) System.out.println("File could not be created.");
+                            db.getPath().createNewFile();
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
 
-                        db.setMasterKey(EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes());
+                        db.setMasterKey(EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes(Main.STANDARD_CHARSET));
                         db.setHashAlgorithm(Objects.requireNonNull(hashBox.getSelectedItem()).toString());
                         db.setEncryptionAlgorithm(Objects.requireNonNull(eaBox.getSelectedItem()).toString());
                         db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123", "Note"));
@@ -232,10 +231,10 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
             keyField.setText(password);
             keyVerificationField.setText(password);
         } else if (keyField.getSelectedEncoding() == 1) {
-            keyField.setText(EncodingWizard.bytesToHex(password.getBytes()));
+            keyField.setText(EncodingWizard.bytesToHex(password.getBytes(Main.STANDARD_CHARSET)));
             keyVerificationField.setText(new String(keyField.getPassword()));
         } else {
-            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes()))));
+            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Main.STANDARD_CHARSET))), Main.STANDARD_CHARSET));
             keyVerificationField.setText(new String(keyField.getPassword()));
         }
 

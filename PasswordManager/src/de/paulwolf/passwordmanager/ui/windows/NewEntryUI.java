@@ -172,10 +172,10 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
             this.password.setText(password);
             this.confirmPassword.setText(password);
         } else if (this.password.getSelectedEncoding() == 1) {
-            this.password.setText(EncodingWizard.bytesToHex(password.getBytes()));
+            this.password.setText(EncodingWizard.bytesToHex(password.getBytes(Main.STANDARD_CHARSET)));
             this.confirmPassword.setText(new String(this.password.getPassword()));
         } else {
-            this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes()))));
+            this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Main.STANDARD_CHARSET)))));
             this.confirmPassword.setText(new String(this.password.getPassword()));
         }
 

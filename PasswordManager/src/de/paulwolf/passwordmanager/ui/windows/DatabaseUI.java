@@ -304,7 +304,13 @@ public class DatabaseUI extends JFrame {
 
         ArrayList<Entry> en = database.getEntries();
         en.set(table.convertRowIndexToModel(index), e);
+        String[] entry = en.get(table.convertRowIndexToModel(index)).getInformationAsArray();
         for (int i = 0; i < 5; i++)
-            dtm.setValueAt(i != 3 ? en.get(table.convertRowIndexToModel(index)).getInformationAsArray()[i] : new String(new char[en.get(table.convertRowIndexToModel(index)).getInformationAsArray()[i].length()]).replace('\0', Main.ECHO_CHAR), table.convertRowIndexToModel(index), i);
+            dtm.setValueAt(
+                    i != 3 ?
+                            entry[i] :
+                            new String(new char[entry[i].length()]).replace('\0', Main.ECHO_CHAR),
+                    table.convertRowIndexToModel(index), i
+            );
     }
 }

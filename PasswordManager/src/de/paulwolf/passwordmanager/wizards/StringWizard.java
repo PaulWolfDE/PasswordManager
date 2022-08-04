@@ -46,17 +46,7 @@ public class StringWizard {
 
         databaseString.append("PasswordManager<" + Main.VERSION_NUMBER + '>');
         databaseString.append(separator);
-
-        if (!databaseBody.toString().matches("\\A\\p{ASCII}*\\z")) {
-            StringBuilder asciiBody = new StringBuilder();
-            for (int i = 0; i < databaseBody.length(); i++)
-                if (String.valueOf(databaseBody.charAt(i)).matches("\\A\\p{ASCII}*\\z"))
-                    asciiBody.append(databaseBody.charAt(i));
-            databaseString.append(bytesToHex(digest.digest(asciiBody.toString().getBytes())));
-        } else {
-            databaseString.append(bytesToHex(digest.digest(databaseBody.toString().getBytes())));
-        }
-
+        databaseString.append(bytesToHex(digest.digest(databaseBody.toString().getBytes(Main.STANDARD_CHARSET))));
         databaseString.append(separator);
         databaseString.append(database.getEncryptionAlgorithm());
         databaseString.append(separator);
@@ -67,6 +57,7 @@ public class StringWizard {
         databaseString.append(bytesToHex(salt));
         databaseString.append(headBodySeparator);
         databaseString.append(databaseBody);
+
         return databaseString.toString();
     }
 
@@ -84,7 +75,6 @@ public class StringWizard {
 
         database.setHashAlgorithm(headStrings[3]);
         database.setEncryptionAlgorithm(headStrings[2]);
-        database.setMasterKey(headStrings[0].getBytes());
 
         if (entryStrings[0].length == 5) {
             for (String[] entryString : entryStrings)

@@ -1,15 +1,12 @@
 package de.paulwolf.passwordmanager.ui.passwordfields;
 
-import de.paulwolf.passwordmanager.wizards.EncodingWizard;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Objects;
 
 public class PasswordEncodingField extends JComponent {
 
-    private static final String[] ENCODINGS = {"ASCII", "HEX", "BASE64"};
+    private static final String[] ENCODINGS = {"UTF-8", "HEX", "BASE64"};
     private int selectedEncoding;
 
     private final PasswordStrengthField passwordField = new PasswordStrengthField(20) {

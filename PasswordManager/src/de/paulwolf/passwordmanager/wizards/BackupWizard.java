@@ -28,7 +28,7 @@ import java.util.Properties;
 
 public class BackupWizard {
 
-    public static boolean createBackup(String username, String hostname, byte[] password, Database database) throws SftpException, JSchException {
+    public static void createBackup(String username, String hostname, byte[] password, Database database) throws SftpException, JSchException {
 
         Session session = null;
         ChannelSftp sftp = null;
@@ -47,7 +47,6 @@ public class BackupWizard {
             try {
                 sftp.mkdir("database_backup");
             } catch (SftpException ignored) {
-                System.out.println("Remote directory already exists.");
             }
             sftp.cd("database_backup");
             String localDatabasePath = database.getPath().getAbsolutePath();
@@ -60,6 +59,5 @@ public class BackupWizard {
             if (sftp != null)
                 sftp.disconnect();
         }
-        return true;
     }
 }
