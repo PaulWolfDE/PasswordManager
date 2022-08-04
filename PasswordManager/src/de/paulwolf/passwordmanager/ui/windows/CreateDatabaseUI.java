@@ -90,13 +90,13 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
         showKeyVerification.addActionListener(this);
         pathField.addKeyListener(this);
 
-        keyField.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        keyField.getPasswordField().setFont(Main.STANDARD_FONT);
         keyField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         keyField.setPreferredSize(new Dimension(400, 26));
-        keyVerificationField.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        keyVerificationField.getPasswordField().setFont(Main.STANDARD_FONT);
         keyVerificationField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         keyVerificationField.setPreferredSize(new Dimension(400, 26));
-        pathField.setFont(new Font("Consolas", Font.PLAIN, 14));
+        pathField.setFont(Main.STANDARD_FONT);
         pathField.setPreferredSize(new Dimension(400, 26));
 
         this.add(wrapper);

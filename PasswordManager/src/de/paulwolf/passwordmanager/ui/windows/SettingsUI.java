@@ -54,7 +54,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
 
         b.addActionListener(this);
         b2.addActionListener(this);
-        pf.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        pf.getPasswordField().setFont(Main.STANDARD_FONT);
         pf.getPasswordField().setDisplayPasswordStrength(false);
         pf.setPreferredSize(new Dimension(400, 26));
 
@@ -109,10 +109,10 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         showKeyVerification.addActionListener(this);
         button.addActionListener(this);
         generatePassword.addActionListener(this);
-        keyField.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        keyField.getPasswordField().setFont(Main.STANDARD_FONT);
         keyField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         keyField.setPreferredSize(new Dimension(400, 26));
-        keyVerificationField.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        keyVerificationField.getPasswordField().setFont(Main.STANDARD_FONT);
         keyVerificationField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         keyVerificationField.setPreferredSize(new Dimension(400, 26));
 

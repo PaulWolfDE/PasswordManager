@@ -109,9 +109,9 @@ public class PasswordGeneratorUI extends JFrame {
         acceptPassword.setPreferredSize(new Dimension(200, 26));
         closeGenerator.setPreferredSize(new Dimension(200, 26));
 
-        utf8PasswordField.setFont(new Font("Consolas", Font.PLAIN, 14));
-        hexPasswordField.setFont(new Font("Consolas", Font.PLAIN, 14));
-        base64PasswordField.setFont(new Font("Consolas", Font.PLAIN, 14));
+        utf8PasswordField.setFont(Main.STANDARD_FONT);
+        hexPasswordField.setFont(Main.STANDARD_FONT);
+        base64PasswordField.setFont(Main.STANDARD_FONT);
 
         lengthLabel.setFont(lengthLabel.getFont().deriveFont(14.0f));
         lengthField.setFont(lengthField.getFont().deriveFont(14.0f));

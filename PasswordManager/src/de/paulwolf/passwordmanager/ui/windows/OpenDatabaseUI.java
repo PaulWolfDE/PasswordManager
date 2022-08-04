@@ -51,7 +51,7 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
         show.addActionListener(this);
         field.getPasswordField().addKeyListener(this);
 
-        field.getPasswordField().setFont(new Font("Consolas", Font.PLAIN, 14));
+        field.getPasswordField().setFont(Main.STANDARD_FONT);
         field.getPasswordField().setDisplayPasswordStrength(false);
         field.setPreferredSize(new Dimension(400, 26));
 

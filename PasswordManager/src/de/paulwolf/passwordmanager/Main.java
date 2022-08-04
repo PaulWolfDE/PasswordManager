@@ -16,6 +16,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -52,6 +53,9 @@ public class Main {
     public static final String BACKUP_TITLE = "sftp-automated-backup";
     // JFRAME ICON
     public static Image IMAGE;
+    // STANDARD FONT
+    public static Font STANDARD_FONT;
+
     public static MainUI ui;
     public static Painting fieldLabel;
     public static boolean windows = false;
@@ -65,10 +69,21 @@ public class Main {
 
     public static void main(String[] args) {
 
-        loadIconImage();
+        try {
+            IMAGE = ImageIO.read(Objects.requireNonNull(Main.class.getResource("/icon.jpg")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        InputStream is = Main.class.getResourceAsStream("/JetBrainsMono-Regular.ttf");
+        try {
+            STANDARD_FONT = (Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(is))).deriveFont(14f);
+        } catch (FontFormatException | IOException e) {
+            throw new RuntimeException(e);
+        }
 
         ui = new MainUI();
-       if (!JSONParser.isUpToDate())
+        if (!JSONParser.isUpToDate())
             new UpdateUI();
 
         if (args.length > 0) {
@@ -99,14 +114,6 @@ public class Main {
         Movement.startMovement();
     }
 
-    private static void loadIconImage() {
-
-        try {
-            IMAGE = ImageIO.read(Objects.requireNonNull(Main.class.getResource("/icon.jpg")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static void loadGui() {
 
