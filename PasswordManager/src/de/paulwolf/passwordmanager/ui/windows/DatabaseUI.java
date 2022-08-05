@@ -37,6 +37,7 @@ public class DatabaseUI extends JFrame {
     static JPanel tableWrapper;
     static JPanel searchPanel;
     static JButton addEntry;
+    static JButton generatePassword;
     static JButton saveDatabase;
     static JButton saveDatabaseAs;
     static JButton settings;
@@ -63,12 +64,14 @@ public class DatabaseUI extends JFrame {
         wrapper = new JPanel();
         buttonPanel = new JPanel();
         addEntry = new JButton("Add Entry");
+        generatePassword = new JButton("Generate Password");
         saveDatabase = new JButton("Save Database");
         saveDatabaseAs = new JButton("Save Database As");
         settings = new JButton("Settings");
         openDatabase = new JButton("Open Database");
 
         buttonPanel.add(addEntry);
+        buttonPanel.add(generatePassword);
         buttonPanel.add(saveDatabase);
         buttonPanel.add(saveDatabaseAs);
         buttonPanel.add(settings);
@@ -82,13 +85,15 @@ public class DatabaseUI extends JFrame {
         wrapper.add(buttonPanel, BorderLayout.PAGE_END);
 
         this.add(wrapper);
-        this.setMinimumSize(new Dimension(800, 300));
+        this.setMinimumSize(new Dimension(1000, 400));
         this.setIconImage(Main.IMAGE);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
 
         addEntry.addActionListener(e -> new NewEntryUI(null, -1));
+
+        generatePassword.addActionListener(e -> new PasswordGeneratorUI(null, "", -1));
 
         saveDatabase.addActionListener(e -> {
 

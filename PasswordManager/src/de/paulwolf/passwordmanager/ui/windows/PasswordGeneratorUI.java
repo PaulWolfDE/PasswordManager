@@ -167,9 +167,14 @@ public class PasswordGeneratorUI extends JFrame {
         wrapper.add(entropyLabel, UIUtils.createGBC(0, 10, GridBagConstraints.HORIZONTAL, 1, 1));
         wrapper.add(entropyDisplay, UIUtils.createGBC(1, 10, GridBagConstraints.HORIZONTAL, 5, 1));
 
-        wrapper.add(generatePassword, UIUtils.createGBC(0, 11, GridBagConstraints.HORIZONTAL, 2, 1, 1.0));
-        wrapper.add(acceptPassword, UIUtils.createGBC(2, 11, GridBagConstraints.HORIZONTAL, 2, 1, 1.0));
-        wrapper.add(closeGenerator, UIUtils.createGBC(4, 11, GridBagConstraints.HORIZONTAL, 2, 1, 1.0));
+        if (this.ui == null) {
+            wrapper.add(generatePassword, UIUtils.createGBC(0, 11, GridBagConstraints.HORIZONTAL, 3, 1, 1.0));
+            wrapper.add(closeGenerator, UIUtils.createGBC(3, 11, GridBagConstraints.HORIZONTAL, 3, 1, 1.0));
+        } else {
+            wrapper.add(generatePassword, UIUtils.createGBC(0, 11, GridBagConstraints.HORIZONTAL, 2, 1, 1.0));
+            wrapper.add(acceptPassword, UIUtils.createGBC(2, 11, GridBagConstraints.HORIZONTAL, 2, 1, 1.0));
+            wrapper.add(closeGenerator, UIUtils.createGBC(4, 11, GridBagConstraints.HORIZONTAL, 2, 1, 1.0));
+        }
 
         this.add(wrapper);
         this.setIconImage(Main.IMAGE);

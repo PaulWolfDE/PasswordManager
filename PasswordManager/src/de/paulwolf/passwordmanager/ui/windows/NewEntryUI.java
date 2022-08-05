@@ -8,6 +8,7 @@ import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
@@ -161,8 +162,44 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
             }
         });
 
-        this.password.getEncodingButton().addActionListener(e14 -> this.confirmPassword.setEncoding((this.confirmPassword.getSelectedEncoding() + 1) % 3));
-        this.confirmPassword.getEncodingButton().addActionListener(e15 -> this.password.setEncoding((this.password.getSelectedEncoding() + 1) % 3));
+        this.password.getEncodingButton().addActionListener(e14 -> {
+            if (this.confirmPassword.getSelectedEncoding() == 0) {
+                if (EncodingWizard.isEncodingValid(0, new String(this.password.getPassword())))
+                    this.password.setText(EncodingWizard.bytesToHex(new String(this.password.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+                if (EncodingWizard.isEncodingValid(0, new String(this.confirmPassword.getPassword())))
+                    this.confirmPassword.setText(EncodingWizard.bytesToHex(new String(this.confirmPassword.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+            } else if (this.confirmPassword.getSelectedEncoding() == 1) {
+                if (EncodingWizard.isEncodingValid(1, new String(this.password.getPassword())))
+                    this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(EncodingWizard.hexToBytes(new String(this.password.getPassword()))))));
+                if (EncodingWizard.isEncodingValid(1, new String(this.confirmPassword.getPassword())))
+                    this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(EncodingWizard.hexToBytes(new String(this.confirmPassword.getPassword()))))));
+            } else {
+                if (EncodingWizard.isEncodingValid(2, new String(this.password.getPassword())))
+                    this.password.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.password.getPassword()).getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+                if (EncodingWizard.isEncodingValid(2, new String(this.confirmPassword.getPassword())))
+                    this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.confirmPassword.getPassword()).getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+            }
+            this.confirmPassword.setEncoding((this.confirmPassword.getSelectedEncoding() + 1) % 3);
+        });
+        this.confirmPassword.getEncodingButton().addActionListener(e15 -> {
+            if (this.password.getSelectedEncoding() == 0) {
+                if (EncodingWizard.isEncodingValid(0, new String(this.password.getPassword())))
+                    this.password.setText(EncodingWizard.bytesToHex(new String(this.password.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+                if (EncodingWizard.isEncodingValid(0, new String(this.confirmPassword.getPassword())))
+                    this.confirmPassword.setText(EncodingWizard.bytesToHex(new String(this.confirmPassword.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+            } else if (this.password.getSelectedEncoding() == 1) {
+                if (EncodingWizard.isEncodingValid(1, new String(this.password.getPassword())))
+                    this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(EncodingWizard.hexToBytes(new String(this.password.getPassword()))))));
+                if (EncodingWizard.isEncodingValid(1, new String(this.confirmPassword.getPassword())))
+                    this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(EncodingWizard.hexToBytes(new String(this.confirmPassword.getPassword()))))));
+            } else {
+                if (EncodingWizard.isEncodingValid(2, new String(this.password.getPassword())))
+                    this.password.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.password.getPassword()).getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+                if (EncodingWizard.isEncodingValid(2, new String(this.confirmPassword.getPassword())))
+                    this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.confirmPassword.getPassword()).getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+            }
+            this.password.setEncoding((this.password.getSelectedEncoding() + 1) % 3);
+        });
     }
 
     @Override
