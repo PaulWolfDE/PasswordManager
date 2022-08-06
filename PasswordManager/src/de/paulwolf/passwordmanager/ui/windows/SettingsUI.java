@@ -38,7 +38,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
     final JToggleButton b;
     final JButton b2;
 
-    public SettingsUI() {
+    public SettingsUI(Component parent) {
 
         this.setTitle("Settings");
 
@@ -80,12 +80,12 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         f.pack();
         f.setMinimumSize(f.getSize());
         f.setIconImage(Main.IMAGE);
-        f.setLocationRelativeTo(null);
+        f.setLocationRelativeTo(parent);
         f.setVisible(true);
     }
 
 
-    private void go() {
+    private void go(Component parent) {
 
         wrapper.setLayout(new GridBagLayout());
 
@@ -130,7 +130,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         this.pack();
         this.setMinimumSize(this.getSize());
         this.setIconImage(Main.IMAGE);
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         this.setVisible(true);
 
         this.keyField.getEncodingButton().addActionListener(e14 -> this.keyVerificationField.setEncoding((this.keyVerificationField.getSelectedEncoding() + 1) % 3));
@@ -154,7 +154,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
 
                 if (password.equals(new String(DatabaseUI.database.getMasterKey(), Main.STANDARD_CHARSET))) {
                     this.setVisible(false);
-                    go();
+                    go(this);
                 } else
                     JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",
                             JOptionPane.ERROR_MESSAGE);

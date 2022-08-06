@@ -122,7 +122,7 @@ public class FileWizard {
         Database database = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString.toString(), derivedKey, iv));
         database.setPath(file);
         database.setMasterKey(new SecretKeySpec(key, splitbase[2].contains("Blowfish") ? "Blowfish" :"AES"));
-        new DatabaseUI(database);
+        new DatabaseUI(database, null);
         return true;
     }
 

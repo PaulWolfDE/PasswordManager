@@ -84,12 +84,12 @@ public class Main {
 
         ui = new MainUI();
         if (!JSONParser.isUpToDate())
-            new UpdateUI();
+            new UpdateUI(ui);
 
         if (args.length > 0) {
 
             ui.databaseFile = new File(args[0]);
-            new OpenDatabaseUI(new File(args[0]).getAbsolutePath());
+            new OpenDatabaseUI(new File(args[0]).getAbsolutePath(), null);
         }
 
     }

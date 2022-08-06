@@ -19,7 +19,11 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
     final JButton submit = new JButton("Submit Password");
     final JButton changeFile = new JButton("Change file");
 
-    public OpenDatabaseUI(String path) {
+    boolean hasParent;
+
+    public OpenDatabaseUI(String path, Component parent) {
+
+        hasParent = parent != null;
 
         this.setTitle("PasswordManager - " + path);
 
@@ -59,8 +63,7 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
         this.pack();
         this.setMinimumSize(this.getSize());
         this.setIconImage(Main.IMAGE);
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(parent);
         this.setVisible(true);
 
     }
@@ -74,7 +77,7 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
 
                 String password = EncodingWizard.decodeString(field.getSelectedEncoding(), new String(field.getPassword()));
 
-                if (Main.ui.openDatabaseWithPassword(password.getBytes(Main.STANDARD_CHARSET)))
+                if (Main.ui.decryptDatabase(password.getBytes(Main.STANDARD_CHARSET)))
                     this.setVisible(false);
                 else
                     JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",
@@ -85,7 +88,8 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
 
         } else if (e.getSource() == changeFile) {
             this.setVisible(false);
-            Main.ui = new MainUI();
+            if (!hasParent)
+               Main.ui = new MainUI();
         } else {
             if (show.isSelected())
                 field.setEchoChar((char) 0);

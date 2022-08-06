@@ -191,7 +191,7 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
                         db.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".".getBytes(Main.STANDARD_CHARSET), ""));
 
                         this.setVisible(false);
-                        new DatabaseUI(db);
+                        new DatabaseUI(db, this);
 
                         try {
                             FileWizard.saveDatabase(db, db.getPath());

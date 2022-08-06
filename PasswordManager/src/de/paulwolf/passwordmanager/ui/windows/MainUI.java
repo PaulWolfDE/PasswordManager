@@ -136,6 +136,7 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
         gbc.gridy = 3;
         wrapper.add(newDatabase, gbc);
 
+        uri.setFont(Main.STANDARD_FONT);
         uri.addKeyListener(this);
         uri.setPreferredSize(new Dimension(400, 26));
 
@@ -150,10 +151,10 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
 
     }
 
-    public boolean openDatabaseWithPassword(byte[] password) {
+    public boolean decryptDatabase(byte[] key) {
 
         try {
-            if (FileWizard.openDatabase(databaseFile, password)) {
+            if (FileWizard.openDatabase(databaseFile, key)) {
                 this.setVisible(false);
                 return true;
             }
@@ -199,7 +200,7 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
             if (Files.exists(path)) {
 
                 try {
-                    new OpenDatabaseUI(path.toFile().getCanonicalPath());
+                    new OpenDatabaseUI(path.toFile().getCanonicalPath(), this);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

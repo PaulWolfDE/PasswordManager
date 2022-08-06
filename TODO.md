@@ -1,11 +1,6 @@
 # TO-DOs
 
-## Security improvements <img src="https://img.shields.io/badge/Priority-High-important.svg">
-A few improvements at security to protect passwords to be leaked by core dumps and attacks on memory.
-- Don't store the master password in memory after the database was opened
-  - Store PBKDF2 hash of it instead
-  - Use the database salt or generate new one at each runtime
-- Consistently use Java's `SecretKey` class for storing passwords 
+None.
 
 # DONEs
 
@@ -40,6 +35,17 @@ Implementation comments:
 All encoding of strings like passwords should be in `UTF-8` format.
 - Every string-byte conversion must comply with this encoding
 - `ASCII` format for hex and base64 strings
+
+## Security improvements <img src="https://img.shields.io/badge/Priority-Implemented (2.0.0)-informational.svg">
+A few improvements at security to protect passwords to be leaked by core dumps and attacks on memory.
+- Don't store the master password in memory after the database was opened
+  - Store PBKDF2 hash of it instead
+  - Use the database salt or generate new one at each runtime
+- Consistently use Java's `SecretKey` class for storing passwords
+
+Implementation comments:
+- SecretKey specification for entries with AES encoding
+- Switched to byte arrays instead of string as often as possible
 
 ## Compress database before encryption <img src="https://img.shields.io/badge/Priority-Not necessary-inactive.svg">
 Compress the database before it is encrypted to prevent too large files.

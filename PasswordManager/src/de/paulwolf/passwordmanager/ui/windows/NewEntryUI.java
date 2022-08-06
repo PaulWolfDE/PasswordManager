@@ -111,8 +111,11 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
         confirmPassword.getPasswordField().setFont(Main.STANDARD_FONT);
         confirmPassword.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
         confirmPassword.setPreferredSize(new Dimension(300, 26));
+        title.setFont(Main.STANDARD_FONT);
         title.setPreferredSize(new Dimension(300, 26));
+        username.setFont(Main.STANDARD_FONT);
         username.setPreferredSize(new Dimension(300, 26));
+        email.setFont(Main.STANDARD_FONT);
         email.setPreferredSize(new Dimension(300, 26));
 
         this.add(wrapper);

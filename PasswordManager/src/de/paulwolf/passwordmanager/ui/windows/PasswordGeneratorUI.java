@@ -112,9 +112,10 @@ public class PasswordGeneratorUI extends JFrame {
         utf8PasswordField.setFont(Main.STANDARD_FONT);
         hexPasswordField.setFont(Main.STANDARD_FONT);
         base64PasswordField.setFont(Main.STANDARD_FONT);
+        lengthField.setFont(Main.STANDARD_FONT);
+        additionalCharactersField.setFont(Main.STANDARD_FONT);
 
         lengthLabel.setFont(lengthLabel.getFont().deriveFont(14.0f));
-        lengthField.setFont(lengthField.getFont().deriveFont(14.0f));
         charsetsLabel.setFont(charsetsLabel.getFont().deriveFont(14.0f));
         lowercaseBox.setFont(lowercaseBox.getFont().deriveFont(14.0f));
         uppercaseBox.setFont(uppercaseBox.getFont().deriveFont(14.0f));
@@ -123,15 +124,11 @@ public class PasswordGeneratorUI extends JFrame {
         commonSpecialsBox.setFont(commonSpecialsBox.getFont().deriveFont(14.0f));
         advancedSpecialsBox.setFont(advancedSpecialsBox.getFont().deriveFont(14.0f));
         additionalCharactersLabel.setFont(additionalCharactersLabel.getFont().deriveFont(14.0f));
-        additionalCharactersField.setFont(additionalCharactersField.getFont().deriveFont(14.0f));
         configurationLabel.setFont(configurationLabel.getFont().deriveFont(14.0f));
         configurationBox.setFont(configurationBox.getFont().deriveFont(14.0f));
         utf8PasswordLabel.setFont(utf8PasswordLabel.getFont().deriveFont(14.0f));
-        utf8PasswordField.setFont(utf8PasswordField.getFont().deriveFont(14.0f));
         hexPasswordLabel.setFont(hexPasswordLabel.getFont().deriveFont(14.0f));
-        hexPasswordField.setFont(hexPasswordField.getFont().deriveFont(14.0f));
         base64PasswordLabel.setFont(base64PasswordLabel.getFont().deriveFont(14.0f));
-        base64PasswordField.setFont(base64PasswordField.getFont().deriveFont(14.0f));
         entropyLabel.setFont(entropyDisplay.getFont().deriveFont(14.0f));
         entropyDisplay.setFont(entropyDisplay.getFont().deriveFont(14.0f));
         generatePassword.setFont(generatePassword.getFont().deriveFont(14.0f));

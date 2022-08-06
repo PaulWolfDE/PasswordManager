@@ -49,7 +49,7 @@ public class DatabaseUI extends JFrame {
     private static JTextField filter;
     private static int t = 0;
 
-    public DatabaseUI(Database db) {
+    public DatabaseUI(Database db, Component parent) {
 
         database = db;
 
@@ -87,7 +87,7 @@ public class DatabaseUI extends JFrame {
         this.add(wrapper);
         this.setMinimumSize(new Dimension(1000, 400));
         this.setIconImage(Main.IMAGE);
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
 
@@ -144,7 +144,7 @@ public class DatabaseUI extends JFrame {
 
         });
 
-        settings.addActionListener(e -> new SettingsUI());
+        settings.addActionListener(e -> new SettingsUI(this));
 
         openDatabase.addActionListener(e -> {
 

@@ -78,3 +78,4 @@
 
 ## Release 2.0.0
 - Switched to universal `UTF-8` charset
+- Implemented various improvements in the security of storing passwords in memory

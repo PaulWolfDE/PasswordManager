@@ -18,7 +18,7 @@ public class UpdateUI extends JFrame implements ActionListener {
     JButton accept = new JButton("Accept");
     JButton deny = new JButton("Deny");
 
-    public UpdateUI() {
+    public UpdateUI(Component parent) {
 
         accept.addActionListener(this);
         deny.addActionListener(this);
@@ -37,7 +37,7 @@ public class UpdateUI extends JFrame implements ActionListener {
         this.setAlwaysOnTop(true);
         this.pack();
         this.setMinimumSize(this.getSize());
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
