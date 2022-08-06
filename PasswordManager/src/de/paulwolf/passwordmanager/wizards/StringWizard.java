@@ -88,7 +88,7 @@ public class StringWizard {
                 database.addEntry(new Entry(entryString[0].equals("-") ? "" : entryString[0],
                         entryString[1].equals("-") ? "" : entryString[1],
                         entryString[2].equals("-") ? "" : entryString[2],
-                        entryString[3].equals("-") ? "".getBytes(Main.STANDARD_CHARSET) : entryString[3].getBytes(Main.STANDARD_CHARSET),
+                        entryString[3].equals("-") ? ".".getBytes(Main.STANDARD_CHARSET) : entryString[3].getBytes(Main.STANDARD_CHARSET),
                         Main.DATE_FORMAT.parse(entryString[4]),
                         entryString[5].equals("-") ? "" : entryString[5]));
         }
