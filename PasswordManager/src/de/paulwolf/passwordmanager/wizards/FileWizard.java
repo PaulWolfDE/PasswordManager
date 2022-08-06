@@ -16,6 +16,7 @@ import gnu.crypto.prng.PBKDF2;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,10 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.*;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 import static de.paulwolf.passwordmanager.wizards.EncodingWizard.hexToBytes;
 
@@ -58,7 +56,7 @@ public class FileWizard {
             if (e.getTitle().equals(Main.BACKUP_TITLE)) {
                 if (!e.getUsername().equals("") && !e.getEmail().equals("")) {
                     try {
-                        BackupWizard.createBackup(e.getUsername(), e.getEmail(), e.getPassword().getBytes(Main.STANDARD_CHARSET), db);
+                        BackupWizard.createBackup(e.getUsername(), e.getEmail(), e.getPassword(), db);
                     } catch (SftpException ex) {
                         throw new RuntimeException(ex);
                     } catch (JSchException ignored) {
@@ -121,10 +119,10 @@ public class FileWizard {
             pbkdf2.nextBytes(derivedKey, 0, derivedKey.length);
         }
 
-        Database dtb = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString.toString(), derivedKey, iv));
-        dtb.setPath(file);
-        dtb.setMasterKey(key);
-        new DatabaseUI(dtb);
+        Database database = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString.toString(), derivedKey, iv));
+        database.setPath(file);
+        database.setMasterKey(new SecretKeySpec(key, splitbase[2].contains("Blowfish") ? "Blowfish" :"AES"));
+        new DatabaseUI(database);
         return true;
     }
 

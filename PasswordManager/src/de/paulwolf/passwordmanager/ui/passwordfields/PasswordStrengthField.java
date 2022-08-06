@@ -9,7 +9,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.KeyListener;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Objects;
 
 abstract public class PasswordStrengthField extends JPasswordField implements KeyListener {
@@ -32,16 +32,18 @@ abstract public class PasswordStrengthField extends JPasswordField implements Ke
             return;
         }
 
-        String password;
+        byte[] password;
         if (encoding == 0)
-            password = new String(this.getPassword());
+            password = new String(this.getPassword()).getBytes(Main.STANDARD_CHARSET);
         else if (encoding == 1)
-            password = new String(EncodingWizard.hexToBytes(new String(this.getPassword())), StandardCharsets.US_ASCII);
+            password = EncodingWizard.hexToBytes(new String(this.getPassword()));
         else
-            password = new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.getPassword()).getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII);
+            password = Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.getPassword()).getBytes(Main.STANDARD_CHARSET)));
 
         Zxcvbn zxcvbn = new Zxcvbn();
-        Strength strength = zxcvbn.measure(password);
+        Strength strength = zxcvbn.measure(new String(password));
+
+        Arrays.fill(password, (byte) 0);
 
         this.setBorder(new LineBorder(Color.getHSBColor(1.0f / 3.0f / 4.0f * strength.getScore(), 1f, 0.7f), 2));
     }

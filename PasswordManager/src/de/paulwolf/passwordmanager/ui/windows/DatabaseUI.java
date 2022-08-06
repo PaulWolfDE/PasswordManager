@@ -161,12 +161,8 @@ public class DatabaseUI extends JFrame {
         Object[] entries = database.getEntries().toArray();
         String[][] asteriskContents = new String[entries.length][5];
 
-        for (int i = 0; i < entries.length; i++) {
-
-            asteriskContents[i] = ((Entry) entries[i]).getInformationAsArray();
-            int t = asteriskContents[i][3].length();
-            asteriskContents[i][3] = new String(new char[t]).replace('\0', Main.ECHO_CHAR);
-        }
+        for (int i = 0; i < entries.length; i++)
+            asteriskContents[i] = ((Entry) entries[i]).getAsteriskArray();
 
         table = new JTable(asteriskContents, columnNames);
         table.setAutoCreateRowSorter(true);
@@ -219,7 +215,7 @@ public class DatabaseUI extends JFrame {
         });
         menuCopyPassword.addActionListener(e -> {
 
-            StringSelection stringSelection = new StringSelection(database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getPassword());
+            StringSelection stringSelection = new StringSelection(new String(database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getPassword(), Main.STANDARD_CHARSET));
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
         });
@@ -296,9 +292,7 @@ public class DatabaseUI extends JFrame {
     public static void addEntry(Entry e) {
 
         database.addEntry(e);
-        String[] asteriskContents = database.getEntries().get(database.getEntries().size() - 1).getInformationAsArray();
-        int t = asteriskContents[3].length();
-        asteriskContents[3] = new String(new char[t]).replace('\0', Main.ECHO_CHAR);
+        String[] asteriskContents = database.getEntries().get(database.getEntries().size() - 1).getAsteriskArray();
 
         dtm.addRow(asteriskContents);
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
@@ -307,15 +301,10 @@ public class DatabaseUI extends JFrame {
 
     public static void editEntry(Entry e, int index) {
 
-        ArrayList<Entry> en = database.getEntries();
-        en.set(table.convertRowIndexToModel(index), e);
-        String[] entry = en.get(table.convertRowIndexToModel(index)).getInformationAsArray();
+        ArrayList<Entry> entries = database.getEntries();
+        entries.set(table.convertRowIndexToModel(index), e);
+        String[] entry = entries.get(table.convertRowIndexToModel(index)).getAsteriskArray();
         for (int i = 0; i < 5; i++)
-            dtm.setValueAt(
-                    i != 3 ?
-                            entry[i] :
-                            new String(new char[entry[i].length()]).replace('\0', Main.ECHO_CHAR),
-                    table.convertRowIndexToModel(index), i
-            );
+            dtm.setValueAt(entry[i], table.convertRowIndexToModel(index), i);
     }
 }

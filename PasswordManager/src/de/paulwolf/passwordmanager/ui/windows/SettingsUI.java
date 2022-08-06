@@ -5,6 +5,7 @@ import de.paulwolf.passwordmanager.ui.UIUtils;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -176,7 +177,10 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
 
                 if (keyField.getPassword().length != 0) {
 
-                    DatabaseUI.database.setMasterKey(EncodingWizard.charsToBytes(keyField.getPassword()));
+                    DatabaseUI.database.setMasterKey(new SecretKeySpec(
+                            EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes(Main.STANDARD_CHARSET),
+                            Objects.requireNonNull(((String) eaBox.getSelectedItem())).contains("Blowfish") ? "Blowfish" :"AES"
+                    ));
                     DatabaseUI.database.setHashAlgorithm((String) hashBox.getSelectedItem());
                     DatabaseUI.database.setEncryptionAlgorithm((String) eaBox.getSelectedItem());
 

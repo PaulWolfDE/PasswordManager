@@ -96,8 +96,8 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
             title.setText(e.getTitle());
             username.setText(e.getUsername());
             email.setText(e.getEmail());
-            password.setText(e.getPassword());
-            confirmPassword.setText(e.getPassword());
+            password.setText(new String(e.getPassword(), Main.STANDARD_CHARSET));
+            confirmPassword.setText(new String(e.getPassword(), Main.STANDARD_CHARSET));
             textArea.setText(e.getNotes().replaceAll("\\\\n", "\n"));
             this.setTitle("PasswordManager - Edit Entry");
         } else this.setTitle("PasswordManager - Create Entry");
@@ -141,9 +141,9 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
                 String notes = textArea.getText().replaceAll("\n", "\\\\n");
 
                 if (index == -1)
-                    DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())), notes));
+                    DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())).getBytes(Main.STANDARD_CHARSET), notes));
                 else
-                    DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())), notes), index);
+                    DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())).getBytes(Main.STANDARD_CHARSET), notes), index);
 
                 this.setVisible(false);
             }

@@ -12,6 +12,7 @@ import gnu.crypto.prng.LimitReachedException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -113,7 +114,6 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
 
         this.keyField.getEncodingButton().addActionListener(e -> this.keyVerificationField.setEncoding((this.keyVerificationField.getSelectedEncoding() + 1) % 3));
         this.keyVerificationField.getEncodingButton().addActionListener(e -> this.keyField.setEncoding((this.keyField.getSelectedEncoding() + 1) % 3));
-
     }
 
     @Override
@@ -153,9 +153,9 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
 
             if (EncodingWizard.isEncodingValid(keyField.getSelectedEncoding(), new String(keyField.getPassword()))) {
 
-                if (Arrays.equals(EncodingWizard.charsToBytes(keyField.getPassword()), EncodingWizard.charsToBytes(keyVerificationField.getPassword()))) {
+                if (Arrays.equals(keyField.getPassword(), keyVerificationField.getPassword())) {
 
-                    if (!pathField.getText().equals("") && !Arrays.toString(EncodingWizard.charsToBytes(keyField.getPassword())).equals("")) {
+                    if (!pathField.getText().equals("") && keyField.getPassword().length > 0) {
 
                         Database db = new Database();
 
@@ -181,11 +181,14 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
                             e1.printStackTrace();
                         }
 
-                        db.setMasterKey(EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes(Main.STANDARD_CHARSET));
+                        db.setMasterKey(new SecretKeySpec(
+                                EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes(Main.STANDARD_CHARSET),
+                                Objects.requireNonNull(((String) eaBox.getSelectedItem())).contains("Blowfish") ? "Blowfish" :"AES"
+                        ));
                         db.setHashAlgorithm(Objects.requireNonNull(hashBox.getSelectedItem()).toString());
                         db.setEncryptionAlgorithm(Objects.requireNonNull(eaBox.getSelectedItem()).toString());
-                        db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123", "Note"));
-                        db.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".", ""));
+                        db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123".getBytes(Main.STANDARD_CHARSET), "Note"));
+                        db.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".".getBytes(Main.STANDARD_CHARSET), ""));
 
                         this.setVisible(false);
                         new DatabaseUI(db);

@@ -2,23 +2,24 @@ package de.paulwolf.passwordmanager.information;
 
 import de.paulwolf.passwordmanager.Main;
 
+import javax.crypto.SecretKey;
 import java.io.File;
 import java.util.ArrayList;
 
 public class Database {
 
     private File path;
-    private byte[] masterKey;
+    private SecretKey masterKey;
     private String hashAlgorithm = Main.HASH_ALGORITHM;
     private String encryptionAlgorithm = Main.ENCRYPTION_ALGORITHM;
 
     private ArrayList<Entry> entries = new ArrayList<>();
 
     public byte[] getMasterKey() {
-        return masterKey;
+        return masterKey.getEncoded();
     }
 
-    public void setMasterKey(byte[] masterKey) {
+    public void setMasterKey(SecretKey masterKey) {
         this.masterKey = masterKey;
     }
 

@@ -208,6 +208,7 @@ public class PasswordGeneratorUI extends JFrame {
 
         acceptPassword.addActionListener(e -> {
 
+            assert ui != null;
             ui.setPassword(utf8PasswordField.getText());
             this.setVisible(false);
         });

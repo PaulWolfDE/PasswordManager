@@ -33,7 +33,7 @@ public class StringWizard {
             databaseBody.append(separator);
             databaseBody.append(entries.get(i).getEmail().equals("") ? "-" : entries.get(i).getEmail());
             databaseBody.append(separator);
-            databaseBody.append(entries.get(i).getPassword().equals("") ? "-" : entries.get(i).getPassword());
+            databaseBody.append(entries.get(i).getPassword().length == 0 ? "-" : new String(entries.get(i).getPassword(), Main.STANDARD_CHARSET));
             databaseBody.append(separator);
             databaseBody.append(Main.DATE_FORMAT.format(entries.get(i).getLastModified()));
             databaseBody.append(separator);
@@ -81,14 +81,14 @@ public class StringWizard {
                 database.addEntry(new Entry(entryString[0].equals("-") ? "" : entryString[0],
                         entryString[1].equals("-") ? "" : entryString[1],
                         entryString[2].equals("-") ? "" : entryString[2],
-                        entryString[3].equals("-") ? "" : entryString[3],
+                        entryString[3].equals("-") ? "".getBytes(Main.STANDARD_CHARSET) : entryString[3].getBytes(Main.STANDARD_CHARSET),
                         Main.DATE_FORMAT.parse(entryString[4]), ""));
         } else {
             for (String[] entryString : entryStrings)
                 database.addEntry(new Entry(entryString[0].equals("-") ? "" : entryString[0],
                         entryString[1].equals("-") ? "" : entryString[1],
                         entryString[2].equals("-") ? "" : entryString[2],
-                        entryString[3].equals("-") ? "" : entryString[3],
+                        entryString[3].equals("-") ? "".getBytes(Main.STANDARD_CHARSET) : entryString[3].getBytes(Main.STANDARD_CHARSET),
                         Main.DATE_FORMAT.parse(entryString[4]),
                         entryString[5].equals("-") ? "" : entryString[5]));
         }
@@ -98,7 +98,7 @@ public class StringWizard {
             if (e.getTitle().equals(Main.BACKUP_TITLE))
                 return database;
 
-        database.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".", ""));
+        database.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".".getBytes(), ""));
         return database;
     }
 }
