@@ -80,9 +80,7 @@ public class Painting extends JLabel {
             }
         }
         g.setColor(Color.WHITE);
-
-        if (!Main.windows) g.setFont(new Font("Nimbus Mono PS", Font.BOLD, 40));
-        else g.setFont(Main.STANDARD_FONT);
+        g.setFont(Main.TETRIS_FONT);
 
         g.drawString("SCORE:", 350, 50);
         g.drawString(String.valueOf(Movement.score), 350, 90);

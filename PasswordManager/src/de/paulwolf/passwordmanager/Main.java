@@ -55,6 +55,8 @@ public class Main {
     public static Image IMAGE;
     // STANDARD FONT
     public static Font STANDARD_FONT;
+    // TETRIS FONT
+    public static Font TETRIS_FONT;
 
     public static MainUI ui;
     public static Painting fieldLabel;
@@ -76,8 +78,10 @@ public class Main {
         }
 
         InputStream is = Main.class.getResourceAsStream("/JetBrainsMono-Regular.ttf");
+        InputStream is2 = Main.class.getResourceAsStream("/PixeloidSansBold-RpeJo.ttf");
         try {
             STANDARD_FONT = (Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(is))).deriveFont(14f);
+            TETRIS_FONT = (Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(is2))).deriveFont(30f);
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
         }

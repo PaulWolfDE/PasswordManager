@@ -45,6 +45,10 @@ Library for secure tunnel connection to perform SFTP.
 
 Free, open-source monospace font family.
 
+[<img src="https://img.shields.io/badge/Font-Pixeloid-yellow.svg">](https://www.fontspace.com/pixeloid-font-f69232)
+
+Free old school font used for Tetris
+
 [<img src="https://img.shields.io/badge/Inspiration-KeePass-green.svg">](https://keepass.info/)
 
 Open-source password manager.
