@@ -79,3 +79,7 @@
 ## Release 2.0.0
 - Switched to universal `UTF-8` charset
 - Implemented various improvements in the security of storing passwords in memory
+
+## Release 2.0.1
+- Implemented unique font for Tetris
+- Developed resolution-independent user interface for both password manager and Tetris
