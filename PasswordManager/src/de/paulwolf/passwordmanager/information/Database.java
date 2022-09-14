@@ -1,6 +1,6 @@
 package de.paulwolf.passwordmanager.information;
 
-import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.Configuration;
 
 import javax.crypto.SecretKey;
 import java.io.File;
@@ -10,8 +10,8 @@ public class Database {
 
     private File path;
     private SecretKey masterKey;
-    private String hashAlgorithm = Main.HASH_ALGORITHM;
-    private String encryptionAlgorithm = Main.ENCRYPTION_ALGORITHM;
+    private String hashAlgorithm = Configuration.HASH_ALGORITHM;
+    private String encryptionAlgorithm = Configuration.ENCRYPTION_ALGORITHM;
 
     private ArrayList<Entry> entries = new ArrayList<>();
 

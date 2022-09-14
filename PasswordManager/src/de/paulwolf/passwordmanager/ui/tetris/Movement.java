@@ -1,6 +1,6 @@
 package de.paulwolf.passwordmanager.ui.tetris;
 
-import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.TetrisMain;
 
 import java.awt.*;
 import java.util.Timer;
@@ -119,7 +119,7 @@ public class Movement {
             }
         }, getLevelSpeed(), getLevelSpeed());
         lockMove = false;
-        Main.pauseButton.setEnabled(true);
+        TetrisMain.pauseButton.setEnabled(true);
     }
 
     public static void moveRight() {
@@ -129,7 +129,7 @@ public class Movement {
 
         if (!(block.getSquare(0).getX() >= 9 || block.getSquare(1).getX() >= 9 || block.getSquare(2).getX() >= 9 || block.getSquare(3).getX() >= 9)) {
 
-            if (!Main.fields[block.getSquare(0).getX() + 1][block.getSquare(0).getY()].isOccupied() && !Main.fields[block.getSquare(1).getX() + 1][block.getSquare(1).getY()].isOccupied() && !Main.fields[block.getSquare(2).getX() + 1][block.getSquare(2).getY()].isOccupied() && !Main.fields[block.getSquare(3).getX() + 1][block.getSquare(3).getY()].isOccupied()) {
+            if (!TetrisMain.fields[block.getSquare(0).getX() + 1][block.getSquare(0).getY()].isOccupied() && !TetrisMain.fields[block.getSquare(1).getX() + 1][block.getSquare(1).getY()].isOccupied() && !TetrisMain.fields[block.getSquare(2).getX() + 1][block.getSquare(2).getY()].isOccupied() && !TetrisMain.fields[block.getSquare(3).getX() + 1][block.getSquare(3).getY()].isOccupied()) {
 
                 block.moveRight();
             }
@@ -143,7 +143,7 @@ public class Movement {
 
         if (!(block.getSquare(0).getX() <= 0 || block.getSquare(1).getX() <= 0 || block.getSquare(2).getX() <= 0 || block.getSquare(3).getX() <= 0)) {
 
-            if (!Main.fields[block.getSquare(0).getX() - 1][block.getSquare(0).getY()].isOccupied() && !Main.fields[block.getSquare(1).getX() - 1][block.getSquare(1).getY()].isOccupied() && !Main.fields[block.getSquare(2).getX() - 1][block.getSquare(2).getY()].isOccupied() && !Main.fields[block.getSquare(3).getX() - 1][block.getSquare(3).getY()].isOccupied()) {
+            if (!TetrisMain.fields[block.getSquare(0).getX() - 1][block.getSquare(0).getY()].isOccupied() && !TetrisMain.fields[block.getSquare(1).getX() - 1][block.getSquare(1).getY()].isOccupied() && !TetrisMain.fields[block.getSquare(2).getX() - 1][block.getSquare(2).getY()].isOccupied() && !TetrisMain.fields[block.getSquare(3).getX() - 1][block.getSquare(3).getY()].isOccupied()) {
 
                 block.moveLeft();
             }
@@ -152,14 +152,14 @@ public class Movement {
 
     private static void blink(BlinkObject obj) {
 
-        Color c = Main.fields[obj.getX()][obj.getY()].getColor();
-        Main.fields[obj.getX()][obj.getY()].setColor(new Color(255, 254, 255));
-        Main.fieldLabel.repaint();
+        Color c = TetrisMain.fields[obj.getX()][obj.getY()].getColor();
+        TetrisMain.fields[obj.getX()][obj.getY()].setColor(new Color(255, 254, 255));
+        TetrisMain.fieldLabel.repaint();
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                Main.fields[obj.getX()][obj.getY()].setColor(c);
-                Main.fieldLabel.repaint();
+                TetrisMain.fields[obj.getX()][obj.getY()].setColor(c);
+                TetrisMain.fieldLabel.repaint();
             }
         }, 100);
     }
@@ -175,7 +175,7 @@ public class Movement {
                 temp = false;
                 timer.cancel();
                 setFieldsOccupied();
-                Main.fieldLabel.repaint();
+                TetrisMain.fieldLabel.repaint();
             }
         }
 
@@ -193,7 +193,7 @@ public class Movement {
 
     private static void setFieldsOccupied() {
         for (int i = 0; i < 4; i++) {
-            Main.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
+            TetrisMain.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
             lines[block.getSquare(i).getY()]++;
         }
         checkLines(true, new BlinkObject(block.getSquare(0).getX(), block.getSquare(0).getY()), new BlinkObject(block.getSquare(1).getX(), block.getSquare(1).getY()), new BlinkObject(block.getSquare(2).getX(), block.getSquare(2).getY()), new BlinkObject(block.getSquare(3).getX(), block.getSquare(3).getY()));
@@ -233,7 +233,7 @@ public class Movement {
     private static void setAnimFieldsOccupied() {
 
         for (int i = 0; i < 4; i++) {
-            Main.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
+            TetrisMain.fields[block.getSquare(i).getX()][block.getSquare(i).getY()].setOccupied(true);
             lines[block.getSquare(i).getY()]++;
         }
         checkLines(true);
@@ -243,7 +243,7 @@ public class Movement {
     public static void checkLines(boolean countPoints, BlinkObject... objects) {
 
         lockMove = true;
-        Main.pauseButton.setEnabled(false);
+        TetrisMain.pauseButton.setEnabled(false);
 
         boolean doBlink = objects.length == 4;
         int n = 0;
@@ -298,24 +298,24 @@ public class Movement {
                 // Colors get saved
                 if (j == 0)
                     for (int k = 0; k < 10; k++)
-                        colors[k] = Main.fields[j][value].getColor();
+                        colors[k] = TetrisMain.fields[j][value].getColor();
 
                 // Colors set to white
                 for (int k = 0; k < 10; k++) {
                     if (height.length == 4)
-                        Main.fields[k][value].setColor(new Color(j % 3 * 127, (j + 1) % 3 * 127, (j + 2) % 3 * 127));
+                        TetrisMain.fields[k][value].setColor(new Color(j % 3 * 127, (j + 1) % 3 * 127, (j + 2) % 3 * 127));
                     else
-                        Main.fields[k][value].setColor(new Color(255, 254, 255));
+                        TetrisMain.fields[k][value].setColor(new Color(255, 254, 255));
                 }
             }
-            Main.fieldLabel.repaint();
+            TetrisMain.fieldLabel.repaint();
             Thread.sleep(25L);
 
             for (int value : height)
                 for (int k = 0; k < 10; k++)
-                    Main.fields[k][value].setColor(colors[k]);
+                    TetrisMain.fields[k][value].setColor(colors[k]);
 
-            Main.fieldLabel.repaint();
+            TetrisMain.fieldLabel.repaint();
             Thread.sleep(25L);
         }
         // Adding score
@@ -326,8 +326,8 @@ public class Movement {
 
             // Setting lines to zero
             for (int j = 0; j < 10; j++) {
-                Main.fields[j][k].setOccupied(false);
-                Main.fields[j][k].setColor(Color.WHITE);
+                TetrisMain.fields[j][k].setOccupied(false);
+                TetrisMain.fields[j][k].setColor(Color.WHITE);
             }
             lines[k] = 0;
 
@@ -339,24 +339,24 @@ public class Movement {
             for (int j = k - 1; j >= 0; j--)
                 lineDown(j);
         }
-        Main.fieldLabel.repaint();
+        TetrisMain.fieldLabel.repaint();
     }
 
     public static void lineDown(int height) {
 
         for (int i = 0; i < 10; i++) {
-            if (Main.fields[i][height].isOccupied()) {
+            if (TetrisMain.fields[i][height].isOccupied()) {
                 lines[height]--;
                 lines[height + 1]++;
             }
-            Main.fields[i][height + 1].setColor(Main.fields[i][height].getColor());
-            Main.fields[i][height + 1].setOccupied(Main.fields[i][height].getOccupied());
-            Main.fields[i][height].setOccupied(false);
-            Main.fields[i][height].setColor(Color.WHITE);
+            TetrisMain.fields[i][height + 1].setColor(TetrisMain.fields[i][height].getColor());
+            TetrisMain.fields[i][height + 1].setOccupied(TetrisMain.fields[i][height].getOccupied());
+            TetrisMain.fields[i][height].setOccupied(false);
+            TetrisMain.fields[i][height].setColor(Color.WHITE);
         }
     }
     private static boolean isClearUnder() {
-        return !Main.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !Main.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !Main.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !Main.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied();
+        return !TetrisMain.fields[block.getSquare(0).getX()][block.getSquare(0).getY() + 1].isOccupied() && !TetrisMain.fields[block.getSquare(1).getX()][block.getSquare(1).getY() + 1].isOccupied() && !TetrisMain.fields[block.getSquare(2).getX()][block.getSquare(2).getY() + 1].isOccupied() && !TetrisMain.fields[block.getSquare(3).getX()][block.getSquare(3).getY() + 1].isOccupied();
     }
 }
 

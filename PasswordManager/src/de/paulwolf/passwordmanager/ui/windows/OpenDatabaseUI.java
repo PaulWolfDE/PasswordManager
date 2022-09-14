@@ -1,6 +1,10 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.ui.UIUtils;
+import de.paulwolf.passwordmanager.ui.components.ScaledButton;
+import de.paulwolf.passwordmanager.ui.components.ScaledToggleButton;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
@@ -15,9 +19,9 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
 
     final JPanel wrapper = new JPanel();
     final PasswordEncodingField field = new PasswordEncodingField();
-    final JToggleButton show = new JToggleButton("Show");
-    final JButton submit = new JButton("Submit Password");
-    final JButton changeFile = new JButton("Change file");
+    final ScaledToggleButton show = new ScaledToggleButton("Show");
+    final ScaledButton submit = new ScaledButton("Submit Password");
+    final ScaledButton changeFile = new ScaledButton("Change file");
 
     boolean hasParent;
 
@@ -25,47 +29,28 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
 
         hasParent = parent != null;
 
-        this.setTitle("PasswordManager - " + path);
+        this.setTitle(path + " : PasswordManager");
 
-        GridBagConstraints gbc = new GridBagConstraints();
         wrapper.setLayout(new GridBagLayout());
-        gbc.gridwidth = GridBagConstraints.RELATIVE;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.weightx = 1;
-        gbc.weighty = 1;
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        wrapper.add(field, gbc);
-
-        gbc.gridx = 1;
-        wrapper.add(show, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        wrapper.add(submit, gbc);
-
-        gbc.gridx = 1;
-        wrapper.add(changeFile, gbc);
+        wrapper.add(field, UIUtils.createGBC(0, 0, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(show, UIUtils.createGBC(1, 0, GridBagConstraints.HORIZONTAL, 1, 1, .0));
+        wrapper.add(submit, UIUtils.createGBC(0, 1, GridBagConstraints.HORIZONTAL, 1, 1, 1.));
+        wrapper.add(changeFile, UIUtils.createGBC(1, 1, GridBagConstraints.HORIZONTAL, 1, 1, .0));
 
         submit.addActionListener(this);
         changeFile.addActionListener(this);
         show.addActionListener(this);
         field.getPasswordField().addKeyListener(this);
 
-        field.getPasswordField().setFont(Main.STANDARD_FONT);
         field.getPasswordField().setDisplayPasswordStrength(false);
-        field.setPreferredSize(new Dimension(400, 26));
 
         this.add(wrapper);
         this.pack();
         this.setMinimumSize(this.getSize());
-        this.setIconImage(Main.IMAGE);
+        this.setIconImage(Configuration.IMAGE);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
-
     }
 
     @Override
@@ -77,7 +62,7 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
 
                 String password = EncodingWizard.decodeString(field.getSelectedEncoding(), new String(field.getPassword()));
 
-                if (Main.ui.decryptDatabase(password.getBytes(Main.STANDARD_CHARSET)))
+                if (Main.ui.decryptDatabase(password.getBytes(Configuration.STANDARD_CHARSET)))
                     this.setVisible(false);
                 else
                     JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",
@@ -94,7 +79,7 @@ public class OpenDatabaseUI extends JFrame implements ActionListener, KeyListene
             if (show.isSelected())
                 field.setEchoChar((char) 0);
             else
-                field.setEchoChar(Main.ECHO_CHAR);
+                field.setEchoChar(Configuration.ECHO_CHAR);
         }
     }
 

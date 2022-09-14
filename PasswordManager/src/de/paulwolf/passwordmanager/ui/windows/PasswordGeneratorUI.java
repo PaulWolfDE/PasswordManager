@@ -1,8 +1,9 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
 import com.nulabinc.zxcvbn.Zxcvbn;
-import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.ui.UIUtils;
+import de.paulwolf.passwordmanager.ui.components.*;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 import de.paulwolf.passwordmanager.wizards.PasswordWizard;
 
@@ -37,37 +38,37 @@ public class PasswordGeneratorUI extends JFrame {
 
     final JPanel wrapper = new JPanel();
 
-    final JLabel lengthLabel = new JLabel("Password length:");
-    final JTextField lengthField;
+    final ScaledLabel lengthLabel = new ScaledLabel("Password length:");
+    final ScaledFormattedTextField lengthField;
 
-    final JLabel charsetsLabel = new JLabel("Charsets:");
-    final JCheckBox lowercaseBox = new JCheckBox("Lowercase (abc...)");
-    final JCheckBox uppercaseBox = new JCheckBox("Uppercase (ABC...)");
-    final JCheckBox digitsBox = new JCheckBox("Digits (012...)");
-    final JCheckBox specialsBox = new JCheckBox("Special characters");
-    final JCheckBox commonSpecialsBox = new JCheckBox("Common (+$&*#?|@!-%)");
-    final JCheckBox advancedSpecialsBox = new JCheckBox("Advanced ('(),./:;<=>{}[]_~\\\")");
-    final JLabel additionalCharactersLabel = new JLabel("Include additional characters:");
-    final JTextField additionalCharactersField = new JTextField(20);
+    final ScaledLabel charsetsLabel = new ScaledLabel("Charsets:");
+    final ScaledCheckBox lowercaseBox = new ScaledCheckBox("Lowercase (abc...)");
+    final ScaledCheckBox uppercaseBox = new ScaledCheckBox("Uppercase (ABC...)");
+    final ScaledCheckBox digitsBox = new ScaledCheckBox("Digits (012...)");
+    final ScaledCheckBox specialsBox = new ScaledCheckBox("Special characters");
+    final ScaledCheckBox commonSpecialsBox = new ScaledCheckBox("Common (+$&*#?|@!-%)");
+    final ScaledCheckBox advancedSpecialsBox = new ScaledCheckBox("Advanced ('(),./:;<=>{}[]_~\\\")");
+    final ScaledLabel additionalCharactersLabel = new ScaledLabel("Include additional characters:");
+    final ScaledTextField additionalCharactersField = new ScaledTextField();
 
-    final JLabel configurationLabel = new JLabel("Configurations:");
-    final JComboBox<PasswordGeneratorConfiguration> configurationBox = new JComboBox<>(CONFIGURATIONS);
+    final ScaledLabel configurationLabel = new ScaledLabel("Configurations:");
+    final ScaledComboBox<PasswordGeneratorConfiguration> configurationBox = new ScaledComboBox<>(CONFIGURATIONS);
 
-    final JLabel utf8PasswordLabel = new JLabel("UTF-8:");
-    final JTextField utf8PasswordField = new JTextField(20);
+    final ScaledLabel utf8PasswordLabel = new ScaledLabel("UTF-8:");
+    final ScaledTextField utf8PasswordField = new ScaledTextField();
 
-    final JLabel hexPasswordLabel = new JLabel("Hexadecimal:");
-    final JTextField hexPasswordField = new JTextField(20);
+    final ScaledLabel hexPasswordLabel = new ScaledLabel("Hexadecimal:");
+    final ScaledTextField hexPasswordField = new ScaledTextField();
 
-    final JLabel base64PasswordLabel = new JLabel("Base64:");
-    final JTextField base64PasswordField = new JTextField(20);
+    final ScaledLabel base64PasswordLabel = new ScaledLabel("Base64:");
+    final ScaledTextField base64PasswordField = new ScaledTextField();
 
-    final JLabel entropyLabel = new JLabel("Password entropy:");
-    final JLabel entropyDisplay = new JLabel("0.00 Bits (Weak)");
+    final ScaledLabel entropyLabel = new ScaledLabel("Password entropy:");
+    final ScaledLabel entropyDisplay = new ScaledLabel("0.00 Bits (Weak)");
 
-    final JButton generatePassword = new JButton("Generate Password");
-    final JButton acceptPassword = new JButton("Accept Password");
-    final JButton closeGenerator = new JButton("Cancel");
+    final ScaledButton generatePassword = new ScaledButton("Generate Password");
+    final ScaledButton acceptPassword = new ScaledButton("Accept Password");
+    final ScaledButton closeGenerator = new ScaledButton("Cancel");
 
     final PasswordAcceptingUI ui;
 
@@ -75,19 +76,24 @@ public class PasswordGeneratorUI extends JFrame {
 
         this.ui = ui;
 
+        additionalCharactersField.setFont(Configuration.MONOSPACE_FONT);
+        utf8PasswordField.setFont(Configuration.MONOSPACE_FONT);
+        hexPasswordField.setFont(Configuration.MONOSPACE_FONT);
+        base64PasswordField.setFont(Configuration.MONOSPACE_FONT);
+
         if (password != null) {
             if (encoding == 0) {
                 this.utf8PasswordField.setText(password);
-                this.hexPasswordField.setText(EncodingWizard.bytesToHex(password.getBytes(Main.STANDARD_CHARSET)));
-                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
+                this.hexPasswordField.setText(EncodingWizard.bytesToHex(password.getBytes(Configuration.STANDARD_CHARSET)));
+                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Configuration.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
             } else if (encoding == 1) {
                 this.hexPasswordField.setText(password);
-                this.utf8PasswordField.setText(new String(EncodingWizard.hexToBytes(password), Main.STANDARD_CHARSET));
-                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
+                this.utf8PasswordField.setText(new String(EncodingWizard.hexToBytes(password), Configuration.STANDARD_CHARSET));
+                this.base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Configuration.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
             } else {
                 this.base64PasswordField.setText(password);
-                this.utf8PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(password.getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
-                this.hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET)));
+                this.utf8PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(password.getBytes(StandardCharsets.US_ASCII))), Configuration.STANDARD_CHARSET));
+                this.hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Configuration.STANDARD_CHARSET)));
             }
         }
 
@@ -95,45 +101,8 @@ public class PasswordGeneratorUI extends JFrame {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
         DecimalFormat decimalFormat = (DecimalFormat) numberFormat;
         decimalFormat.setGroupingUsed(false);
-        lengthField = new JFormattedTextField(decimalFormat);
-        lengthField.setColumns(20);
+        lengthField = new ScaledFormattedTextField(decimalFormat);
         lengthField.setText("20");
-
-        lengthField.setPreferredSize(new Dimension(200, 26));
-        additionalCharactersField.setPreferredSize(new Dimension(200, 26));
-        utf8PasswordField.setPreferredSize(new Dimension(200, 26));
-        hexPasswordField.setPreferredSize(new Dimension(200, 26));
-        base64PasswordField.setPreferredSize(new Dimension(200, 26));
-
-        generatePassword.setPreferredSize(new Dimension(200, 26));
-        acceptPassword.setPreferredSize(new Dimension(200, 26));
-        closeGenerator.setPreferredSize(new Dimension(200, 26));
-
-        utf8PasswordField.setFont(Main.STANDARD_FONT);
-        hexPasswordField.setFont(Main.STANDARD_FONT);
-        base64PasswordField.setFont(Main.STANDARD_FONT);
-        lengthField.setFont(Main.STANDARD_FONT);
-        additionalCharactersField.setFont(Main.STANDARD_FONT);
-
-        lengthLabel.setFont(lengthLabel.getFont().deriveFont(14.0f));
-        charsetsLabel.setFont(charsetsLabel.getFont().deriveFont(14.0f));
-        lowercaseBox.setFont(lowercaseBox.getFont().deriveFont(14.0f));
-        uppercaseBox.setFont(uppercaseBox.getFont().deriveFont(14.0f));
-        digitsBox.setFont(digitsBox.getFont().deriveFont(14.0f));
-        specialsBox.setFont(specialsBox.getFont().deriveFont(14.0f));
-        commonSpecialsBox.setFont(commonSpecialsBox.getFont().deriveFont(14.0f));
-        advancedSpecialsBox.setFont(advancedSpecialsBox.getFont().deriveFont(14.0f));
-        additionalCharactersLabel.setFont(additionalCharactersLabel.getFont().deriveFont(14.0f));
-        configurationLabel.setFont(configurationLabel.getFont().deriveFont(14.0f));
-        configurationBox.setFont(configurationBox.getFont().deriveFont(14.0f));
-        utf8PasswordLabel.setFont(utf8PasswordLabel.getFont().deriveFont(14.0f));
-        hexPasswordLabel.setFont(hexPasswordLabel.getFont().deriveFont(14.0f));
-        base64PasswordLabel.setFont(base64PasswordLabel.getFont().deriveFont(14.0f));
-        entropyLabel.setFont(entropyDisplay.getFont().deriveFont(14.0f));
-        entropyDisplay.setFont(entropyDisplay.getFont().deriveFont(14.0f));
-        generatePassword.setFont(generatePassword.getFont().deriveFont(14.0f));
-        acceptPassword.setFont(acceptPassword.getFont().deriveFont(14.0f));
-        closeGenerator.setFont(closeGenerator.getFont().deriveFont(14.0f));
 
         wrapper.setLayout(new GridBagLayout());
 
@@ -173,16 +142,16 @@ public class PasswordGeneratorUI extends JFrame {
             wrapper.add(closeGenerator, UIUtils.createGBC(4, 11, GridBagConstraints.HORIZONTAL, 2, 1, 1.0));
         }
 
-        this.add(wrapper);
-        this.setIconImage(Main.IMAGE);
-        this.setTitle("Random Password Generator");
-        this.pack();
-        this.setMinimumSize(this.getSize());
-        this.setLocationRelativeTo((Component) ui);
-        this.setVisible(true);
-
         setConfiguration(CONFIGURATIONS[0]);
         updateEntropy();
+
+        this.add(wrapper);
+        this.setIconImage(Configuration.IMAGE);
+        this.setTitle("Random Password Generator");
+        this.setLocationRelativeTo((Component) ui);
+        this.pack();
+        this.setMinimumSize(this.getSize());
+        this.setVisible(true);
 
         generatePassword.addActionListener(e -> {
 
@@ -195,7 +164,7 @@ public class PasswordGeneratorUI extends JFrame {
 
                 byte[] pw = PasswordWizard.generatePassword(Integer.parseInt(lengthField.getText()), charset);
 
-                utf8PasswordField.setText(new String(pw, Main.STANDARD_CHARSET));
+                utf8PasswordField.setText(new String(pw, Configuration.STANDARD_CHARSET));
                 hexPasswordField.setText(EncodingWizard.bytesToHex(pw));
                 base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(pw)), StandardCharsets.US_ASCII));
             }
@@ -229,8 +198,8 @@ public class PasswordGeneratorUI extends JFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 updateEntropy();
-                hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET)));
-                base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
+                hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Configuration.STANDARD_CHARSET)));
+                base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Configuration.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
             }
         });
         hexPasswordField.addKeyListener(new KeyListener() {
@@ -246,8 +215,8 @@ public class PasswordGeneratorUI extends JFrame {
                 String hexPassword = hexPasswordField.getText();
                 if (hexPassword.matches("-?[\\da-fA-F]+")) {
                     if (hexPassword.length() % 2 == 0) {
-                        utf8PasswordField.setText(new String(EncodingWizard.hexToBytes(hexPasswordField.getText()), Main.STANDARD_CHARSET));
-                        base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
+                        utf8PasswordField.setText(new String(EncodingWizard.hexToBytes(hexPasswordField.getText()), Configuration.STANDARD_CHARSET));
+                        base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Configuration.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
                         updateEntropy();
                         hexPasswordField.setForeground(Color.BLACK);
                     }
@@ -271,7 +240,7 @@ public class PasswordGeneratorUI extends JFrame {
 
                 if (EncodingWizard.base64ToBytes(base64Password.getBytes(StandardCharsets.US_ASCII)) != null) {
                     utf8PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(base64Password.getBytes(StandardCharsets.US_ASCII)))));
-                    hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Main.STANDARD_CHARSET)));
+                    hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Configuration.STANDARD_CHARSET)));
                     updateEntropy();
                     base64PasswordField.setForeground(Color.BLACK);
                 } else {
@@ -306,7 +275,7 @@ public class PasswordGeneratorUI extends JFrame {
                 charset.append(userChars.charAt(i));
         }
 
-        return charset.toString().getBytes(Main.STANDARD_CHARSET);
+        return charset.toString().getBytes(Configuration.STANDARD_CHARSET);
     }
 
     private byte[] getCharset(String password) {
@@ -321,7 +290,7 @@ public class PasswordGeneratorUI extends JFrame {
                 }
             }
         }
-        return charset.toString().getBytes(Main.STANDARD_CHARSET);
+        return charset.toString().getBytes(Configuration.STANDARD_CHARSET);
     }
 
     private int getCharsetLength(String password) {

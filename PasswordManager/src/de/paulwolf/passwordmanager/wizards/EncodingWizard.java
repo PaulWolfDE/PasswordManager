@@ -1,5 +1,6 @@
 package de.paulwolf.passwordmanager.wizards;
 
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 
 import java.nio.ByteBuffer;
@@ -58,9 +59,9 @@ public class EncodingWizard {
         if (encoding == 0)
             return str;
         else if (encoding == 1)
-            return new String(hexToBytes(str), Main.STANDARD_CHARSET);
+            return new String(hexToBytes(str), Configuration.STANDARD_CHARSET);
         else
-            return new String(Objects.requireNonNull(base64ToBytes(str.getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET);
+            return new String(Objects.requireNonNull(base64ToBytes(str.getBytes(StandardCharsets.US_ASCII))), Configuration.STANDARD_CHARSET);
     }
 
     public static boolean isEncodingValid(int encoding, String str) {

@@ -1,5 +1,6 @@
 package de.paulwolf.passwordmanager.wizards;
 
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
@@ -33,9 +34,9 @@ public class StringWizard {
             databaseBody.append(separator);
             databaseBody.append(entries.get(i).getEmail().equals("") ? "-" : entries.get(i).getEmail());
             databaseBody.append(separator);
-            databaseBody.append(entries.get(i).getPassword().length == 0 ? "-" : new String(entries.get(i).getPassword(), Main.STANDARD_CHARSET));
+            databaseBody.append(entries.get(i).getPassword().length == 0 ? "-" : new String(entries.get(i).getPassword(), Configuration.STANDARD_CHARSET));
             databaseBody.append(separator);
-            databaseBody.append(Main.DATE_FORMAT.format(entries.get(i).getLastModified()));
+            databaseBody.append(Configuration.DATE_FORMAT.format(entries.get(i).getLastModified()));
             databaseBody.append(separator);
             databaseBody.append(entries.get(i).getNotes().equals("") ? "-" : entries.get(i).getNotes());
             if (i < entries.size() - 1)
@@ -44,9 +45,9 @@ public class StringWizard {
 
         MessageDigest digest = MessageDigest.getInstance(database.getHashAlgorithm());
 
-        databaseString.append("PasswordManager<" + Main.VERSION_NUMBER + '>');
+        databaseString.append("PasswordManager<" + Configuration.VERSION_NUMBER + '>');
         databaseString.append(separator);
-        databaseString.append(bytesToHex(digest.digest(databaseBody.toString().getBytes(Main.STANDARD_CHARSET))));
+        databaseString.append(bytesToHex(digest.digest(databaseBody.toString().getBytes(Configuration.STANDARD_CHARSET))));
         databaseString.append(separator);
         databaseString.append(database.getEncryptionAlgorithm());
         databaseString.append(separator);
@@ -81,24 +82,24 @@ public class StringWizard {
                 database.addEntry(new Entry(entryString[0].equals("-") ? "" : entryString[0],
                         entryString[1].equals("-") ? "" : entryString[1],
                         entryString[2].equals("-") ? "" : entryString[2],
-                        entryString[3].equals("-") ? "".getBytes(Main.STANDARD_CHARSET) : entryString[3].getBytes(Main.STANDARD_CHARSET),
-                        Main.DATE_FORMAT.parse(entryString[4]), ""));
+                        entryString[3].equals("-") ? "".getBytes(Configuration.STANDARD_CHARSET) : entryString[3].getBytes(Configuration.STANDARD_CHARSET),
+                        Configuration.DATE_FORMAT.parse(entryString[4]), ""));
         } else {
             for (String[] entryString : entryStrings)
                 database.addEntry(new Entry(entryString[0].equals("-") ? "" : entryString[0],
                         entryString[1].equals("-") ? "" : entryString[1],
                         entryString[2].equals("-") ? "" : entryString[2],
-                        entryString[3].equals("-") ? ".".getBytes(Main.STANDARD_CHARSET) : entryString[3].getBytes(Main.STANDARD_CHARSET),
-                        Main.DATE_FORMAT.parse(entryString[4]),
+                        entryString[3].equals("-") ? ".".getBytes(Configuration.STANDARD_CHARSET) : entryString[3].getBytes(Configuration.STANDARD_CHARSET),
+                        Configuration.DATE_FORMAT.parse(entryString[4]),
                         entryString[5].equals("-") ? "" : entryString[5]));
         }
 
         ArrayList<Entry> entries = database.getEntries();
         for (Entry e : entries)
-            if (e.getTitle().equals(Main.BACKUP_TITLE))
+            if (e.getTitle().equals(Configuration.BACKUP_TITLE))
                 return database;
 
-        database.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".".getBytes(), ""));
+        database.addEntry(new Entry(Configuration.BACKUP_TITLE, "", "", ".".getBytes(), ""));
         return database;
     }
 }

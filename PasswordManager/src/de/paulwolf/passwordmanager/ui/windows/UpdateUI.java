@@ -1,5 +1,6 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.ui.UIUtils;
 
@@ -33,7 +34,7 @@ public class UpdateUI extends JFrame implements ActionListener {
 
         this.add(wrapper);
         this.setTitle("Update available");
-        this.setIconImage(Main.IMAGE);
+        this.setIconImage(Configuration.IMAGE);
         this.setAlwaysOnTop(true);
         this.pack();
         this.setMinimumSize(this.getSize());

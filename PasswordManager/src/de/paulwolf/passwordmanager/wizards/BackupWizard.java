@@ -1,6 +1,7 @@
 package de.paulwolf.passwordmanager.wizards;
 
 import com.jcraft.jsch.*;
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 
@@ -51,7 +52,7 @@ public class BackupWizard {
             sftp.cd("database_backup");
             String localDatabasePath = database.getPath().getAbsolutePath();
             String localDatabaseName = localDatabasePath.substring(localDatabasePath.lastIndexOf('/') + 1);
-            sftp.put(localDatabasePath, String.format("%s-%s.pmdtb", localDatabaseName.substring(0, localDatabaseName.length() - 6), Main.DATE_FORMAT.format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))));
+            sftp.put(localDatabasePath, String.format("%s-%s.pmdtb", localDatabaseName.substring(0, localDatabaseName.length() - 6), Configuration.DATE_FORMAT.format(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))));
 
         } finally {
             if (session != null)

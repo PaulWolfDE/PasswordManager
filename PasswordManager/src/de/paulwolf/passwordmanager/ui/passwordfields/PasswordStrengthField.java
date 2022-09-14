@@ -2,7 +2,10 @@ package de.paulwolf.passwordmanager.ui.passwordfields;
 
 import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.ui.components.ScaledPasswordField;
+import de.paulwolf.passwordmanager.ui.components.ScaledTextField;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
 import javax.swing.*;
@@ -12,13 +15,12 @@ import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.Objects;
 
-abstract public class PasswordStrengthField extends JPasswordField implements KeyListener {
+abstract public class PasswordStrengthField extends ScaledPasswordField implements KeyListener {
 
     private boolean displayPasswordStrength = true;
 
-    public PasswordStrengthField(int c) {
+    public PasswordStrengthField() {
 
-        this.setColumns(c);
         this.addKeyListener(this);
     }
 
@@ -34,11 +36,11 @@ abstract public class PasswordStrengthField extends JPasswordField implements Ke
 
         byte[] password;
         if (encoding == 0)
-            password = new String(this.getPassword()).getBytes(Main.STANDARD_CHARSET);
+            password = new String(this.getPassword()).getBytes(Configuration.STANDARD_CHARSET);
         else if (encoding == 1)
             password = EncodingWizard.hexToBytes(new String(this.getPassword()));
         else
-            password = Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+            password = Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.getPassword()).getBytes(Configuration.STANDARD_CHARSET)));
 
         Zxcvbn zxcvbn = new Zxcvbn();
         Strength strength = zxcvbn.measure(new String(password));

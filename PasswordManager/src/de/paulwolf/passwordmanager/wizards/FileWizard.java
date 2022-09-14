@@ -2,6 +2,7 @@ package de.paulwolf.passwordmanager.wizards;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
@@ -18,10 +19,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.security.*;
 import java.text.ParseException;
 import java.util.*;
@@ -39,12 +38,12 @@ public class FileWizard {
         sr.nextBytes(iv);
         sr.nextBytes(salt);
         byte[] derivedKey = new byte[32];
-        IMac prf = HMacFactory.getInstance(Main.HMAC_ALGORITHM);
+        IMac prf = HMacFactory.getInstance(Configuration.HMAC_ALGORITHM);
         PBKDF2 pbkdf2 = new PBKDF2(prf);
         Map<String, Object> map = new HashMap<>();
         map.put("gnu.crypto.pbe.salt", salt);
-        map.put("gnu.crypto.pbe.password", new String(db.getMasterKey(), Main.STANDARD_CHARSET).toCharArray());
-        map.put("gnu.crypto.pbe.iteration.count", Main.ITERATIONS);
+        map.put("gnu.crypto.pbe.password", new String(db.getMasterKey(), Configuration.STANDARD_CHARSET).toCharArray());
+        map.put("gnu.crypto.pbe.iteration.count", Configuration.ITERATIONS);
         pbkdf2.init(map);
         pbkdf2.nextBytes(derivedKey, 0, derivedKey.length);
 
@@ -53,7 +52,7 @@ public class FileWizard {
 
         ArrayList<Entry> entries = db.getEntries();
         for (Entry e : entries) {
-            if (e.getTitle().equals(Main.BACKUP_TITLE)) {
+            if (e.getTitle().equals(Configuration.BACKUP_TITLE)) {
                 if (!e.getUsername().equals("") && !e.getEmail().equals("")) {
                     try {
                         BackupWizard.createBackup(e.getUsername(), e.getEmail(), e.getPassword(), db);
@@ -81,60 +80,117 @@ public class FileWizard {
         }
         scanner.close();
 
-        String[] splitbase = databaseString.toString().split(StringWizard.separator);
-        if (!isCompatible(splitbase[0])) {
-            JOptionPane.showMessageDialog(null,
-                    "Either the file is not an database file or the version is not compatible!", "Invalid file", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+        String[] splitDatabase = databaseString.toString().split(StringWizard.separator);
         byte[] iv = new byte[16];
-        if (splitbase[4].contains(",")) // Version prior 1.4.4
+        if (splitDatabase[4].contains(",")) // Version prior 1.4.4
             for (int j = 0; j < iv.length; j++)
-                iv[j] = Byte.parseByte(splitbase[4].split(",")[j]);
+                iv[j] = Byte.parseByte(splitDatabase[4].split(",")[j]);
         else // Later versions
-            iv = hexToBytes(splitbase[4]);
+            iv = hexToBytes(splitDatabase[4]);
 
 
         byte[] derivedKey = new byte[32];
-        if (splitbase[5].equals("")) {
+        if (splitDatabase[5].equals("")) {
             // Old database --> password hashed with std algo
-            MessageDigest md = MessageDigest.getInstance(splitbase[3]);
+            MessageDigest md = MessageDigest.getInstance(splitDatabase[3]);
             derivedKey = md.digest(key);
         } else {
             // New database --> password derived with pbkdf2
             byte[] salt = new byte[16];
-            if (splitbase[5].contains(",")) // Version prior 1.4.4
+            if (splitDatabase[5].contains(",")) // Version prior 1.4.4
                 for (int j = 0; j < iv.length; j++)
-                    salt[j] = Byte.parseByte(splitbase[5].split(",")[j]);
+                    salt[j] = Byte.parseByte(splitDatabase[5].split(",")[j]);
             else // Later version
-                salt = hexToBytes(splitbase[5]);
+                salt = hexToBytes(splitDatabase[5]);
 
-            IMac prf = HMacFactory.getInstance(Main.HMAC_ALGORITHM);
+            IMac prf = HMacFactory.getInstance(Configuration.HMAC_ALGORITHM);
             PBKDF2 pbkdf2 = new PBKDF2(prf);
             Map<String, Object> map = new HashMap<>();
             map.put("gnu.crypto.pbe.salt", salt);
-            map.put("gnu.crypto.pbe.password", new String(key, Main.STANDARD_CHARSET).toCharArray());
-            map.put("gnu.crypto.pbe.iteration.count", Main.ITERATIONS);
+            map.put("gnu.crypto.pbe.password", new String(key, Configuration.STANDARD_CHARSET).toCharArray());
+            map.put("gnu.crypto.pbe.iteration.count", Configuration.ITERATIONS);
             pbkdf2.init(map);
             pbkdf2.nextBytes(derivedKey, 0, derivedKey.length);
         }
 
         Database database = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString.toString(), derivedKey, iv));
         database.setPath(file);
-        database.setMasterKey(new SecretKeySpec(key, splitbase[2].contains("Blowfish") ? "Blowfish" :"AES"));
+        database.setMasterKey(new SecretKeySpec(key, splitDatabase[2].contains("Blowfish") ? "Blowfish" :"AES"));
         new DatabaseUI(database, null);
         return true;
     }
 
-    public static boolean isCompatible(String signature) {
+    public static boolean isCompatible(File f) throws IOException {
+
+        Scanner scanner = new Scanner(f);
+        // Signature is found on the first line of the file
+        String signature = scanner.nextLine();
 
         String version = signature.substring(signature.indexOf("<") + 1);
         version = version.substring(0, version.indexOf(">"));
 
-        for (int i = 0; i < Main.COMPATIBLE_VERSIONS.length; i++) {
-            if (version.equals(Main.COMPATIBLE_VERSIONS[i]))
+        for (int i = 0; i < Configuration.COMPATIBLE_VERSIONS.length; i++) {
+            if (version.equals(Configuration.COMPATIBLE_VERSIONS[i]))
                 return true;
         }
         return JSONParser.checkRemoteCompatibility(version);
+    }
+
+    public static String[] getRecentlyOpenedFiles(boolean onlyCompatibles) throws IOException {
+
+        ArrayList<String> filesCompatible = new ArrayList<>();
+        ArrayList<String> filesToKeep = new ArrayList<>();
+
+        File recentlyOpened;
+        if (System.getenv("Appdata") == null)
+            recentlyOpened = new File(System.getProperty("user.home") + "/PasswordManager/.pmrc"); // Linux
+        else
+            recentlyOpened = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc"); // Windows
+
+        Scanner scanner;
+        try {
+            scanner = new Scanner(recentlyOpened);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+        while (scanner.hasNextLine()) {
+            File currentFile = new File(scanner.nextLine());
+            if (Files.exists(currentFile.toPath()) && isCompatible(currentFile)) {
+                filesCompatible.add(currentFile.getCanonicalPath());
+                filesToKeep.add(currentFile.getCanonicalPath());
+            } else if (!Files.exists(currentFile.toPath())) {
+                filesToKeep.add(currentFile.getCanonicalPath());
+            }
+        }
+        scanner.close();
+
+        if (onlyCompatibles)
+            return filesCompatible.toArray(new String[]{});
+        return filesToKeep.toArray(new String[]{});
+    }
+
+    public static void updateRecentlyOpened(String fileOpened) throws IOException {
+
+        File recentlyOpened;
+        if (System.getenv("Appdata") == null)
+            recentlyOpened = new File(System.getProperty("user.home") + "/PasswordManager/.pmrc"); // Linux
+        else
+            recentlyOpened = new File(System.getenv("Appdata") + "/PasswordManager/.pmrc"); // Windows
+
+        // Directory hierarchy for rc file gets created
+        (new File(recentlyOpened.getCanonicalPath() + "/../)")).mkdirs();
+
+        String[] filesToKeep = getRecentlyOpenedFiles(false);
+
+        recentlyOpened.createNewFile();
+        FileWriter writer = new FileWriter(recentlyOpened);
+        writer.write(fileOpened + "\n");
+        if (filesToKeep == null)
+            return;
+        for (String file : filesToKeep) {
+            if (!new File(file).getCanonicalPath().equals(fileOpened))
+                writer.write(file + "\n");
+        }
+        writer.close();
     }
 }

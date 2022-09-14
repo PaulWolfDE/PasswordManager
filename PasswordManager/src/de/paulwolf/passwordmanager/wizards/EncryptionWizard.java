@@ -1,5 +1,6 @@
 package de.paulwolf.passwordmanager.wizards;
 
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.WrongPasswordException;
 
@@ -25,7 +26,7 @@ public class EncryptionWizard {
 
         byte[] ciphertext = encrypt(
                 headStrings[2],
-                headBodyStrings[1].getBytes(Main.STANDARD_CHARSET),
+                headBodyStrings[1].getBytes(Configuration.STANDARD_CHARSET),
                 new SecretKeySpec(key, 0, key.length,
                         headStrings[2].equals("Blowfish/ECB/PKCS5Padding")
                                 || headStrings[2].equals("Blowfish/CBC/PKCS5Padding")
@@ -55,7 +56,7 @@ public class EncryptionWizard {
         byte[] verificationHex;
 
         if (headStrings[0].charAt(16) == '1') { // Hash over ASCII body
-            if (!new String(plaintext, Main.STANDARD_CHARSET).matches("\\A\\p{ASCII}*\\z")) {
+            if (!new String(plaintext, Configuration.STANDARD_CHARSET).matches("\\A\\p{ASCII}*\\z")) {
                 StringBuilder asciiBody = new StringBuilder();
                 for (byte b : plaintext)
                     if ((b & 0xFF) >> 7 == 0)
@@ -69,7 +70,7 @@ public class EncryptionWizard {
         }
 
         if (Arrays.equals(verificationHex, EncodingWizard.hexToBytes(headStrings[1])))
-            return headBodyStrings[0] + StringWizard.headBodySeparator + new String(plaintext, Main.STANDARD_CHARSET);
+            return headBodyStrings[0] + StringWizard.headBodySeparator + new String(plaintext, Configuration.STANDARD_CHARSET);
 
         throw new WrongPasswordException("The entered password is incorrect!");
     }

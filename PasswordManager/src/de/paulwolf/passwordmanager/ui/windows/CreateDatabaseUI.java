@@ -1,9 +1,10 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
-import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.ui.*;
+import de.paulwolf.passwordmanager.ui.components.*;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
@@ -33,28 +34,28 @@ import java.util.Objects;
 public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, ActionListener, KeyListener {
 
     final JPanel wrapper = new JPanel();
-    final JLabel eaLabel = new JLabel("Encryption Algorithm");
-    final JLabel hashLabel = new JLabel("Hash Algorithm");
-    final JLabel keyLabel = new JLabel("Master Key");
-    final JLabel keyVerificationLabel = new JLabel("Repeat Master Key");
-    final JLabel pathLabel = new JLabel("Save Database At");
+    final ScaledLabel eaLabel = new ScaledLabel("Encryption Algorithm");
+    final ScaledLabel hashLabel = new ScaledLabel("Hash Algorithm");
+    final ScaledLabel keyLabel = new ScaledLabel("Master Key");
+    final ScaledLabel keyVerificationLabel = new ScaledLabel("Repeat Master Key");
+    final ScaledLabel pathLabel = new ScaledLabel("Save Database At");
 
-    final JButton browseButton = new JButton("Browse");
-    final JButton generateKey = new JButton("Generate Random Password");
-    final JButton createDatabase = new JButton("Create Database");
+    final ScaledButton browseButton = new ScaledButton("Browse");
+    final ScaledButton generateKey = new ScaledButton("Generate Random Password");
+    final ScaledButton createDatabase = new ScaledButton("Create Database");
 
-    final JComboBox<String> eaBox = new JComboBox<>(Main.ENCRYPTION_ALGORITHMS);
-    final JComboBox<String> hashBox = new JComboBox<>(Main.HASH_ALGORITHMS);
+    final ScaledComboBox<String> eaBox = new ScaledComboBox<>(Configuration.ENCRYPTION_ALGORITHMS);
+    final ScaledComboBox<String> hashBox = new ScaledComboBox<>(Configuration.HASH_ALGORITHMS);
 
-    final JToggleButton showKey = new JToggleButton("Show");
-    final JToggleButton showKeyVerification = new JToggleButton("Show");
+    final ScaledToggleButton showKey = new ScaledToggleButton("Show");
+    final ScaledToggleButton showKeyVerification = new ScaledToggleButton("Show");
 
     final PasswordEncodingField keyField = new PasswordEncodingField();
     final PasswordEncodingField keyVerificationField = new PasswordEncodingField();
 
-    final JTextField pathField = new JTextField(20);
+    final ScaledTextField pathField = new ScaledTextField();
 
-    final JFileChooser fileChooser = new JFileChooser();
+    final ScaledFileChooser fileChooser = new ScaledFileChooser();
 
     public CreateDatabaseUI() {
 
@@ -69,11 +70,11 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
         wrapper.add(hashBox, UIUtils.createGBC(1, 1, GridBagConstraints.HORIZONTAL, 2, 1));
 
         wrapper.add(keyLabel, UIUtils.createGBC(0, 2, GridBagConstraints.HORIZONTAL, 1, 1));
-        wrapper.add(keyField, UIUtils.createGBC(1, 2, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(keyField, UIUtils.createGBC(1, 2, GridBagConstraints.HORIZONTAL, 1, 1, 1.0));
         wrapper.add(showKey, UIUtils.createGBC(2, 2, GridBagConstraints.HORIZONTAL, 1, 1, .0));
 
         wrapper.add(keyVerificationLabel, UIUtils.createGBC(0, 3, GridBagConstraints.HORIZONTAL, 1, 1));
-        wrapper.add(keyVerificationField, UIUtils.createGBC(1, 3, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(keyVerificationField, UIUtils.createGBC(1, 3, GridBagConstraints.HORIZONTAL, 1, 1, 1.0));
         wrapper.add(showKeyVerification, UIUtils.createGBC(2, 3, GridBagConstraints.HORIZONTAL, 1, 1, .0));
 
         wrapper.add(pathLabel, UIUtils.createGBC(0, 4, GridBagConstraints.HORIZONTAL, 1, 1));
@@ -91,19 +92,19 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
         showKeyVerification.addActionListener(this);
         pathField.addKeyListener(this);
 
-        keyField.getPasswordField().setFont(Main.STANDARD_FONT);
+        keyField.getPasswordField().setFont(Configuration.MONOSPACE_FONT);
         keyField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
-        keyField.setPreferredSize(new Dimension(400, 26));
-        keyVerificationField.getPasswordField().setFont(Main.STANDARD_FONT);
+        keyField.setPreferredSize(Configuration.SCALED_PASSWORD_FIELD_SIZE);
+        keyVerificationField.getPasswordField().setFont(Configuration.MONOSPACE_FONT);
         keyVerificationField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
-        keyVerificationField.setPreferredSize(new Dimension(400, 26));
-        pathField.setFont(Main.STANDARD_FONT);
-        pathField.setPreferredSize(new Dimension(400, 26));
+        keyVerificationField.setPreferredSize(Configuration.SCALED_PASSWORD_FIELD_SIZE);
+        pathField.setFont(Configuration.STANDARD_FONT);
+        pathField.setPreferredSize(Configuration.SCALED_TEXT_FIELD_SIZE);
 
         this.add(wrapper);
         this.pack();
         this.setMinimumSize(this.getSize());
-        this.setIconImage(Main.IMAGE);
+        this.setIconImage(Configuration.IMAGE);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -112,8 +113,12 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Password Manager Database Files", "pmdtb");
         fileChooser.setFileFilter(filter);
 
-        this.keyField.getEncodingButton().addActionListener(e -> this.keyVerificationField.setEncoding((this.keyVerificationField.getSelectedEncoding() + 1) % 3));
-        this.keyVerificationField.getEncodingButton().addActionListener(e -> this.keyField.setEncoding((this.keyField.getSelectedEncoding() + 1) % 3));
+        this.keyField.getEncodingButton().addActionListener(
+                e -> this.keyVerificationField.setEncoding((this.keyVerificationField.getSelectedEncoding() + 1) % 3)
+        );
+        this.keyVerificationField.getEncodingButton().addActionListener(
+                e -> this.keyField.setEncoding((this.keyField.getSelectedEncoding() + 1) % 3)
+        );
     }
 
     @Override
@@ -126,13 +131,13 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
         if (e.getSource() == showKey) {
 
             if (showKey.isSelected()) keyField.setEchoChar((char) 0);
-            else keyField.setEchoChar(Main.ECHO_CHAR);
+            else keyField.setEchoChar(Configuration.ECHO_CHAR);
         }
 
         if (e.getSource() == showKeyVerification) {
 
             if (showKeyVerification.isSelected()) keyVerificationField.setEchoChar((char) 0);
-            else keyVerificationField.setEchoChar(Main.ECHO_CHAR);
+            else keyVerificationField.setEchoChar(Configuration.ECHO_CHAR);
         }
 
         if (e.getSource() == browseButton) {
@@ -182,13 +187,13 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
                         }
 
                         db.setMasterKey(new SecretKeySpec(
-                                EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes(Main.STANDARD_CHARSET),
+                                EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes(Configuration.STANDARD_CHARSET),
                                 Objects.requireNonNull(((String) eaBox.getSelectedItem())).contains("Blowfish") ? "Blowfish" :"AES"
                         ));
                         db.setHashAlgorithm(Objects.requireNonNull(hashBox.getSelectedItem()).toString());
                         db.setEncryptionAlgorithm(Objects.requireNonNull(eaBox.getSelectedItem()).toString());
-                        db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123".getBytes(Main.STANDARD_CHARSET), "Note"));
-                        db.addEntry(new Entry(Main.BACKUP_TITLE, "", "", ".".getBytes(Main.STANDARD_CHARSET), ""));
+                        db.addEntry(new Entry("Example Entry", "John Doe", "john.doe@example.com", "password123".getBytes(Configuration.STANDARD_CHARSET), "Note"));
+                        db.addEntry(new Entry(Configuration.BACKUP_TITLE, "", "", ".".getBytes(Configuration.STANDARD_CHARSET), ""));
 
                         this.setVisible(false);
                         new DatabaseUI(db, this);
@@ -234,10 +239,10 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
             keyField.setText(password);
             keyVerificationField.setText(password);
         } else if (keyField.getSelectedEncoding() == 1) {
-            keyField.setText(EncodingWizard.bytesToHex(password.getBytes(Main.STANDARD_CHARSET)));
+            keyField.setText(EncodingWizard.bytesToHex(password.getBytes(Configuration.STANDARD_CHARSET)));
             keyVerificationField.setText(new String(keyField.getPassword()));
         } else {
-            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Main.STANDARD_CHARSET))), Main.STANDARD_CHARSET));
+            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Configuration.STANDARD_CHARSET))), Configuration.STANDARD_CHARSET));
             keyVerificationField.setText(new String(keyField.getPassword()));
         }
 

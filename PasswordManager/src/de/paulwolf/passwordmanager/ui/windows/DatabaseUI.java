@@ -1,8 +1,11 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.TetrisMain;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
+import de.paulwolf.passwordmanager.ui.components.*;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
 import gnu.crypto.prng.LimitReachedException;
 
@@ -36,17 +39,17 @@ public class DatabaseUI extends JFrame {
     static JPanel buttonPanel;
     static JPanel tableWrapper;
     static JPanel searchPanel;
-    static JButton addEntry;
-    static JButton generatePassword;
-    static JButton saveDatabase;
-    static JButton saveDatabaseAs;
-    static JButton settings;
-    static JButton openDatabase;
+    static ScaledButton addEntry;
+    static ScaledButton generatePassword;
+    static ScaledButton saveDatabase;
+    static ScaledButton saveDatabaseAs;
+    static ScaledButton settings;
+    static ScaledButton openDatabase;
     static JTable table;
     static JScrollPane scrollPane;
     private static int selectedRow;
     private static DefaultTableModel dtm;
-    private static JTextField filter;
+    private static ScaledTextField filter;
     private static int t = 0;
 
     public DatabaseUI(Database db, Component parent) {
@@ -55,20 +58,21 @@ public class DatabaseUI extends JFrame {
 
         searchPanel = new JPanel(new BorderLayout());
         tableWrapper = new JPanel(new BorderLayout());
-        scrollPane = new JScrollPane(table);
-        filter = new JTextField();
+        scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(50, 0));
+        filter = new ScaledTextField();
 
         updateTable();
 
-        this.setTitle("Password Manager - " + database.getPath());
+        this.setTitle(database.getPath()+ " : PasswordManager");
         wrapper = new JPanel();
         buttonPanel = new JPanel();
-        addEntry = new JButton("Add Entry");
-        generatePassword = new JButton("Generate Password");
-        saveDatabase = new JButton("Save Database");
-        saveDatabaseAs = new JButton("Save Database As");
-        settings = new JButton("Settings");
-        openDatabase = new JButton("Open Database");
+        addEntry = new ScaledButton("Add Entry");
+        generatePassword = new ScaledButton("Generate Password");
+        saveDatabase = new ScaledButton("Save Database");
+        saveDatabaseAs = new ScaledButton("Save Database As");
+        settings = new ScaledButton("Settings");
+        openDatabase = new ScaledButton("Open Database");
 
         buttonPanel.add(addEntry);
         buttonPanel.add(generatePassword);
@@ -85,8 +89,9 @@ public class DatabaseUI extends JFrame {
         wrapper.add(buttonPanel, BorderLayout.PAGE_END);
 
         this.add(wrapper);
-        this.setMinimumSize(new Dimension(1000, 400));
-        this.setIconImage(Main.IMAGE);
+        this.pack();
+//        this.setMinimumSize(new Dimension(1000, 400));
+        this.setIconImage(Configuration.IMAGE);
         this.setLocationRelativeTo(parent);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -106,7 +111,7 @@ public class DatabaseUI extends JFrame {
 
         saveDatabaseAs.addActionListener(e -> {
 
-            JFileChooser fileChooser = new JFileChooser();
+            ScaledFileChooser fileChooser = new ScaledFileChooser();
             fileChooser.setSelectedFile(new File("Database.pmdtb"));
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Password Manager Database Files", "pmdtb");
             fileChooser.setFileFilter(filter);
@@ -139,9 +144,7 @@ public class DatabaseUI extends JFrame {
                 } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException | IOException | IllegalStateException | LimitReachedException e1) {
                     e1.printStackTrace();
                 }
-
             }
-
         });
 
         settings.addActionListener(e -> new SettingsUI(this));
@@ -165,13 +168,16 @@ public class DatabaseUI extends JFrame {
             asteriskContents[i] = ((Entry) entries[i]).getAsteriskArray();
 
         table = new JTable(asteriskContents, columnNames);
+        table.setFont(Configuration.STANDARD_FONT);
+        table.getTableHeader().setFont(Configuration.STANDARD_FONT);
         table.setAutoCreateRowSorter(true);
+        table.setRowHeight(Configuration.SCALED_TABLE_ROW_HEIGHT);
         JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem menuCopyUsername = new JMenuItem("Copy Username");
-        JMenuItem menuCopyEmail = new JMenuItem("Copy Email Address");
-        JMenuItem menuCopyPassword = new JMenuItem("Copy Password");
-        JMenuItem menuItemEdit = new JMenuItem("Edit Entry");
-        JMenuItem menuItemRemove = new JMenuItem("Remove Entry");
+        ScaledMenuItem menuCopyUsername = new ScaledMenuItem("Copy Username");
+        ScaledMenuItem menuCopyEmail = new ScaledMenuItem("Copy Email Address");
+        ScaledMenuItem menuCopyPassword = new ScaledMenuItem("Copy Password");
+        ScaledMenuItem menuItemEdit = new ScaledMenuItem("Edit Entry");
+        ScaledMenuItem menuItemRemove = new ScaledMenuItem("Remove Entry");
         popupMenu.add(menuCopyUsername);
         popupMenu.add(menuCopyEmail);
         popupMenu.add(menuCopyPassword);
@@ -215,7 +221,7 @@ public class DatabaseUI extends JFrame {
         });
         menuCopyPassword.addActionListener(e -> {
 
-            StringSelection stringSelection = new StringSelection(new String(database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getPassword(), Main.STANDARD_CHARSET));
+            StringSelection stringSelection = new StringSelection(new String(database.getEntries().get(table.convertRowIndexToModel(selectedRow)).getPassword(), Configuration.STANDARD_CHARSET));
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
         });
@@ -246,7 +252,7 @@ public class DatabaseUI extends JFrame {
         table.setModel(dtm);
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(table.getModel());
         table.setRowSorter(rowSorter);
-        searchPanel.add(new JLabel("   Enter search query:   "), BorderLayout.WEST);
+        searchPanel.add(new ScaledLabel("   Enter search query:   "), BorderLayout.WEST);
         searchPanel.add(filter, BorderLayout.CENTER);
 
         filter.getDocument().addDocumentListener(new DocumentListener() {
@@ -255,11 +261,11 @@ public class DatabaseUI extends JFrame {
             public void insertUpdate(DocumentEvent e) {
                 String text = filter.getText();
                 if (text.equalsIgnoreCase("Tetris187") || text.equalsIgnoreCase("Malle ist nur einmal im Jahr") || text.equalsIgnoreCase("69420")) {
-                    Main.runTetris(0);
+                    TetrisMain.runTetris(0);
                     SwingUtilities.invokeLater(() -> filter.setText(""));
                 }
                 if (text.length() == 9 /*tetris:nn*/ && text.substring(0, 7).equalsIgnoreCase("tetris:") && Integer.parseInt(text.substring(7)) <= 29 && Integer.parseInt(text.substring(7)) >= 0) {
-                    Main.runTetris(Integer.parseInt(text.substring(7)));
+                    TetrisMain.runTetris(Integer.parseInt(text.substring(7)));
                     SwingUtilities.invokeLater(() -> filter.setText(""));
                 }
                 text = text.replaceAll("\\*", "").replaceAll("\\+", "").replaceAll("\\?", "").replaceAll("\\\\", "");
@@ -281,7 +287,8 @@ public class DatabaseUI extends JFrame {
             }
         });
 
-        scrollPane = new JScrollPane(table);
+        scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(30, 0));
 
         if (t == 0) {
             table.getRowSorter().toggleSortOrder(0);

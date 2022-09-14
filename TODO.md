@@ -1,6 +1,7 @@
 # TO-DOs
 
-None.
+## Make Tetris fully resizable <img src="https://img.shields.io/badge/Priority-Low-yellowgreen.svg">
+The Tetris window should be resizable resulting in responsive block size and text margin.
 
 # DONEs
 

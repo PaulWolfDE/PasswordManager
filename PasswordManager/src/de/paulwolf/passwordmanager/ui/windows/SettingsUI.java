@@ -1,7 +1,11 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
-import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.ui.UIUtils;
+import de.paulwolf.passwordmanager.ui.components.ScaledButton;
+import de.paulwolf.passwordmanager.ui.components.ScaledComboBox;
+import de.paulwolf.passwordmanager.ui.components.ScaledLabel;
+import de.paulwolf.passwordmanager.ui.components.ScaledToggleButton;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 
@@ -19,24 +23,24 @@ import java.util.Objects;
 public class SettingsUI extends JFrame implements ActionListener, PasswordAcceptingUI {
 
     final JPanel wrapper = new JPanel();
-    final JLabel eaLabel = new JLabel("Encryption Algorithm");
-    final JComboBox<String> eaBox = new JComboBox<>(Main.ENCRYPTION_ALGORITHMS);
-    final JLabel hashLabel = new JLabel("Hash Algorithm");
-    final JComboBox<String> hashBox = new JComboBox<>(Main.HASH_ALGORITHMS);
+    final ScaledLabel eaLabel = new ScaledLabel("Encryption Algorithm");
+    final ScaledComboBox<String> eaBox = new ScaledComboBox<>(Configuration.ENCRYPTION_ALGORITHMS);
+    final ScaledLabel hashLabel = new ScaledLabel("Hash Algorithm");
+    final ScaledComboBox<String> hashBox = new ScaledComboBox<>(Configuration.HASH_ALGORITHMS);
     final PasswordEncodingField keyField = new PasswordEncodingField();
-    final JToggleButton showKey = new JToggleButton("Show");
-    final JLabel keyLabel = new JLabel("Master Key");
+    final ScaledToggleButton showKey = new ScaledToggleButton("Show");
+    final ScaledLabel keyLabel = new ScaledLabel("Master Key");
     final PasswordEncodingField keyVerificationField = new PasswordEncodingField();
-    final JToggleButton showKeyVerification = new JToggleButton("Show");
-    final JLabel keyVerificationLabel = new JLabel("Repeat Master Key");
-    final JButton generatePassword = new JButton("Generate Password");
-    final JButton button = new JButton("Save Changes");
+    final ScaledToggleButton showKeyVerification = new ScaledToggleButton("Show");
+    final ScaledLabel keyVerificationLabel = new ScaledLabel("Repeat Master Key");
+    final ScaledButton generatePassword = new ScaledButton("Generate Password");
+    final ScaledButton button = new ScaledButton("Save Changes");
 
     final JFrame f;
     final JPanel p;
     final PasswordEncodingField pf;
-    final JToggleButton b;
-    final JButton b2;
+    final ScaledToggleButton b;
+    final ScaledButton b2;
 
     public SettingsUI(Component parent) {
 
@@ -45,8 +49,8 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         f = new JFrame("Enter Master Password");
         p = new JPanel();
         pf = new PasswordEncodingField();
-        b = new JToggleButton("Show");
-        b2 = new JButton("Submit Password");
+        b = new ScaledToggleButton("Show");
+        b2 = new ScaledButton("Submit Password");
 
         p.setLayout(new GridBagLayout());
         p.add(pf, UIUtils.createGBC(0, 0, GridBagConstraints.HORIZONTAL, 1, 1, 1.0));
@@ -55,9 +59,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
 
         b.addActionListener(this);
         b2.addActionListener(this);
-        pf.getPasswordField().setFont(Main.STANDARD_FONT);
         pf.getPasswordField().setDisplayPasswordStrength(false);
-        pf.setPreferredSize(new Dimension(400, 26));
 
         pf.getPasswordField().addKeyListener(new KeyListener() {
 
@@ -79,7 +81,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         f.add(p);
         f.pack();
         f.setMinimumSize(f.getSize());
-        f.setIconImage(Main.IMAGE);
+        f.setIconImage(Configuration.IMAGE);
         f.setLocationRelativeTo(parent);
         f.setVisible(true);
     }
@@ -110,12 +112,8 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         showKeyVerification.addActionListener(this);
         button.addActionListener(this);
         generatePassword.addActionListener(this);
-        keyField.getPasswordField().setFont(Main.STANDARD_FONT);
         keyField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
-        keyField.setPreferredSize(new Dimension(400, 26));
-        keyVerificationField.getPasswordField().setFont(Main.STANDARD_FONT);
         keyVerificationField.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
-        keyVerificationField.setPreferredSize(new Dimension(400, 26));
 
         eaBox.setSelectedItem(DatabaseUI.database.getEncryptionAlgorithm());
         hashBox.setSelectedItem(DatabaseUI.database.getHashAlgorithm());
@@ -129,7 +127,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         this.add(wrapper);
         this.pack();
         this.setMinimumSize(this.getSize());
-        this.setIconImage(Main.IMAGE);
+        this.setIconImage(Configuration.IMAGE);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
 
@@ -145,14 +143,14 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
             if (b.isSelected())
                 pf.setEchoChar((char) 0);
             else
-                pf.setEchoChar(Main.ECHO_CHAR);
+                pf.setEchoChar(Configuration.ECHO_CHAR);
         } else if (e.getSource() == b2) {
 
             if (EncodingWizard.isEncodingValid(pf.getSelectedEncoding(), new String(pf.getPassword()))) {
 
                 String password = EncodingWizard.decodeString(pf.getSelectedEncoding(), new String(pf.getPassword()));
 
-                if (password.equals(new String(DatabaseUI.database.getMasterKey(), Main.STANDARD_CHARSET))) {
+                if (password.equals(new String(DatabaseUI.database.getMasterKey(), Configuration.STANDARD_CHARSET))) {
                     this.setVisible(false);
                     go(this);
                 } else
@@ -165,12 +163,12 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
             if (showKey.isSelected())
                 keyField.setEchoChar((char) 0);
             else
-                keyField.setEchoChar(Main.ECHO_CHAR);
+                keyField.setEchoChar(Configuration.ECHO_CHAR);
         } else if (e.getSource() == showKeyVerification) {
             if (showKeyVerification.isSelected())
                 keyVerificationField.setEchoChar((char) 0);
             else
-                keyVerificationField.setEchoChar(Main.ECHO_CHAR);
+                keyVerificationField.setEchoChar(Configuration.ECHO_CHAR);
         } else if (e.getSource() == button) {
 
             if (Arrays.equals(EncodingWizard.charsToBytes(keyField.getPassword()), EncodingWizard.charsToBytes(keyVerificationField.getPassword()))) {
@@ -178,7 +176,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
                 if (keyField.getPassword().length != 0) {
 
                     DatabaseUI.database.setMasterKey(new SecretKeySpec(
-                            EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes(Main.STANDARD_CHARSET),
+                            EncodingWizard.decodeString(keyField.getSelectedEncoding(), new String(keyField.getPassword())).getBytes(Configuration.STANDARD_CHARSET),
                             Objects.requireNonNull(((String) eaBox.getSelectedItem())).contains("Blowfish") ? "Blowfish" :"AES"
                     ));
                     DatabaseUI.database.setHashAlgorithm((String) hashBox.getSelectedItem());
@@ -204,10 +202,10 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
             keyField.setText(password);
             keyVerificationField.setText(password);
         } else if (keyField.getSelectedEncoding() == 1) {
-            keyField.setText(EncodingWizard.bytesToHex(password.getBytes(Main.STANDARD_CHARSET)));
+            keyField.setText(EncodingWizard.bytesToHex(password.getBytes(Configuration.STANDARD_CHARSET)));
             keyVerificationField.setText(new String(keyField.getPassword()));
         } else {
-            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Main.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
+            keyField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Configuration.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
             keyVerificationField.setText(new String(keyField.getPassword()));
         }
 

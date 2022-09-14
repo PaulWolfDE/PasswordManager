@@ -1,5 +1,6 @@
 package de.paulwolf.passwordmanager.utility;
 
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +33,7 @@ public class JSONParser {
 
         try {
             JSONObject compatibility = getCompatibilityJSON();
-            JSONObject clientVersion = (JSONObject) compatibility.get(Main.VERSION_NUMBER);
+            JSONObject clientVersion = (JSONObject) compatibility.get(Configuration.VERSION_NUMBER);
             JSONObject foundVersion = (JSONObject) clientVersion.get(databaseVersion);
             return (boolean) foundVersion.get("compatible");
         } catch (JSONException e) {
@@ -47,7 +48,7 @@ public class JSONParser {
         try {
             JSONObject json = getCompatibilityJSON();
             String newestVersion = (String) json.get("newestVersion");
-            if (!Main.VERSION_NUMBER.equals(newestVersion))
+            if (!Configuration.VERSION_NUMBER.equals(newestVersion))
                 return false;
         } catch (JSONException e) {
             return true; // JSON problem

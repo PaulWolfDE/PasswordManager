@@ -1,5 +1,6 @@
 package de.paulwolf.passwordmanager.information;
 
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 
 import javax.crypto.SecretKey;
@@ -67,8 +68,8 @@ public class Entry {
         asteriskArray[0] = this.getTitle();
         asteriskArray[1] = this.getUsername();
         asteriskArray[2] = this.getEmail();
-        asteriskArray[3] = new String(new char[this.getPassword().length]).replace('\0', Main.ECHO_CHAR);
-        asteriskArray[4] = Main.DATE_FORMAT.format(this.getLastModified());
+        asteriskArray[3] = new String(new char[this.getPassword().length]).replace('\0', Configuration.ECHO_CHAR);
+        asteriskArray[4] = Configuration.DATE_FORMAT.format(this.getLastModified());
         asteriskArray[5] = this.getNotes();
 
         return asteriskArray;

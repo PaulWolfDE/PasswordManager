@@ -1,7 +1,8 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
-import de.paulwolf.passwordmanager.Main;
+import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.information.Entry;
+import de.paulwolf.passwordmanager.ui.components.*;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
 import de.paulwolf.passwordmanager.ui.UIUtils;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
@@ -15,26 +16,26 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
     private static final int NOTES_ROWS = 5;
     final JPanel wrapper = new JPanel();
-    final JTextField title = new JTextField(20);
-    final JLabel titleLabel = new JLabel("Title");
-    final JTextField username = new JTextField(20);
-    final JLabel usernameLabel = new JLabel("Username");
-    final JTextField email = new JTextField(20);
-    final JLabel emailLabel = new JLabel("Email Address");
+    final ScaledTextField title = new ScaledTextField();
+    final ScaledLabel titleLabel = new ScaledLabel("Title");
+    final ScaledTextField username = new ScaledTextField();
+    final ScaledLabel usernameLabel = new ScaledLabel("Username");
+    final ScaledTextField email = new ScaledTextField();
+    final ScaledLabel emailLabel = new ScaledLabel("Email Address");
     final PasswordEncodingField password = new PasswordEncodingField();
-    final JLabel passwordLabel = new JLabel("Password");
-    final JButton generatePassword = new JButton("Generate Password");
+    final ScaledLabel passwordLabel = new ScaledLabel("Password");
+    final ScaledButton generatePassword = new ScaledButton("Generate Password");
     final PasswordEncodingField confirmPassword = new PasswordEncodingField();
-    final JLabel confirmPasswordLabel = new JLabel("Confirm Password");
-    final JToggleButton showPassword = new JToggleButton("Show Password");
-    final JButton submit = new JButton("Submit Entry");
-    final JLabel notesLabel = new JLabel("Notes");
-    final JTextArea textArea = new JTextArea(5, 0);
+    final ScaledLabel confirmPasswordLabel = new ScaledLabel("Confirm Password");
+    final ScaledToggleButton showPassword = new ScaledToggleButton("Show Password");
+    final ScaledButton submit = new ScaledButton("Submit Entry");
+    final ScaledLabel notesLabel = new ScaledLabel("Notes");
+    final ScaledTextArea textArea = new ScaledTextArea(5);
     final JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
     public NewEntryUI(Entry e, int index) {
 
-        if (index != -1 && e.getTitle().equals(Main.BACKUP_TITLE)) {
+        if (index != -1 && e.getTitle().equals(Configuration.BACKUP_TITLE)) {
             title.setEditable(false);
             emailLabel.setText("Hostname");
             this.setTitle("Edit SFTP Backup Settings");
@@ -88,7 +89,7 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
         row += notesRows;
         gbc = UIUtils.createGBC(0, row, GridBagConstraints.HORIZONTAL, 1, 1);
-        wrapper.add(new JLabel(""), gbc);
+        wrapper.add(new ScaledLabel(""), gbc);
         gbc = UIUtils.createGBC(1, row, GridBagConstraints.HORIZONTAL, 2, 1);
         wrapper.add(submit, gbc);
 
@@ -96,8 +97,8 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
             title.setText(e.getTitle());
             username.setText(e.getUsername());
             email.setText(e.getEmail());
-            password.setText(new String(e.getPassword(), Main.STANDARD_CHARSET));
-            confirmPassword.setText(new String(e.getPassword(), Main.STANDARD_CHARSET));
+            password.setText(new String(e.getPassword(), Configuration.STANDARD_CHARSET));
+            confirmPassword.setText(new String(e.getPassword(), Configuration.STANDARD_CHARSET));
             textArea.setText(e.getNotes().replaceAll("\\\\n", "\n"));
             this.setTitle("PasswordManager - Edit Entry");
         } else this.setTitle("PasswordManager - Create Entry");
@@ -105,21 +106,13 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
         password.getPasswordField().evaluatePassword(password.getSelectedEncoding());
         confirmPassword.getPasswordField().evaluatePassword(confirmPassword.getSelectedEncoding());
 
-        password.getPasswordField().setFont(Main.STANDARD_FONT);
         password.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
-        password.setPreferredSize(new Dimension(300, 26));
-        confirmPassword.getPasswordField().setFont(Main.STANDARD_FONT);
         confirmPassword.getPasswordField().putClientProperty("JPasswordField.cutCopyAllowed", true);
-        confirmPassword.setPreferredSize(new Dimension(300, 26));
-        title.setFont(Main.STANDARD_FONT);
-        title.setPreferredSize(new Dimension(300, 26));
-        username.setFont(Main.STANDARD_FONT);
-        username.setPreferredSize(new Dimension(300, 26));
-        email.setFont(Main.STANDARD_FONT);
-        email.setPreferredSize(new Dimension(300, 26));
+
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(Configuration.SCALED_SCROLL_BAR_THICKNESS, 0));
 
         this.add(wrapper);
-        this.setIconImage(Main.IMAGE);
+        this.setIconImage(Configuration.IMAGE);
         this.pack();
         this.setMinimumSize(this.getSize());
         this.setLocationRelativeTo(null);
@@ -135,7 +128,7 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
 
                 JOptionPane.showMessageDialog(null, "Passwords can't be left empty!", "Argument error", JOptionPane.ERROR_MESSAGE);
 
-            } else if (title.getText().equals(Main.BACKUP_TITLE) && title.isEditable()) {
+            } else if (title.getText().equals(Configuration.BACKUP_TITLE) && title.isEditable()) {
 
                 JOptionPane.showMessageDialog(null, "Entry name is reserved!", "Argument error", JOptionPane.ERROR_MESSAGE);
 
@@ -144,9 +137,9 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
                 String notes = textArea.getText().replaceAll("\n", "\\\\n");
 
                 if (index == -1)
-                    DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())).getBytes(Main.STANDARD_CHARSET), notes));
+                    DatabaseUI.addEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())).getBytes(Configuration.STANDARD_CHARSET), notes));
                 else
-                    DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())).getBytes(Main.STANDARD_CHARSET), notes), index);
+                    DatabaseUI.editEntry(new Entry(title.getText(), username.getText(), email.getText(), EncodingWizard.decodeString(password.getSelectedEncoding(), new String(password.getPassword())).getBytes(Configuration.STANDARD_CHARSET), notes), index);
 
                 this.setVisible(false);
             }
@@ -157,8 +150,8 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
         showPassword.addActionListener(e13 -> {
 
             if (!showPassword.isSelected()) {
-                password.setEchoChar(Main.ECHO_CHAR);
-                confirmPassword.setEchoChar(Main.ECHO_CHAR);
+                password.setEchoChar(Configuration.ECHO_CHAR);
+                confirmPassword.setEchoChar(Configuration.ECHO_CHAR);
             } else {
                 password.setEchoChar((char) 0);
                 confirmPassword.setEchoChar((char) 0);
@@ -168,9 +161,9 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
         this.password.getEncodingButton().addActionListener(e14 -> {
             if (this.confirmPassword.getSelectedEncoding() == 0) {
                 if (EncodingWizard.isEncodingValid(0, new String(this.password.getPassword())))
-                    this.password.setText(EncodingWizard.bytesToHex(new String(this.password.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+                    this.password.setText(EncodingWizard.bytesToHex(new String(this.password.getPassword()).getBytes(Configuration.STANDARD_CHARSET)));
                 if (EncodingWizard.isEncodingValid(0, new String(this.confirmPassword.getPassword())))
-                    this.confirmPassword.setText(EncodingWizard.bytesToHex(new String(this.confirmPassword.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+                    this.confirmPassword.setText(EncodingWizard.bytesToHex(new String(this.confirmPassword.getPassword()).getBytes(Configuration.STANDARD_CHARSET)));
             } else if (this.confirmPassword.getSelectedEncoding() == 1) {
                 if (EncodingWizard.isEncodingValid(1, new String(this.password.getPassword())))
                     this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(EncodingWizard.hexToBytes(new String(this.password.getPassword()))))));
@@ -178,18 +171,18 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
                     this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(EncodingWizard.hexToBytes(new String(this.confirmPassword.getPassword()))))));
             } else {
                 if (EncodingWizard.isEncodingValid(2, new String(this.password.getPassword())))
-                    this.password.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.password.getPassword()).getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+                    this.password.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.password.getPassword()).getBytes(StandardCharsets.US_ASCII))), Configuration.STANDARD_CHARSET));
                 if (EncodingWizard.isEncodingValid(2, new String(this.confirmPassword.getPassword())))
-                    this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.confirmPassword.getPassword()).getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+                    this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.confirmPassword.getPassword()).getBytes(StandardCharsets.US_ASCII))), Configuration.STANDARD_CHARSET));
             }
             this.confirmPassword.setEncoding((this.confirmPassword.getSelectedEncoding() + 1) % 3);
         });
         this.confirmPassword.getEncodingButton().addActionListener(e15 -> {
             if (this.password.getSelectedEncoding() == 0) {
                 if (EncodingWizard.isEncodingValid(0, new String(this.password.getPassword())))
-                    this.password.setText(EncodingWizard.bytesToHex(new String(this.password.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+                    this.password.setText(EncodingWizard.bytesToHex(new String(this.password.getPassword()).getBytes(Configuration.STANDARD_CHARSET)));
                 if (EncodingWizard.isEncodingValid(0, new String(this.confirmPassword.getPassword())))
-                    this.confirmPassword.setText(EncodingWizard.bytesToHex(new String(this.confirmPassword.getPassword()).getBytes(Main.STANDARD_CHARSET)));
+                    this.confirmPassword.setText(EncodingWizard.bytesToHex(new String(this.confirmPassword.getPassword()).getBytes(Configuration.STANDARD_CHARSET)));
             } else if (this.password.getSelectedEncoding() == 1) {
                 if (EncodingWizard.isEncodingValid(1, new String(this.password.getPassword())))
                     this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(EncodingWizard.hexToBytes(new String(this.password.getPassword()))))));
@@ -197,9 +190,9 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
                     this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(EncodingWizard.hexToBytes(new String(this.confirmPassword.getPassword()))))));
             } else {
                 if (EncodingWizard.isEncodingValid(2, new String(this.password.getPassword())))
-                    this.password.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.password.getPassword()).getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+                    this.password.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.password.getPassword()).getBytes(StandardCharsets.US_ASCII))), Configuration.STANDARD_CHARSET));
                 if (EncodingWizard.isEncodingValid(2, new String(this.confirmPassword.getPassword())))
-                    this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.confirmPassword.getPassword()).getBytes(StandardCharsets.US_ASCII))), Main.STANDARD_CHARSET));
+                    this.confirmPassword.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(new String(this.confirmPassword.getPassword()).getBytes(StandardCharsets.US_ASCII))), Configuration.STANDARD_CHARSET));
             }
             this.password.setEncoding((this.password.getSelectedEncoding() + 1) % 3);
         });
@@ -212,10 +205,10 @@ public class NewEntryUI extends JFrame implements PasswordAcceptingUI {
             this.password.setText(password);
             this.confirmPassword.setText(password);
         } else if (this.password.getSelectedEncoding() == 1) {
-            this.password.setText(EncodingWizard.bytesToHex(password.getBytes(Main.STANDARD_CHARSET)));
+            this.password.setText(EncodingWizard.bytesToHex(password.getBytes(Configuration.STANDARD_CHARSET)));
             this.confirmPassword.setText(new String(this.password.getPassword()));
         } else {
-            this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Main.STANDARD_CHARSET)))));
+            this.password.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(password.getBytes(Configuration.STANDARD_CHARSET)))));
             this.confirmPassword.setText(new String(this.password.getPassword()));
         }
 
