@@ -26,6 +26,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
+import java.net.PortUnreachableException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -59,7 +60,7 @@ public class DatabaseUI extends JFrame {
         searchPanel = new JPanel(new BorderLayout());
         tableWrapper = new JPanel(new BorderLayout());
         scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(50, 0));
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(Configuration.SCALED_SCROLL_BAR_THICKNESS, 0));
         filter = new ScaledTextField();
 
         updateTable();
@@ -104,6 +105,8 @@ public class DatabaseUI extends JFrame {
 
             try {
                 FileWizard.saveDatabase(database, database.getPath());
+            } catch (PortUnreachableException ignored) {
+                JOptionPane.showMessageDialog(this, "Due to a backup host connection error, no database backup could be saved. Check your host or your firewall for port 22.", "No backup made", JOptionPane.WARNING_MESSAGE);
             } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException | IOException | IllegalStateException | LimitReachedException e1) {
                 e1.printStackTrace();
             }
@@ -141,6 +144,8 @@ public class DatabaseUI extends JFrame {
 
                 try {
                     FileWizard.saveDatabase(database, database.getPath().getAbsoluteFile());
+                }catch (PortUnreachableException ignored) {
+                    JOptionPane.showMessageDialog(this, "Due to a backup host connection error, no database backup could be saved. Check your host or your firewall for port 22.", "No backup made", JOptionPane.WARNING_MESSAGE);
                 } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException | IOException | IllegalStateException | LimitReachedException e1) {
                     e1.printStackTrace();
                 }
@@ -288,7 +293,7 @@ public class DatabaseUI extends JFrame {
         });
 
         scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(30, 0));
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(Configuration.SCALED_SCROLL_BAR_THICKNESS, 0));
 
         if (t == 0) {
             table.getRowSorter().toggleSortOrder(0);
