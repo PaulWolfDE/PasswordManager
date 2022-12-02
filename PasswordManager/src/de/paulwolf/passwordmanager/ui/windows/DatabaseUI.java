@@ -1,5 +1,6 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
+import com.jcraft.jsch.JSchException;
 import de.paulwolf.passwordmanager.Configuration;
 import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.TetrisMain;
@@ -7,11 +8,6 @@ import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.ui.components.*;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
-import gnu.crypto.prng.LimitReachedException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -25,11 +21,6 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
-import java.io.IOException;
-import java.net.PortUnreachableException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class DatabaseUI extends JFrame {
@@ -105,10 +96,10 @@ public class DatabaseUI extends JFrame {
 
             try {
                 FileWizard.saveDatabase(database, database.getPath());
-            } catch (PortUnreachableException ignored) {
+            } catch (JSchException ex) {
                 JOptionPane.showMessageDialog(this, "Due to a backup host connection error, no database backup could be saved. Check your host or your firewall for port 22.", "No backup made", JOptionPane.WARNING_MESSAGE);
-            } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException | IOException | IllegalStateException | LimitReachedException e1) {
-                e1.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -144,10 +135,10 @@ public class DatabaseUI extends JFrame {
 
                 try {
                     FileWizard.saveDatabase(database, database.getPath().getAbsoluteFile());
-                }catch (PortUnreachableException ignored) {
+                } catch (JSchException ex) {
                     JOptionPane.showMessageDialog(this, "Due to a backup host connection error, no database backup could be saved. Check your host or your firewall for port 22.", "No backup made", JOptionPane.WARNING_MESSAGE);
-                } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException | IOException | IllegalStateException | LimitReachedException e1) {
-                    e1.printStackTrace();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });

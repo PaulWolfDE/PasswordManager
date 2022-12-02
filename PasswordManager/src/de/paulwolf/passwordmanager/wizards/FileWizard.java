@@ -3,7 +3,6 @@ package de.paulwolf.passwordmanager.wizards;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 import de.paulwolf.passwordmanager.Configuration;
-import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.information.WrongPasswordException;
@@ -18,7 +17,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.security.*;
@@ -31,7 +29,7 @@ public class FileWizard {
 
     public static void saveDatabase(Database db, File file) throws NoSuchAlgorithmException, IOException,
             InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException,
-            IllegalBlockSizeException, IllegalStateException, LimitReachedException {
+            IllegalBlockSizeException, IllegalStateException, LimitReachedException, JSchException {
         FileWriter writer = new FileWriter(file);
         SecureRandom sr = new SecureRandom();
         byte[] iv = new byte[16], salt = new byte[16];
@@ -58,7 +56,6 @@ public class FileWizard {
                         BackupWizard.createBackup(e.getUsername(), e.getEmail(), e.getPassword(), db);
                     } catch (SftpException ex) {
                         throw new RuntimeException(ex);
-                    } catch (JSchException ignored) {
                     }
                 }
             }

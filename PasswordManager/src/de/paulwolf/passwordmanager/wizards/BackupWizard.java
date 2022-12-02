@@ -2,7 +2,6 @@ package de.paulwolf.passwordmanager.wizards;
 
 import com.jcraft.jsch.*;
 import de.paulwolf.passwordmanager.Configuration;
-import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 
 import java.time.LocalDateTime;
@@ -41,14 +40,13 @@ public class BackupWizard {
             config.put("StrictHostKeyChecking", "no");
             config.put("PreferredAuthentications", "password");
             session.setConfig(config);
-            session.connect();
+            session.connect(3000);
 
             sftp = (ChannelSftp) session.openChannel("sftp");
             sftp.connect();
             try {
                 sftp.mkdir("database_backup");
-            } catch (SftpException ignored) {
-            }
+            } catch (SftpException ignored) {}
             sftp.cd("database_backup");
             String localDatabasePath = database.getPath().getAbsolutePath();
             String localDatabaseName = localDatabasePath.substring(localDatabasePath.lastIndexOf('/') + 1);

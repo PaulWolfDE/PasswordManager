@@ -8,11 +8,7 @@ import de.paulwolf.passwordmanager.ui.components.*;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
-import gnu.crypto.prng.LimitReachedException;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -25,9 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -200,9 +193,7 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
 
                         try {
                             FileWizard.saveDatabase(db, db.getPath());
-                        } catch (NoSuchAlgorithmException | IOException | InvalidKeyException | NoSuchPaddingException |
-                                 InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException |
-                                 IllegalStateException | LimitReachedException e1) {
+                        } catch (Exception e1) {
                             e1.printStackTrace();
                         }
                     } else {
