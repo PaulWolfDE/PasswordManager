@@ -55,7 +55,7 @@ public class MainUI extends JFrame implements ActionListener, KeyListener {
             throw new RuntimeException(e);
         }
 
-        box = new ScaledComboBox<>(compatibleFiles);
+        box = new ScaledComboBox<>(compatibleFiles != null ? compatibleFiles : new Object[]{});
         box.addActionListener(e -> uri.setText(Objects.requireNonNull(box.getSelectedItem()).toString()));
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Password Manager Database Files", "pmdtb");
