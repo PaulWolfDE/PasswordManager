@@ -1,8 +1,5 @@
 # TO-DOs
 
-## Make Tetris fully resizable <img src="https://img.shields.io/badge/Priority-Low-yellowgreen.svg">
-The Tetris window should be resizable resulting in responsive block size and text margin.
-
 # DONEs
 
 ## Saving recently opened files <img src="https://img.shields.io/badge/Priority-Implemented (1.3.5)-blue.svg">
@@ -54,6 +51,13 @@ Compress the database before it is encrypted to prevent too large files.
 
 Why not necessary:
 - Databases will never grow so large that compression would have a real effect on file size
+
+## Make Tetris fully resizable <img src="https://img.shields.io/badge/Priority-Not necessary-inactive.svg">
+The Tetris window should be resizable resulting in responsive block size and text margin.
+
+Why not necessary:
+- Java applications can already be run with `java -Dsun.java2d.dpiaware=false -jar PasswordManager.jar` to dynamically scale a Swing GUI
+
 
 # Labels
 

@@ -83,3 +83,10 @@
 ## Release 2.0.1
 - Implemented unique font for Tetris
 - Developed resolution-independent user interface for both password manager and Tetris
+
+## Release 2.0.2
+- Implemented GitHub API request to determine the latest version
+- Fixed a bug resulting the program to crash with empty .pmrc
+- Added a timeout for SFTP backup to prevent the program from crashing because of e.g. firewall-blocked port 22
+- Minimal graphics improvements
+- Added compilation script for Java 8
