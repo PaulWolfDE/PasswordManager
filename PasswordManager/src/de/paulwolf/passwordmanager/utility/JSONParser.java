@@ -1,11 +1,12 @@
 package de.paulwolf.passwordmanager.utility;
 
 import de.paulwolf.passwordmanager.Configuration;
-import de.paulwolf.passwordmanager.Main;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -45,15 +46,46 @@ public class JSONParser {
 
     public static boolean isUpToDate() {
 
+
+        HttpURLConnection connection = null;
         try {
-            JSONObject json = getCompatibilityJSON();
-            String newestVersion = (String) json.get("newestVersion");
-            if (!Configuration.VERSION_NUMBER.equals(newestVersion))
-                return false;
-        } catch (JSONException e) {
-            return true; // JSON problem
+            URL url = new URL("https://api.github.com/repos/PaulWolfDE/PasswordManager/releases/latest");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("Accept", "application/vnd.github+json");
+            connection.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
+            connection.setUseCaches(false);
+
+            // When status code isn't OK, compatibility file is being checked
+            if (connection.getResponseCode() != 200)
+                throw new IOException();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            StringBuilder rawResponse = new StringBuilder();
+
+            while ((line = reader.readLine()) != null)
+                rawResponse.append(line);
+            reader.close();
+
+            JSONObject response = new JSONObject(rawResponse.toString());
+
+            return response.getString("tag_name").equals(Configuration.VERSION_NUMBER);
+
+        } catch (MalformedURLException ignored) {
         } catch (IOException e) {
-            return true; // Connection problem
+            // If connection to GitHub API fails, compatibility file is being checked
+            try {
+                JSONObject json = getCompatibilityJSON();
+                String newestVersion = (String) json.get("newestVersion");
+                if (!Configuration.VERSION_NUMBER.equals(newestVersion))
+                    return false;
+            } catch (Exception e2) {
+                return true; // JSON or connection problem
+            }
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
         return true;
     }
