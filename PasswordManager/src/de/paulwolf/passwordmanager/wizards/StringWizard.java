@@ -1,7 +1,6 @@
 package de.paulwolf.passwordmanager.wizards;
 
 import de.paulwolf.passwordmanager.Configuration;
-import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 
@@ -18,10 +17,8 @@ public class StringWizard {
     public final static String separator = "\n";
     public final static String endEntrySeparator = "\n\n";
 
-    public static String makeString(Database database, byte[] iv, byte[] salt)
-            throws NoSuchAlgorithmException {
+    public static String makeDatabaseBody(Database database) {
 
-        StringBuilder databaseString = new StringBuilder();
         StringBuilder databaseBody = new StringBuilder();
 
         ArrayList<Entry> entries = database.getEntries();
@@ -43,11 +40,20 @@ public class StringWizard {
                 databaseBody.append(endEntrySeparator);
         }
 
+        return databaseBody.toString();
+    }
+
+    public static String makeString(Database database, byte[] iv, byte[] salt)
+            throws NoSuchAlgorithmException {
+
+        StringBuilder databaseString = new StringBuilder();
+        String databaseBody = makeDatabaseBody(database);
+
         MessageDigest digest = MessageDigest.getInstance(database.getHashAlgorithm());
 
         databaseString.append("PasswordManager<" + Configuration.VERSION_NUMBER + '>');
         databaseString.append(separator);
-        databaseString.append(bytesToHex(digest.digest(databaseBody.toString().getBytes(Configuration.STANDARD_CHARSET))));
+        databaseString.append(bytesToHex(digest.digest(databaseBody.getBytes(Configuration.STANDARD_CHARSET))));
         databaseString.append(separator);
         databaseString.append(database.getEncryptionAlgorithm());
         databaseString.append(separator);

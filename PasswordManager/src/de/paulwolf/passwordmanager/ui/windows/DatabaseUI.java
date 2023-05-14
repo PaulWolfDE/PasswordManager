@@ -20,7 +20,10 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class DatabaseUI extends JFrame {
@@ -56,7 +59,8 @@ public class DatabaseUI extends JFrame {
 
         updateTable();
 
-        this.setTitle(database.getPath()+ " : PasswordManager");
+        this.setTitle(DatabaseUI.database.getPath()+ " : PasswordManager");
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         wrapper = new JPanel();
         buttonPanel = new JPanel();
         addEntry = new ScaledButton("Add Entry");
@@ -85,7 +89,6 @@ public class DatabaseUI extends JFrame {
 //        this.setMinimumSize(new Dimension(1000, 400));
         this.setIconImage(Configuration.IMAGE);
         this.setLocationRelativeTo(parent);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
 
         addEntry.addActionListener(e -> new NewEntryUI(null, -1));
@@ -95,7 +98,7 @@ public class DatabaseUI extends JFrame {
         saveDatabase.addActionListener(e -> {
 
             try {
-                FileWizard.saveDatabase(database, database.getPath());
+                FileWizard.saveDatabase(DatabaseUI.database, DatabaseUI.database.getPath());
             } catch (JSchException ex) {
                 JOptionPane.showMessageDialog(this, "Due to a backup host connection error, no database backup could be saved. Check your host or your firewall for port 22.", "No backup made", JOptionPane.WARNING_MESSAGE);
             } catch (Exception ex) {
@@ -120,21 +123,21 @@ public class DatabaseUI extends JFrame {
 
                     if (pathString.substring(pathString.length() - 6).equalsIgnoreCase(".pmdtb")) {
 
-                        database.setPath(new File(pathString));
+                        DatabaseUI.database.setPath(new File(pathString));
                     } else {
 
                         pathString += ".pmdtb";
-                        database.setPath(new File(pathString));
+                        DatabaseUI.database.setPath(new File(pathString));
                     }
 
                 } else {
 
                     pathString += ".pmdtb";
-                    database.setPath(new File(pathString));
+                    DatabaseUI.database.setPath(new File(pathString));
                 }
 
                 try {
-                    FileWizard.saveDatabase(database, database.getPath().getAbsoluteFile());
+                    FileWizard.saveDatabase(DatabaseUI.database, DatabaseUI.database.getPath().getAbsoluteFile());
                 } catch (JSchException ex) {
                     JOptionPane.showMessageDialog(this, "Due to a backup host connection error, no database backup could be saved. Check your host or your firewall for port 22.", "No backup made", JOptionPane.WARNING_MESSAGE);
                 } catch (Exception ex) {
@@ -152,7 +155,34 @@ public class DatabaseUI extends JFrame {
             Main.ui = new MainUI();
         });
 
-        // this.requestFocus();
+        // To prevent closing when database is not saved
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                System.out.println("hello -> closing");
+
+                try {
+                    if (FileWizard.isDatabaseModified(database, database.getPath())) {
+                        int response = JOptionPane.showConfirmDialog(null,
+                                "Your database has unsaved changes. Do you want to save the changes?",
+                                "Unsaved changes",
+                                JOptionPane.YES_NO_CANCEL_OPTION);
+                        if (response != JOptionPane.CANCEL_OPTION) {
+                            if (response == JOptionPane.YES_OPTION)
+                                saveDatabase.doClick();
+                            System.exit(0);
+                            super.windowClosing(e);
+                        }
+
+                    } else {
+                        System.exit(0);
+                        super.windowClosing(e);
+                    }
+
+                } catch (NoSuchAlgorithmException ignored) { }
+            }
+        });
     }
 
     public static void updateTable() {

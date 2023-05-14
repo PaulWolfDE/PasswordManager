@@ -23,6 +23,7 @@ import java.security.*;
 import java.text.ParseException;
 import java.util.*;
 
+import static de.paulwolf.passwordmanager.wizards.EncodingWizard.bytesToHex;
 import static de.paulwolf.passwordmanager.wizards.EncodingWizard.hexToBytes;
 
 public class FileWizard {
@@ -115,6 +116,31 @@ public class FileWizard {
         database.setMasterKey(new SecretKeySpec(key, splitDatabase[2].contains("Blowfish") ? "Blowfish" :"AES"));
         new DatabaseUI(database, null);
         return true;
+    }
+
+    // Checks whether the database was modified.
+    public static boolean isDatabaseModified(Database db, File file) throws NoSuchAlgorithmException {
+
+        StringBuilder databaseString = new StringBuilder();
+        Scanner scanner;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            return true;
+        }
+        int i = 0;
+        while (scanner.hasNextLine()) {
+            if (i != 0)
+                databaseString.append(StringWizard.separator);
+            i++;
+            databaseString.append(scanner.nextLine());
+        }
+        scanner.close();
+
+        String[] splitDatabase = databaseString.toString().split(StringWizard.separator);
+        MessageDigest digest = MessageDigest.getInstance(db.getHashAlgorithm());
+        String databaseBody = StringWizard.makeDatabaseBody(db);
+        return !splitDatabase[1].equals(bytesToHex(digest.digest(databaseBody.getBytes(Configuration.STANDARD_CHARSET))));
     }
 
     public static boolean isCompatible(File f) throws IOException {
