@@ -90,3 +90,6 @@
 - Added a timeout for SFTP backup to prevent the program from crashing because of e.g. firewall-blocked port 22
 - Minimal graphics improvements
 - Added compilation script for Java 8
+
+## Release 2.0.3
+- Added a system to prevent closing unsaved databases
