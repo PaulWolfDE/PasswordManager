@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="64" height="64" version="1.1" viewBox="0 0 16.933 16.933" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <mask id="keyhole">
+      <rect fill="white" width="100%" height="100%" y="0" x="0"/>
+      <rect x="7.874" y="10.212" width="1.185" height="3" style=""/>
+      <circle style="" cx="8.466" cy="10.5" r="1.224"/>
+    </mask>
+    <filter id="filter1178" x="-.047999" y="-.047999" width="1.096" height="1.096" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="0.30691668"/>
+    </filter>
+    <filter id="distortion-187">
+      <feGaussianBlur stdDeviation=".15"/>
+    </filter>
+    <linearGradient id="linearGradient1340" x1="8.355" x2="8.3996" y1="16.007" y2=".79375" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2e3440" offset="0"/>
+      <stop stop-color="#4c566a" offset="1"/>
+    </linearGradient>
+    <linearGradient id="gradient-1" bx:pinned="true">
+      <title>Gray gradiant</title>
+      <stop offset="0.161" style="stop-color: rgb(65, 68, 75);"/>
+      <stop offset="0.817" style="stop-color: rgb(56, 58, 61);"/>
+    </linearGradient>
+    <clipPath id="myClip2">
+      <rect x="1.12604" y="1.12604" width="14.681" height="14.681" rx="3" ry="3" transform="matrix(1, 0, 0, 1, 0, 0)"/>
+    </clipPath>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round" style="">
+    <title>Background</title>
+    <rect id="bg-main" x=".92604" y=".92604" width="15.081" height="15.081" rx="3" ry="3"/>
+    <rect transform="matrix(.99138 0 0 1 .072989 .0019055)" x=".79375" y=".90545" width="15.346" height="15.346" rx="3.0526" ry="3.0526" filter="url(#filter1178)" opacity=".15" stroke-width="1.2489" style="mix-blend-mode:normal" fill="#000000"/>
+    <rect x=".92604" y=".92604" width="15.081" height="15.081" rx="3" ry="3" stroke-width="1.2274" fill="url(#linearGradient1340)"/>
+    <rect x=".01215" y=".0060174" width="16.924" height="16.927" opacity=".15" stroke-width="1.052" fill="none"/>
+    <text style="fill: rgb(0, 255, 0); font-family: Arial, sans-serif; font-size: 0.9px; font-weight: 700; white-space: pre; clip-path: url(#myClip2); filter: url(#distortion-187);"><tspan x="0.144" y="0.34">9d42d9897f0946c5d3f35cb46278e752e93b8b21d3e017ff4a</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>73ee1a962cab70a00b0cc29b47493e5a20fe5672b1a1908ae1</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>706c64a2274680bbce259db9401b95e8c630dfb1178705d08c</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>643ce5b522cb9fd366a4d96c83f5246f0914601d5c12b7ad80</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>439f008e8a779e7b7f6a89189fa211b24699b13dbc813d3427</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>0438b59411739aae4e49490397744dc1a029719e48b00aea51</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>1efcd9c49418a028a363255054113ef407898056262f7a6e71</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>b41f9805804186514f2b161bc39d9116f17b44f26cedcd9c81</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>faa4aec3eece42d0ad58e03148db01653257eb258532aec0e8</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>87671075baa6fc1bbd4c9dbd694de64bd568fbef4a179daccab</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>3cf99b94bf57181e1acbf2cffee510c9bb522681e43f9cb502</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>031c367de31ab999bed4d601f0ec97cc8834571f50225352c39</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>90d3b0055bba8a4fbb720a299d0ef72428c901e778d46e2485</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>def0ba2ee4b5b5a0c2354bd926663fdd6e46aa64a47483f44e</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>5aaf63eebd1c96b4d82c94707c4c50c1bb13aba1d05caf9b24</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>69cdd9c38e0bb8c17ca845176c7302546a9309c6cc0c3825e6</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>6f76fd0235945d26638b34ac3e76fef2e017c7d83396dc35e9</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>e9d7b611c733f433d5d5f2d592f053ca7b9adb1c25a89d25b9</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>724c2e945d5ccddddcdd167a43ce9f53a868e7a3bd89a042f8</tspan><tspan x="0.144" dy="1em">​</tspan><tspan>2f9a82a78f3d38308f06bf063d896d5dee05ecd05982a935</tspan><tspan x="0.144" dy="1em">​</tspan></text>
+  </g>
+  <g>
+    <title>Lock</title>
+    <g transform="matrix(1, 0, 0, 1, -0.0005, -0.463466)">
+      <title>Lock &amp; Shackle Background</title>
+      <path style="fill: none; stroke: url(#linearGradient1340);" d="M 5.3 9 C 4.785 4.422 6.26 3.523 8.467 3.515 C 10.426 3.506 12.118 4.388 11.633 9"/>
+      <rect mask="url(#keyhole)" style="paint-order: stroke; stroke-width: 0.5px; fill-rule: nonzero; fill: url(#linearGradient1340); stroke: url(#linearGradient1340)" x="3.72" y="8.135" width="9.494" height="6.21" rx="0.5" ry="0.5" stroke="red" stroke-width="5"/>
+    </g>
+  </g>
+</svg>
