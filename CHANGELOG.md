@@ -93,3 +93,7 @@
 
 ## Release 2.0.3
 - Added a system to prevent closing unsaved databases
+
+## Release 2.0.4
+- Added a new logo icon as svg and high-resolution png render
+- Redacts information in the table view in database when window is not focussed
