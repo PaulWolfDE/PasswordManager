@@ -103,7 +103,7 @@ public class Configuration {
     public static void loadResources() {
 
         try {
-            IMAGE = ImageIO.read(Objects.requireNonNull(Main.class.getResource("/icon.jpg")));
+            IMAGE = ImageIO.read(Objects.requireNonNull(Main.class.getResource("/icon.png")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

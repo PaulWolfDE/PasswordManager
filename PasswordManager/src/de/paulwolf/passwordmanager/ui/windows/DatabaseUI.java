@@ -22,11 +22,12 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-public class DatabaseUI extends JFrame {
+public class DatabaseUI extends JFrame implements WindowFocusListener {
 
     private static final String[] columnNames = {"Title", "Username", "Email", "Password", "Last modified"};
     static Database database;
@@ -90,6 +91,8 @@ public class DatabaseUI extends JFrame {
         this.setIconImage(Configuration.IMAGE);
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
+
+        this.addWindowFocusListener(this);
 
         addEntry.addActionListener(e -> new NewEntryUI(null, -1));
 
@@ -339,5 +342,15 @@ public class DatabaseUI extends JFrame {
         String[] entry = entries.get(table.convertRowIndexToModel(index)).getAsteriskArray();
         for (int i = 0; i < 5; i++)
             dtm.setValueAt(entry[i], table.convertRowIndexToModel(index), i);
+    }
+
+    @Override
+    public void windowGainedFocus(WindowEvent e) {
+        table.setVisible(true);
+    }
+
+    @Override
+    public void windowLostFocus(WindowEvent e) {
+        table.setVisible(false);
     }
 }
