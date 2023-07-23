@@ -41,6 +41,10 @@ Java implementation of the zxcvbn password checker.
 
 Library for secure tunnel connection to perform SFTP.
 
+[<img src="https://img.shields.io/badge/Library-FlatLaf-blue.svg">](https://github.com/JFormDesigner/FlatLaf)
+
+Modern Look and Feel for the Java Swing user interface.
+
 [<img src="https://img.shields.io/badge/Font-JetBrainsMono-yellow.svg">](https://www.jetbrains.com/lp/mono/)
 
 Free, open-source monospace font family.
