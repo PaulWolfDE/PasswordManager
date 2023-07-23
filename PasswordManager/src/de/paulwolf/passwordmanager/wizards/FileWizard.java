@@ -221,7 +221,7 @@ public class FileWizard {
         writer.close();
     }
 
-    public static String getSelectedTheme() throws IOException {
+    public static String getSelectedTheme(boolean json) throws IOException {
 
         File configFile;
         if (System.getenv("Appdata") == null)
@@ -231,9 +231,29 @@ public class FileWizard {
 
         String fileContents = new String(Files.readAllBytes(configFile.toPath()), Configuration.STANDARD_CHARSET);
 
+        if (json)
+            return fileContents;
+
         String theme = JSONParser.getSelectedTheme(fileContents);
         if (!Arrays.asList(Configuration.FLATLAF_THEMES).contains(theme))
             theme = Configuration.FLATLAF_THEME;
         return theme;
+    }
+
+    public static void updateSelectedTheme(String theme) throws IOException {
+
+        File configFile;
+        if (System.getenv("Appdata") == null)
+            configFile = new File(System.getProperty("user.home") + "/PasswordManager/configuration.json"); // Linux
+        else
+            configFile = new File(System.getenv("Appdata") + "/PasswordManager/configuration.json"); // Windows
+
+        // Directory hierarchy for rc file gets created
+        (new File(configFile.getCanonicalPath() + "/../)")).mkdirs();
+
+        configFile.createNewFile();
+        FileWriter writer = new FileWriter(configFile);
+        writer.write(JSONParser.setSelectedTheme(getSelectedTheme(true), theme));
+        writer.close();
     }
 }

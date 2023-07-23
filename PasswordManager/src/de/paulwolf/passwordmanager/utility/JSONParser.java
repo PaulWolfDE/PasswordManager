@@ -43,6 +43,19 @@ public class JSONParser {
         return theme;
     }
 
+    public static String setSelectedTheme(String jsonString, String theme) {
+
+        try {
+            JSONObject json = new JSONObject(jsonString);
+            json.put("flatlaf-theme", theme);
+            return json.toString();
+        } catch (JSONException e) {
+            JSONObject json = new JSONObject();
+            json.put("flatlaf-theme", theme);
+            return json.toString();
+        }
+    }
+
     public static boolean checkRemoteCompatibility(String databaseVersion) {
 
         try {

@@ -9,11 +9,13 @@ import de.paulwolf.passwordmanager.ui.components.ScaledLabel;
 import de.paulwolf.passwordmanager.ui.components.ScaledToggleButton;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
+import de.paulwolf.passwordmanager.wizards.FileWizard;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
@@ -140,10 +142,14 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         this.keyVerificationField.getEncodingButton().addActionListener(e15 -> this.keyField.setEncoding((this.keyField.getSelectedEncoding() + 1) % 3));
         this.themeBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                System.out.println(e.getItem());
                 Configuration.setTheme((String) e.getItem());
                 SwingUtilities.updateComponentTreeUI(this);
                 SwingUtilities.updateComponentTreeUI(Main.dui);
+                try {
+                    FileWizard.updateSelectedTheme(Configuration.ACTIVE_THEME);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }

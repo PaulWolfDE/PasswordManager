@@ -185,7 +185,7 @@ public class Configuration {
 
         String theme;
         try {
-            theme = FileWizard.getSelectedTheme();
+            theme = FileWizard.getSelectedTheme(false);
         } catch (IOException e) {
             theme = Configuration.FLATLAF_THEME;
         }
