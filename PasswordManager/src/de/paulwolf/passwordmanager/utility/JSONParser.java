@@ -30,6 +30,19 @@ public class JSONParser {
         return new JSONObject(raw);
     }
 
+    public static String getSelectedTheme(String jsonString) {
+
+        String theme;
+
+        try {
+            JSONObject json = new JSONObject(jsonString);
+            theme = (String) json.get("flatlaf-theme");
+        } catch (JSONException e) {
+            return Configuration.FLATLAF_THEME;
+        }
+        return theme;
+    }
+
     public static boolean checkRemoteCompatibility(String databaseVersion) {
 
         try {
@@ -45,7 +58,6 @@ public class JSONParser {
     }
 
     public static boolean isUpToDate() {
-
 
         HttpURLConnection connection = null;
         try {

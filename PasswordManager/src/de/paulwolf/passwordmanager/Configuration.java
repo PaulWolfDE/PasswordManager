@@ -1,5 +1,13 @@
 package de.paulwolf.passwordmanager;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import de.paulwolf.passwordmanager.wizards.FileWizard;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -66,6 +74,11 @@ public class Configuration {
     // Reserved name of backup entry
     public static final String BACKUP_TITLE = "sftp-automated-backup";
 
+    // Themes available in flatlaf
+    public static final String[] FLATLAF_THEMES = {"LIGHT", "DARK", "INTELLIJ", "DARCULA", "MACOS_LIGHT", "MACOS_DARK"};
+    // Standard flatlaf theme
+    public static final String FLATLAF_THEME = "DARK";
+
     // Window icon
     public static Image IMAGE;
     // Standard window font
@@ -101,6 +114,8 @@ public class Configuration {
     public static int SCALED_TETRIS_BOTTOM_ELEMENT;
 
     public static void loadResources() {
+
+        initFlatlaf();
 
         try {
             IMAGE = ImageIO.read(Objects.requireNonNull(Main.class.getResource("/icon.png")));
@@ -162,5 +177,28 @@ public class Configuration {
         SCALED_TETRIS_ELEMENT_MARGIN = (int) ((double) STANDARD_TETRIS_ELEMENT_MARGIN / 1080 * screenSize.getHeight());
         SCALED_TETRIS_TEXT_MARGIN = (int) ((double) STANDARD_TETRIS_TEXT_MARGIN / 1080 * screenSize.getHeight());
         SCALED_TETRIS_BOTTOM_ELEMENT = (int) ((double) STANDARD_TETRIS_BOTTOM_ELEMENT / 1080 * screenSize.getHeight());
+    }
+
+    public static void initFlatlaf() {
+
+        String theme;
+        try {
+            theme = FileWizard.getSelectedTheme();
+        } catch (IOException e) {
+            theme = Configuration.FLATLAF_THEME;
+        }
+
+        if (theme.equals(FLATLAF_THEMES[0]))
+            FlatLightLaf.setup();
+        else if (theme.equals(FLATLAF_THEMES[1]))
+            FlatDarkLaf.setup();
+        else if (theme.equals(FLATLAF_THEMES[2]))
+            FlatIntelliJLaf.setup();
+        else if (theme.equals(FLATLAF_THEMES[3]))
+            FlatDarculaLaf.setup();
+        else if (theme.equals(FLATLAF_THEMES[4]))
+            FlatMacLightLaf.setup();
+        else if (theme.equals(FLATLAF_THEMES[5]))
+            FlatMacDarkLaf.setup();
     }
 }

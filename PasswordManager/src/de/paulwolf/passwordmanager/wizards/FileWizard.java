@@ -17,7 +17,10 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.security.*;
 import java.text.ParseException;
@@ -215,5 +218,21 @@ public class FileWizard {
                 writer.write(file + "\n");
         }
         writer.close();
+    }
+
+    public static String getSelectedTheme() throws IOException {
+
+        File configFile;
+        if (System.getenv("Appdata") == null)
+            configFile = new File(System.getProperty("user.home") + "/PasswordManager/configuration.json"); // Linux
+        else
+            configFile = new File(System.getenv("Appdata") + "/PasswordManager/configuration.json"); // Windows
+
+        String fileContents = new String(Files.readAllBytes(configFile.toPath()), Configuration.STANDARD_CHARSET);
+
+        String theme = JSONParser.getSelectedTheme(fileContents);
+        if (!Arrays.asList(Configuration.FLATLAF_THEMES).contains(theme))
+            theme = Configuration.FLATLAF_THEME;
+        return theme;
     }
 }
