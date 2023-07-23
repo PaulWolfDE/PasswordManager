@@ -97,3 +97,7 @@
 ## Release 2.0.4
 - Added a new logo icon as svg and high-resolution png render
 - Redacts information in the table view in database when window is not focussed
+
+## Release 2.0.5
+- Added custom Swing Look and Feel with the FlatLaf library
+- Minor bug-fixes
