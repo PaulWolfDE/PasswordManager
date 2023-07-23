@@ -3,6 +3,7 @@ package de.paulwolf.passwordmanager.wizards;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 import de.paulwolf.passwordmanager.Configuration;
+import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
 import de.paulwolf.passwordmanager.information.WrongPasswordException;
@@ -116,8 +117,8 @@ public class FileWizard {
 
         Database database = StringWizard.evaluateString(EncryptionWizard.decrypt(databaseString.toString(), derivedKey, iv));
         database.setPath(file);
-        database.setMasterKey(new SecretKeySpec(key, splitDatabase[2].contains("Blowfish") ? "Blowfish" :"AES"));
-        new DatabaseUI(database, null);
+        database.setMasterKey(new SecretKeySpec(key, splitDatabase[2].contains("Blowfish") ? "Blowfish" : "AES"));
+        Main.dui = new DatabaseUI(database, null);
         return true;
     }
 

@@ -74,10 +74,12 @@ public class Configuration {
     // Reserved name of backup entry
     public static final String BACKUP_TITLE = "sftp-automated-backup";
 
-    // Themes available in flatlaf
+    // Themes available in FlatLaf
     public static final String[] FLATLAF_THEMES = {"LIGHT", "DARK", "INTELLIJ", "DARCULA", "MACOS_LIGHT", "MACOS_DARK"};
-    // Standard flatlaf theme
+    // Standard FlatLaf theme
     public static final String FLATLAF_THEME = "DARK";
+    // FlatLaf theme that is currently active
+    public static String ACTIVE_THEME;
 
     // Window icon
     public static Image IMAGE;
@@ -188,6 +190,11 @@ public class Configuration {
             theme = Configuration.FLATLAF_THEME;
         }
 
+        setTheme(theme);
+    }
+
+    public static void setTheme(String theme) {
+
         if (theme.equals(FLATLAF_THEMES[0]))
             FlatLightLaf.setup();
         else if (theme.equals(FLATLAF_THEMES[1]))
@@ -200,5 +207,7 @@ public class Configuration {
             FlatMacLightLaf.setup();
         else if (theme.equals(FLATLAF_THEMES[5]))
             FlatMacDarkLaf.setup();
+
+        ACTIVE_THEME = theme;
     }
 }

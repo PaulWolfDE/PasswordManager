@@ -1,6 +1,7 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
 import de.paulwolf.passwordmanager.Configuration;
+import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.ui.UIUtils;
 import de.paulwolf.passwordmanager.ui.components.ScaledButton;
 import de.paulwolf.passwordmanager.ui.components.ScaledComboBox;
@@ -12,10 +13,7 @@ import de.paulwolf.passwordmanager.wizards.EncodingWizard;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
@@ -27,6 +25,8 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
     final ScaledComboBox<String> eaBox = new ScaledComboBox<>(Configuration.ENCRYPTION_ALGORITHMS);
     final ScaledLabel hashLabel = new ScaledLabel("Hash Algorithm");
     final ScaledComboBox<String> hashBox = new ScaledComboBox<>(Configuration.HASH_ALGORITHMS);
+    final ScaledLabel themeLabel = new ScaledLabel("GUI Theme");
+    final ScaledComboBox<String> themeBox = new ScaledComboBox<>(Configuration.FLATLAF_THEMES);
     final PasswordEncodingField keyField = new PasswordEncodingField();
     final ScaledToggleButton showKey = new ScaledToggleButton("Show");
     final ScaledLabel keyLabel = new ScaledLabel("Master Key");
@@ -97,16 +97,20 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         wrapper.add(hashLabel, UIUtils.createGBC(0, 1, GridBagConstraints.HORIZONTAL, 1, 1));
         wrapper.add(hashBox, UIUtils.createGBC(1, 1, GridBagConstraints.HORIZONTAL, 2, 1));
 
-        wrapper.add(keyLabel, UIUtils.createGBC(0, 2, GridBagConstraints.HORIZONTAL, 1, 1));
-        wrapper.add(keyField, UIUtils.createGBC(1, 2, GridBagConstraints.HORIZONTAL, 1, 1));
-        wrapper.add(showKey, UIUtils.createGBC(2, 2, GridBagConstraints.HORIZONTAL, 1, 1, .0));
+        wrapper.add(themeLabel, UIUtils.createGBC(0, 2, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(themeBox, UIUtils.createGBC(1, 2, GridBagConstraints.HORIZONTAL, 2, 1));
 
-        wrapper.add(keyVerificationLabel, UIUtils.createGBC(0, 3, GridBagConstraints.HORIZONTAL, 1, 1));
-        wrapper.add(keyVerificationField, UIUtils.createGBC(1, 3, GridBagConstraints.HORIZONTAL, 1, 1));
-        wrapper.add(showKeyVerification, UIUtils.createGBC(2, 3, GridBagConstraints.HORIZONTAL, 1, 1, .0));
+        wrapper.add(keyLabel, UIUtils.createGBC(0, 3, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(keyField, UIUtils.createGBC(1, 3, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(showKey, UIUtils.createGBC(2, 3, GridBagConstraints.HORIZONTAL, 1, 1, .0));
 
-        wrapper.add(generatePassword, UIUtils.createGBC(0, 4, GridBagConstraints.HORIZONTAL, 3, 1));
-        wrapper.add(button, UIUtils.createGBC(0, 5, GridBagConstraints.HORIZONTAL, 3, 1));
+        wrapper.add(keyVerificationLabel, UIUtils.createGBC(0, 4, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(keyVerificationField, UIUtils.createGBC(1, 4, GridBagConstraints.HORIZONTAL, 1, 1));
+        wrapper.add(showKeyVerification, UIUtils.createGBC(2, 4, GridBagConstraints.HORIZONTAL, 1, 1, .0));
+
+        wrapper.add(generatePassword, UIUtils.createGBC(0, 5, GridBagConstraints.HORIZONTAL, 3, 1));
+
+        wrapper.add(button, UIUtils.createGBC(0, 6, GridBagConstraints.HORIZONTAL, 3, 1));
 
         showKey.addActionListener(this);
         showKeyVerification.addActionListener(this);
@@ -117,6 +121,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
 
         eaBox.setSelectedItem(DatabaseUI.database.getEncryptionAlgorithm());
         hashBox.setSelectedItem(DatabaseUI.database.getHashAlgorithm());
+        themeBox.setSelectedItem(Configuration.ACTIVE_THEME);
         keyField.setText(new String(pf.getPassword()));
         keyField.setEncoding(pf.getSelectedEncoding());
         keyField.getPasswordField().evaluatePassword(keyField.getSelectedEncoding());
@@ -133,6 +138,14 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
 
         this.keyField.getEncodingButton().addActionListener(e14 -> this.keyVerificationField.setEncoding((this.keyVerificationField.getSelectedEncoding() + 1) % 3));
         this.keyVerificationField.getEncodingButton().addActionListener(e15 -> this.keyField.setEncoding((this.keyField.getSelectedEncoding() + 1) % 3));
+        this.themeBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                System.out.println(e.getItem());
+                Configuration.setTheme((String) e.getItem());
+                SwingUtilities.updateComponentTreeUI(this);
+                SwingUtilities.updateComponentTreeUI(Main.dui);
+            }
+        });
     }
 
     @Override
@@ -151,7 +164,7 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
                 String password = EncodingWizard.decodeString(pf.getSelectedEncoding(), new String(pf.getPassword()));
 
                 if (password.equals(new String(DatabaseUI.database.getMasterKey(), Configuration.STANDARD_CHARSET))) {
-                    this.setVisible(false);
+                    this.f.setVisible(false);
                     go(this);
                 } else
                     JOptionPane.showMessageDialog(null, "The entered password is incorrect!", "Insufficient credentials",

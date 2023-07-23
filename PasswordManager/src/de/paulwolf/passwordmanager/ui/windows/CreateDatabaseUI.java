@@ -1,9 +1,10 @@
 package de.paulwolf.passwordmanager.ui.windows;
 
 import de.paulwolf.passwordmanager.Configuration;
+import de.paulwolf.passwordmanager.Main;
 import de.paulwolf.passwordmanager.information.Database;
 import de.paulwolf.passwordmanager.information.Entry;
-import de.paulwolf.passwordmanager.ui.*;
+import de.paulwolf.passwordmanager.ui.UIUtils;
 import de.paulwolf.passwordmanager.ui.components.*;
 import de.paulwolf.passwordmanager.ui.passwordfields.PasswordEncodingField;
 import de.paulwolf.passwordmanager.wizards.EncodingWizard;
@@ -189,7 +190,7 @@ public class CreateDatabaseUI extends JFrame implements PasswordAcceptingUI, Act
                         db.addEntry(new Entry(Configuration.BACKUP_TITLE, "", "", ".".getBytes(Configuration.STANDARD_CHARSET), ""));
 
                         this.setVisible(false);
-                        new DatabaseUI(db, this);
+                        Main.dui = new DatabaseUI(db, this);
 
                         try {
                             FileWizard.saveDatabase(db, db.getPath());
