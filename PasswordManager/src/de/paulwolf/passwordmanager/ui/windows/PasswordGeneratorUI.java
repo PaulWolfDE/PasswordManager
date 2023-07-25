@@ -156,9 +156,8 @@ public class PasswordGeneratorUI extends JFrame {
         generatePassword.addActionListener(e -> {
 
             byte[] charset = selectCharset();
-
-            hexPasswordField.setForeground(Color.BLACK);
-            base64PasswordField.setForeground(Color.BLACK);
+            hexPasswordField.setForeground(new JPasswordField().getForeground());
+            base64PasswordField.setForeground(new JPasswordField().getForeground());
 
             if (charset.length > 0) {
 
@@ -218,7 +217,7 @@ public class PasswordGeneratorUI extends JFrame {
                         utf8PasswordField.setText(new String(EncodingWizard.hexToBytes(hexPasswordField.getText()), Configuration.STANDARD_CHARSET));
                         base64PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.bytesToBase64(utf8PasswordField.getText().getBytes(Configuration.STANDARD_CHARSET))), StandardCharsets.US_ASCII));
                         updateEntropy();
-                        hexPasswordField.setForeground(Color.BLACK);
+                        hexPasswordField.setForeground(new JPasswordField().getForeground());
                     }
                 } else {
                     hexPasswordField.setForeground(Color.RED);
@@ -242,7 +241,7 @@ public class PasswordGeneratorUI extends JFrame {
                     utf8PasswordField.setText(new String(Objects.requireNonNull(EncodingWizard.base64ToBytes(base64Password.getBytes(StandardCharsets.US_ASCII)))));
                     hexPasswordField.setText(EncodingWizard.bytesToHex(utf8PasswordField.getText().getBytes(Configuration.STANDARD_CHARSET)));
                     updateEntropy();
-                    base64PasswordField.setForeground(Color.BLACK);
+                    base64PasswordField.setForeground(new JPasswordField().getForeground());
                 } else {
                     base64PasswordField.setForeground(Color.RED);
                     utf8PasswordField.setText("");
