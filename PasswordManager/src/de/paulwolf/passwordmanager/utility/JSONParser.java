@@ -23,7 +23,7 @@ public class JSONParser {
 
     public static JSONObject getCompatibilityJSON() throws IOException, JSONException {
 
-        InputStream is = new URL("https://paulwolf.de/crypto/passwordmanager/compatibility.json").openStream();
+        InputStream is = new URL("https://raw.githubusercontent.com/paulwolfde/passwordmanager/master/compatibility.json").openStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         String raw = getAll(br);
         is.close();
