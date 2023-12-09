@@ -1,9 +1,6 @@
 package de.paulwolf.passwordmanager;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import de.paulwolf.passwordmanager.wizards.FileWizard;
@@ -75,7 +72,7 @@ public class Configuration {
     public static final String BACKUP_TITLE = "sftp-automated-backup";
 
     // Themes available in FlatLaf
-    public static final String[] FLATLAF_THEMES = {"LIGHT", "DARK", "INTELLIJ", "DARCULA", "MACOS_LIGHT", "MACOS_DARK"};
+    public static final String[] FLATLAF_THEMES = {"LIGHT", "DARK", "INTELLIJ", "DARCULA", "ONE_DARK", "MACOS_LIGHT", "MACOS_DARK", "SYSTEM_DEFAULT", "SWING_DEFAULT"};
     // Standard FlatLaf theme
     public static final String FLATLAF_THEME = "DARK";
     // FlatLaf theme that is currently active
@@ -190,10 +187,14 @@ public class Configuration {
             theme = Configuration.FLATLAF_THEME;
         }
 
-        setTheme(theme);
+        try {
+            setTheme(theme);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static void setTheme(String theme) {
+    public static void setTheme(String theme) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         if (theme.equals(FLATLAF_THEMES[0]))
             FlatLightLaf.setup();
@@ -204,9 +205,16 @@ public class Configuration {
         else if (theme.equals(FLATLAF_THEMES[3]))
             FlatDarculaLaf.setup();
         else if (theme.equals(FLATLAF_THEMES[4]))
-            FlatMacLightLaf.setup();
+            IntelliJTheme.setup(Configuration.class.getResourceAsStream("/themes/one_dark.theme.json"));
         else if (theme.equals(FLATLAF_THEMES[5]))
+            FlatMacLightLaf.setup();
+        else if (theme.equals(FLATLAF_THEMES[6]))
             FlatMacDarkLaf.setup();
+        else if (theme.equals(FLATLAF_THEMES[7]))
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        else if (theme.equals(FLATLAF_THEMES[8]))
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+
 
         ACTIVE_THEME = theme;
     }

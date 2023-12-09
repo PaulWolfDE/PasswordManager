@@ -142,7 +142,11 @@ public class SettingsUI extends JFrame implements ActionListener, PasswordAccept
         this.keyVerificationField.getEncodingButton().addActionListener(e15 -> this.keyField.setEncoding((this.keyField.getSelectedEncoding() + 1) % 3));
         this.themeBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                Configuration.setTheme((String) e.getItem());
+                try {
+                    Configuration.setTheme((String) e.getItem());
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
                 SwingUtilities.updateComponentTreeUI(this);
                 SwingUtilities.updateComponentTreeUI(Main.dui);
                 try {
