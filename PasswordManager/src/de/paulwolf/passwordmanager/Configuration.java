@@ -72,7 +72,7 @@ public class Configuration {
     public static final String BACKUP_TITLE = "sftp-automated-backup";
 
     // Themes available in FlatLaf
-    public static final String[] FLATLAF_THEMES = {"LIGHT", "DARK", "INTELLIJ", "DARCULA", "ONE_DARK", "NORD", "MACOS_LIGHT", "MACOS_DARK", "SYSTEM_DEFAULT", "SWING_DEFAULT"};
+    public static final String[] FLATLAF_THEMES = {"LIGHT", "DARK", "INTELLIJ", "DARCULA", "ONE_DARK", "NORD", "DARK_PURPLE", "MACOS_LIGHT", "MACOS_DARK", "SYSTEM_DEFAULT", "SWING_DEFAULT"};
     // Standard FlatLaf theme
     public static final String FLATLAF_THEME = "DARK";
     // FlatLaf theme that is currently active
@@ -209,12 +209,14 @@ public class Configuration {
         else if (theme.equals(FLATLAF_THEMES[5]))
             IntelliJTheme.setup(Configuration.class.getResourceAsStream("/themes/nord.theme.json"));
         else if (theme.equals(FLATLAF_THEMES[6]))
-            FlatMacLightLaf.setup();
+            IntelliJTheme.setup(Configuration.class.getResourceAsStream("/themes/DarkPurple.theme.json"));
         else if (theme.equals(FLATLAF_THEMES[7]))
-            FlatMacDarkLaf.setup();
+            FlatMacLightLaf.setup();
         else if (theme.equals(FLATLAF_THEMES[8]))
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            FlatMacDarkLaf.setup();
         else if (theme.equals(FLATLAF_THEMES[9]))
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        else if (theme.equals(FLATLAF_THEMES[10]))
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
 
