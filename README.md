@@ -25,37 +25,41 @@ $ java -jar PasswordManager.jar
 For tutorials on using the program, check the documentation.
 
 ## Credits
-[<img src="https://img.shields.io/badge/Library-GNU Crypto-blue.svg">](https://www.gnu.org/software/gnu-crypto/)
+[<img alt="https://www.gnu.org/software/gnu-crypto/" src="https://img.shields.io/badge/Library-GNU Crypto-blue.svg">](https://www.gnu.org/software/gnu-crypto/)
 
 Library containing various cryptographic methods.
 
-[<img src="https://img.shields.io/badge/Library-JSON Java-blue.svg">](https://github.com/stleary/JSON-java)
+[<img alt="https://github.com/stleary/JSON-java" src="https://img.shields.io/badge/Library-JSON Java-blue.svg">](https://github.com/stleary/JSON-java)
 
 Library for JSON en- and decoding to check compatibilities.
 
-[<img src="https://img.shields.io/badge/Library-zxcvbn4j-blue.svg">](https://github.com/nulab/zxcvbn4j)
+[<img alt="https://github.com/nulab/zxcvbn4j" src="https://img.shields.io/badge/Library-zxcvbn4j-blue.svg">](https://github.com/nulab/zxcvbn4j)
 
 Java implementation of the zxcvbn password checker.
 
-[<img src="https://img.shields.io/badge/Library-Jsch-blue.svg">](http://www.jcraft.com/jsch/)
+[<img alt="http://www.jcraft.com/jsch/" src="https://img.shields.io/badge/Library-Jsch-blue.svg">](http://www.jcraft.com/jsch/)
 
 Library for secure tunnel connection to perform SFTP.
 
-[<img src="https://img.shields.io/badge/Library-FlatLaf-blue.svg">](https://github.com/JFormDesigner/FlatLaf)
+[<img alt="https://github.com/JFormDesigner/FlatLaf" src="https://img.shields.io/badge/Library-FlatLaf-blue.svg">](https://github.com/JFormDesigner/FlatLaf)
 
 Modern Look and Feel for the Java Swing user interface.
 
-[<img src="https://img.shields.io/badge/Font-JetBrainsMono-yellow.svg">](https://www.jetbrains.com/lp/mono/)
+[<img alt="https://github.com/one-dark/jetbrains-one-dark-theme" src="https://img.shields.io/badge/Theme-OneDark-tan.svg">](https://github.com/one-dark/jetbrains-one-dark-theme)
+
+Modern dark IntelliJ theme.
+
+[<img alt="https://www.jetbrains.com/lp/mono/" src="https://img.shields.io/badge/Font-JetBrainsMono-yellow.svg">](https://www.jetbrains.com/lp/mono/)
 
 Free, open-source monospace font family.
 
-[<img src="https://img.shields.io/badge/Font-Pixeloid-yellow.svg">](https://www.fontspace.com/pixeloid-font-f69232)
+[<img alt="https://www.fontspace.com/pixeloid-font-f69232" src="https://img.shields.io/badge/Font-Pixeloid-yellow.svg">](https://www.fontspace.com/pixeloid-font-f69232)
 
 Free old school font used for Tetris
 
-[<img src="https://img.shields.io/badge/Inspiration-KeePass-green.svg">](https://keepass.info/)
+[<img alt="https://keepass.info/" src="https://img.shields.io/badge/Inspiration-KeePass-green.svg">](https://keepass.info/)
 
 Open-source password manager.
 
 ## License
-[<img src="https://img.shields.io/badge/License-GPLv3-important.svg">](https://www.gnu.org/licenses/gpl-3.0.html)
+[<img alt="https://www.gnu.org/licenses/gpl-3.0.html" src="https://img.shields.io/badge/License-GPLv3-important.svg">](https://www.gnu.org/licenses/gpl-3.0.html)
