@@ -47,7 +47,9 @@ Modern Look and Feel for the Java Swing user interface.
 
 [<img alt="https://github.com/one-dark/jetbrains-one-dark-theme" src="https://img.shields.io/badge/Theme-OneDark-tan.svg">](https://github.com/one-dark/jetbrains-one-dark-theme)
 
-Modern dark IntelliJ theme.
+[<img alt="https://github.com/nordtheme/jetbrains" src="https://img.shields.io/badge/Theme-Nord-tan.svg"](https://github.com/nordtheme/jetbrains)
+
+Flatlaf IntelliJ themes.
 
 [<img alt="https://www.jetbrains.com/lp/mono/" src="https://img.shields.io/badge/Font-JetBrainsMono-yellow.svg">](https://www.jetbrains.com/lp/mono/)
 
