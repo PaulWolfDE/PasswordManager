@@ -101,3 +101,8 @@
 ## Release 2.0.5
 - Added custom Swing Look and Feel with the FlatLaf library
 - Minor bug-fixes
+
+## Release 2.0.6
+- Addition of third-party IntelliJ UI themes
+- Various UI fixes
+- Moved compatibility checking file to GitHub

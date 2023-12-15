@@ -62,9 +62,9 @@ public class Configuration {
     // Entry date format
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd@HH:mm");
     // Version identifier
-    public static final String VERSION_NUMBER = "2.0.5";
+    public static final String VERSION_NUMBER = "2.0.6";
     // Compatible version identifiers
-    public static final String[] COMPATIBLE_VERSIONS = {"2.0.5", "2.0.4", "2.0.3", "2.0.2", "2.0.1", "2.0.0", "1.4.8", "1.4.7", "1.4.6", "1.4.5", "1.4.4", "1.4.3",
+    public static final String[] COMPATIBLE_VERSIONS = {"2.0.6", "2.0.5", "2.0.4", "2.0.3", "2.0.2", "2.0.1", "2.0.0", "1.4.8", "1.4.7", "1.4.6", "1.4.5", "1.4.4", "1.4.3",
             "1.4.2", "1.4.1", "1.4.0", "1.3.9", "1.3.8", "1.3.7", "1.3.6", "1.3.5", "1.3.4", "1.3.3", "1.3.2"};
     // Password field echo char
     public static final char ECHO_CHAR = 0x2022;
