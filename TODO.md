@@ -1,5 +1,9 @@
 # TO-DOs
 
+## Ability to import/export databases <img src="https://img.shields.io/badge/Priority-Medium-yellow.svg">
+There should be an option to export data, for example to csv.
+It should also be possible to import data from file formats like csv, for example to merge databases.
+
 # DONEs
 
 ## Saving recently opened files <img src="https://img.shields.io/badge/Priority-Implemented (1.3.5)-blue.svg">
