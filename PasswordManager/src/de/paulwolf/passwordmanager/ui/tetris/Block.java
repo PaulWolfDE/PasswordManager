@@ -3,7 +3,8 @@ package de.paulwolf.passwordmanager.ui.tetris;
 import de.paulwolf.passwordmanager.TetrisMain;
 
 import java.awt.*;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 public class Block {
 
@@ -20,25 +21,17 @@ public class Block {
         this.shape = shape;
     }
 
-    public char getRandomShape() {
-        int t = random.nextInt(7);
+    Stack<Character> shapeStack = new Stack<>();
 
-        switch (t) {
-            case 0:
-                return 'I';
-            case 1:
-                return 'J';
-            case 2:
-                return 'L';
-            case 3:
-                return 'O';
-            case 4:
-                return 'S';
-            case 5:
-                return 'T';
-            default:
-                return 'Z';
+    public char getRandomShape() {
+
+        if (shapeStack.isEmpty()) {
+            List<Character> l = Arrays.asList('I', 'J', 'L', 'O', 'S', 'T', 'Z');
+            Collections.shuffle(l);
+            shapeStack.addAll(l);
         }
+
+        return shapeStack.pop();
     }
 
     public Field getSquare(int s) {
