@@ -4,6 +4,11 @@
 There should be an option to export data, for example to csv.
 It should also be possible to import data from file formats like csv, for example to merge databases.
 
+## Remote database on user-defined server <img src="https://img.shields.io/badge/Priority-Low-yellowgreen.svg">
+Users should be able to define a remote server to store their database on. Then, the application should be able to 
+connect to this server and download the database without needing to have the latest version of the database file locally 
+but only one static configuration that does not change with every database update.
+
 # DONEs
 
 ## Saving recently opened files <img src="https://img.shields.io/badge/Priority-Implemented (1.3.5)-blue.svg">
